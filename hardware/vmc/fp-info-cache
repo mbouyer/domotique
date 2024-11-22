@@ -1,4 +1,4 @@
-23313536266706237
+23158514789323879
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -1316,13 +1316,6 @@ Ultraminiature Surface Mount Slide Switch, right-angle, https://www.ckswitches.c
 8
 4
 Button_Switch_SMD
-SW_SPDT_CK-JS102011SAQN
-Sub-miniature slide switch, right-angle, http://www.ckswitches.com/media/1422/js.pdf
-switch spdt
-0
-3
-3
-Button_Switch_SMD
 SW_SPDT_CK_JS102011SAQN
 Sub-miniature slide switch, right-angle, http://www.ckswitches.com/media/1422/js.pdf
 switch spdt
@@ -1686,27 +1679,6 @@ SPST button switch Off-On
 0
 2
 2
-Button_Switch_THT
-SW_CuK_JS202011AQN_DPDT_Angled
-CuK sub miniature slide switch, JS series, DPDT, right angle, http://www.ckswitches.com/media/1422/js.pdf
-switch DPDT
-0
-6
-6
-Button_Switch_THT
-SW_CuK_JS202011CQN_DPDT_Straight
-CuK sub miniature slide switch, JS series, DPDT, right angle, http://www.ckswitches.com/media/1422/js.pdf
-switch DPDT
-0
-6
-6
-Button_Switch_THT
-SW_CuK_OS102011MA1QN1_SPDT_Angled
-CuK miniature slide switch, OS series, SPDT, right angle, http://www.ckswitches.com/media/1428/os.pdf
-switch SPDT
-0
-5
-3
 Button_Switch_THT
 SW_DIP_SPSTx01_Piano_10.8x4.1mm_W7.62mm_P2.54mm
 1x-dip-switch SPST , Piano, row spacing 7.62 mm (300 mils), body size 10.8x4.1mm
@@ -2315,13 +2287,6 @@ Wuerth, WS-SLTV, 450301014042, https://www.we-online.com/components/products/dat
 switch single-pole double-throw SPDT würth wurth
 0
 3
-3
-Button_Switch_THT
-SW_Slide_1P2T_CK_OS102011MS2Q
-CuK miniature slide switch, OS series, SPDT, https://www.ckswitches.com/media/1428/os.pdf
-switch SPDT
-0
-5
 3
 Button_Switch_THT
 SW_Slide_SPDT_Angled_CK_OS102011MA1Q
@@ -3187,20 +3152,6 @@ capacitor
 Capacitor_SMD
 C_1825_4564Metric_Pad1.57x6.80mm_HandSolder
 Capacitor SMD 1825 (4564 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size from: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator
-capacitor handsolder
-0
-2
-2
-Capacitor_SMD
-C_2220_5650Metric
-Capacitor SMD 2220 (5650 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size from: http://datasheets.avx.com/AVX-HV_MLCC.pdf), generated with kicad-footprint-generator
-capacitor
-0
-2
-2
-Capacitor_SMD
-C_2220_5650Metric_Pad1.97x5.40mm_HandSolder
-Capacitor SMD 2220 (5650 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size from: http://datasheets.avx.com/AVX-HV_MLCC.pdf), generated with kicad-footprint-generator
 capacitor handsolder
 0
 2
@@ -6496,13 +6447,6 @@ cliff 4mm socket jack banana yellow
 1
 1
 Connector
-Banana_Cliff_FCR7350x_S16N-PC_Horizontal
-Cliff single 4mm shrouded banana panel socket, through-hole, horizontal, https://www.cliffuk.co.uk/products/testleads/sockets/S16NPC.pdf
-cliff 4mm socket jack banana
-0
-1
-1
-Connector
 Banana_Jack_1Pin
 Single banana socket, footprint - 6mm drill
 banana socket
@@ -9009,13 +8953,6 @@ DIN 41612 IEC 60603 Q/2
 32
 32
 Connector_DIN
-DIN41612_Q2_2x16_Male_Horizontal_THT
-DIN41612 connector, type Q/2, Horizontal, 2 rows 16 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
-DIN 41612 IEC 60603 Q/2
-0
-32
-32
-Connector_DIN
 DIN41612_Q2_2x16_Male_Vertical_THT
 DIN41612 connector, type Q/2, Vertical, 2 rows 16 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
 DIN 41612 IEC 60603 Q/2
@@ -9024,13 +8961,6 @@ DIN 41612 IEC 60603 Q/2
 32
 Connector_DIN
 DIN41612_Q3_2x10_Female_Horizontal_THT
-DIN41612 connector, type Q/3, Horizontal, 2 rows 10 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
-DIN 41612 IEC 60603 Q/3
-0
-20
-20
-Connector_DIN
-DIN41612_Q3_2x10_Male_Horizontal_THT
 DIN41612 connector, type Q/3, Horizontal, 2 rows 10 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
 DIN 41612 IEC 60603 Q/3
 0
@@ -9051,13 +8981,6 @@ DIN 41612 IEC 60603 Q
 64
 64
 Connector_DIN
-DIN41612_Q_2x32_Male_Horizontal_THT
-DIN41612 connector, type Q, Horizontal, 2 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
-DIN 41612 IEC 60603 Q
-0
-64
-64
-Connector_DIN
 DIN41612_Q_2x32_Male_Vertical_THT
 DIN41612 connector, type Q, Vertical, 2 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
 DIN 41612 IEC 60603 Q
@@ -9066,13 +8989,6 @@ DIN 41612 IEC 60603 Q
 64
 Connector_DIN
 DIN41612_R2_2x16_Female_Horizontal_THT
-DIN41612 connector, type R/2, Horizontal, 3 rows 16 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
-DIN 41612 IEC 60603 R/2
-0
-32
-32
-Connector_DIN
-DIN41612_R2_2x16_Male_Horizontal_THT
 DIN41612 connector, type R/2, Horizontal, 3 rows 16 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
 DIN 41612 IEC 60603 R/2
 0
@@ -9093,13 +9009,6 @@ DIN 41612 IEC 60603 R/2
 48
 48
 Connector_DIN
-DIN41612_R2_3x16_Male_Horizontal_THT
-DIN41612 connector, type R/2, Horizontal, 3 rows 16 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
-DIN 41612 IEC 60603 R/2
-0
-48
-48
-Connector_DIN
 DIN41612_R2_3x16_Male_Vertical_THT
 DIN41612 connector, type R/2, Vertical, 3 rows 16 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
 DIN 41612 IEC 60603 R/2
@@ -9108,13 +9017,6 @@ DIN 41612 IEC 60603 R/2
 48
 Connector_DIN
 DIN41612_R3_2x10_Female_Horizontal_THT
-DIN41612 connector, type R/3, Horizontal, 3 rows 10 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
-DIN 41612 IEC 60603 R/3
-0
-20
-20
-Connector_DIN
-DIN41612_R3_2x10_Male_Horizontal_THT
 DIN41612 connector, type R/3, Horizontal, 3 rows 10 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
 DIN 41612 IEC 60603 R/3
 0
@@ -9135,13 +9037,6 @@ DIN 41612 IEC 60603 R/3
 30
 30
 Connector_DIN
-DIN41612_R3_3x10_Male_Horizontal_THT
-DIN41612 connector, type R/3, Horizontal, 3 rows 10 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
-DIN 41612 IEC 60603 R/3
-0
-30
-30
-Connector_DIN
 DIN41612_R3_3x10_Male_Vertical_THT
 DIN41612 connector, type R/3, Vertical, 3 rows 10 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
 DIN 41612 IEC 60603 R/3
@@ -9150,13 +9045,6 @@ DIN 41612 IEC 60603 R/3
 30
 Connector_DIN
 DIN41612_R_1x32_Female_Horizontal_THT
-DIN41612 connector, type R, Horizontal, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
-DIN 41612 IEC 60603 R
-0
-32
-32
-Connector_DIN
-DIN41612_R_1x32_Male_Horizontal_THT
 DIN41612 connector, type R, Horizontal, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
 DIN 41612 IEC 60603 R
 0
@@ -9177,13 +9065,6 @@ DIN 41612 IEC 60603 R
 32
 32
 Connector_DIN
-DIN41612_R_2x16_Male_Horizontal_THT
-DIN41612 connector, type R, Horizontal, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
-DIN 41612 IEC 60603 R
-0
-32
-32
-Connector_DIN
 DIN41612_R_2x16_Male_Vertical_THT
 DIN41612 connector, type R, Vertical, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
 DIN 41612 IEC 60603 R
@@ -9192,13 +9073,6 @@ DIN 41612 IEC 60603 R
 32
 Connector_DIN
 DIN41612_R_2x32_Female_Horizontal_THT
-DIN41612 connector, type R, Horizontal, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
-DIN 41612 IEC 60603 R
-0
-64
-64
-Connector_DIN
-DIN41612_R_2x32_Male_Horizontal_THT
 DIN41612 connector, type R, Horizontal, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
 DIN 41612 IEC 60603 R
 0
@@ -9219,13 +9093,6 @@ DIN 41612 IEC 60603 R
 48
 48
 Connector_DIN
-DIN41612_R_3x16_Male_Horizontal_THT
-DIN41612 connector, type R, Horizontal, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
-DIN 41612 IEC 60603 R
-0
-48
-48
-Connector_DIN
 DIN41612_R_3x16_Male_Vertical_THT
 DIN41612 connector, type R, Vertical, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
 DIN 41612 IEC 60603 R
@@ -9234,13 +9101,6 @@ DIN 41612 IEC 60603 R
 48
 Connector_DIN
 DIN41612_R_3x32_Female_Horizontal_THT
-DIN41612 connector, type R, Horizontal, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
-DIN 41612 IEC 60603 R
-0
-96
-96
-Connector_DIN
-DIN41612_R_3x32_Male_Horizontal_THT
 DIN41612 connector, type R, Horizontal, 3 rows 32 pins wide, https://www.erni-x-press.com/de/downloads/kataloge/englische_kataloge/erni-din41612-iec60603-2-e.pdf
 DIN 41612 IEC 60603 R
 0
@@ -43148,13 +43008,6 @@ RJ9 Connector tab down
 4
 4
 Connector_RJ
-RJ12_Amphenol_54601
-RJ12 connector  https://cdn.amphenol-icc.com/media/wysiwyg/files/drawing/c-bmj-0082.pdf
-RJ12 connector
-0
-6
-6
-Connector_RJ
 RJ12_Amphenol_54601-x06_Horizontal
 RJ12 6P6C horizontal socket, plastic body, tab down, https://cdn.amphenol-icc.com/media/wysiwyg/files/drawing/c-bmj-0082.pdf
 RJ12 connector
@@ -43287,13 +43140,6 @@ Halo FastJack, Shielded, https://www.haloelectronics.com/pdf/fastjack-100baset.p
 0
 10
 9
-Connector_RJ
-RJ45_Hanrun_HR911105A
-http://www.kosmodrom.com.ua/pdf/HR911105A.pdf
-RJ45 Magjack
-0
-14
-13
 Connector_RJ
 RJ45_Hanrun_HR911105A_Horizontal
 1 Port RJ45 8P8C receptacle, shielded, with magnetics, through hole, 2 LEDs, tab down, http://www.hanrun.com/public/upload/down/2020/09-11/cc11be56d66bb63d5f1eeb85492439c0.pdf
@@ -51726,27 +51572,6 @@ Converter_ACDC
 Converter_ACDC_Hi-Link_HLK-PMxx
 ACDC-Converter, 3W, Hi-Link, HLK-PMxx, THT (Script generated with StandardBox.py) (https://h.hlktech.com/download/ACDC%E7%94%B5%E6%BA%90%E6%A8%A1%E5%9D%973W%E7%B3%BB%E5%88%97/1/%E6%B5%B7%E5%87%8C%E7%A7%913W%E7%B3%BB%E5%88%97%E7%94%B5%E6%BA%90%E6%A8%A1%E5%9D%97%E8%A7%84%E6%A0%BC%E4%B9%A6V2.8.pdf)
 ACDC-Converter 3W THT Hi-Link board mount module
-0
-4
-4
-Converter_ACDC
-Converter_ACDC_HiLink_HLK-5Mxx
-ACDC-Converter, 10W, HiLink, HLK-5Mxx, (http://h.hlktech.com/download/ACDC%E7%94%B5%E6%BA%90%E6%A8%A1%E5%9D%975W%E7%B3%BB%E5%88%97/1/%E6%B5%B7%E5%87%8C%E7%A7%915W%E7%B3%BB%E5%88%97%E7%94%B5%E6%BA%90%E6%A8%A1%E5%9D%97%E8%A7%84%E6%A0%BC%E4%B9%A6V2.8.pdf)
-ACDC-Converter 5W THT HiLink board mount module
-0
-4
-4
-Converter_ACDC
-Converter_ACDC_HiLink_HLK-10Mxx
-ACDC-Converter, 10W, HiLink, HLK-10Mxx, THT, http://h.hlktech.com/download/ACDC%E7%94%B5%E6%BA%90%E6%A8%A1%E5%9D%9710W%E7%B3%BB%E5%88%97/1/%E6%B5%B7%E5%87%8C%E7%A7%9110W%E7%B3%BB%E5%88%97%E7%94%B5%E6%BA%90%E6%A8%A1%E5%9D%97%E8%A7%84%E6%A0%BC%E4%B9%A6V1.8.pdf
-ACDC-Converter 10W THT HiLink board mount module
-0
-4
-4
-Converter_ACDC
-Converter_ACDC_HiLink_HLK-PMxx
-ACDC-Converter, 3W, HiLink, HLK-PMxx, THT, http://www.hlktech.net/product_detail.php?ProId=54
-ACDC-Converter 3W THT HiLink board mount module
 0
 4
 4
@@ -66934,13 +66759,6 @@ laser-ranging sensor
 12
 12
 OptoDevice
-ST_VL53L1X
-https://www.st.com/resource/en/datasheet/vl53l1x.pdf
-laser-ranging sensor
-0
-12
-12
-OptoDevice
 Sharp_GP2S700HCP
 Sharp GP2S700HCP, light-direction upwards, see: https://www.sharpsde.com/fileadmin/products/Optoelectronics/Isolation%20Devices/Specs_Photointerrupter/GP2S700HCP_03Oct05_DS_D3-A02201FEN.pdf
 refective opto couple photo coupler
@@ -69958,13 +69776,6 @@ DFN NoLead 506AQ
 13
 9
 Package_DFN_QFN
-DFN-8-1EP_2x2mm_P0.5mm_EP0.7x1.3mm
-DFN, 8 Pin (https://www.onsemi.com/pub/Collateral/NUF4401MN-D.PDF#page=6), generated with kicad-footprint-generator ipc_noLead_generator.py
-DFN NoLead
-0
-13
-9
-Package_DFN_QFN
 DFN-8-1EP_2x2mm_P0.5mm_EP0.8x1.6mm
 DFN, 8 Pin (https://www.qorvo.com/products/d/da007268), generated with kicad-footprint-generator ipc_noLead_generator.py
 DFN NoLead
@@ -70322,13 +70133,6 @@ DFN 0.5
 23
 15
 Package_DFN_QFN
-DFN-14-1EP_4x4mm_P0.5mm_EP2.86x3.6mm
-DFN14, 4x4, 0.5P; CASE 506CM (see ON Semiconductor 506CM.PDF)
-DFN 0.5
-0
-23
-15
-Package_DFN_QFN
 DFN-14_1.35x3.5mm_P0.5mm
 DFN, 14 Pin (https://m.littelfuse.com/media?resourcetype=datasheets&itemid=9fbe09c9-efee-4022-a889-ca0005cd9b07&filename=littelfuse-tvs-diode-array-sp3012-datasheet#page=5), generated with kicad-footprint-generator ipc_noLead_generator.py
 DFN NoLead
@@ -70558,20 +70362,6 @@ MLPQ 48 leads, 7x7mm (https://www.infineon.com/dgdl/irs2093mpbf.pdf?fileId=5546d
 mlpq 32 7x7mm
 0
 113
-49
-Package_DFN_QFN
-Infineon_MLPQ-48-1EP_7x7mm_P0.5mm_Pad5.15x5.15mm
-MLPQ 48 leads, 7x7mm (https://www.infineon.com/dgdl/irs2052mpbf.pdf?fileId=5546d462533600a401535675d3b32788)
-mlpq 32 7x7mm
-0
-117
-49
-Package_DFN_QFN
-Infineon_MLPQ-48-1EP_7x7mm_P0.5mm_Pad5.55x5.55mm
-MLPQ 48 leads, 7x7mm (https://www.infineon.com/dgdl/irs2093mpbf.pdf?fileId=5546d462533600a401535675fb892793)
-mlpq 32 7x7mm
-0
-117
 49
 Package_DFN_QFN
 Infineon_PQFN-22-15-4EP_6x5mm_P0.65mm
@@ -72548,13 +72338,6 @@ UQFN DFN 0.5 ST
 6
 6
 Package_DFN_QFN
-ST_UQFN-6L_1.5x1.7mm_Pitch0.5mm
-ST UQFN 6 pin 0.5mm Pitch http://www.st.com/resource/en/datasheet/ecmf02-2amx6.pdf
-UQFN DFN 0.5 ST
-0
-6
-6
-Package_DFN_QFN
 SiliconLabs_QFN-20-1EP_3x3mm_P0.5mm_EP1.8x1.8mm
 20-Lead Plastic Quad Flat, No Lead Package - 3x3 mm Body [QFN] with corner pads; see figure 8.2 of https://www.silabs.com/documents/public/data-sheets/efm8bb1-datasheet.pdf
 QFN 0.5
@@ -72982,20 +72765,6 @@ Texas_R-PUQFN-N12
 13
 12
 Package_DFN_QFN
-Texas_R-PWQFN-N28_EP2.1x3.1mm
-QFN, 28 Pin (http://www.ti.com/lit/ds/symlink/tps51363.pdf#page=29), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-33
-29
-Package_DFN_QFN
-Texas_R-PWQFN-N28_EP2.1x3.1mm_ThermalVias
-QFN, 28 Pin (http://www.ti.com/lit/ds/symlink/tps51363.pdf#page=29), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-43
-29
-Package_DFN_QFN
 Texas_RGC0064B_VQFN-64-1EP_9x9mm_P0.5mm_EP4.25x4.25mm
 Texas RGC0064B VQFN, 64 Pin (http://www.ti.com/lit/ds/symlink/msp430f5217.pdf#page=122), generated with kicad-footprint-generator ipc_noLead_generator.py
 Texas VQFN NoLead
@@ -73010,20 +72779,6 @@ Texas VQFN NoLead
 127
 65
 Package_DFN_QFN
-Texas_RGE0024C_EP2.1x2.1mm
-Texas  QFN, 24 Pin (http://www.ti.com/lit/ds/symlink/pca9548a.pdf#page=37), generated with kicad-footprint-generator ipc_noLead_generator.py
-Texas QFN NoLead
-0
-29
-25
-Package_DFN_QFN
-Texas_RGE0024C_EP2.1x2.1mm_ThermalVias
-Texas  QFN, 24 Pin (http://www.ti.com/lit/ds/symlink/pca9548a.pdf#page=37), generated with kicad-footprint-generator ipc_noLead_generator.py
-Texas QFN NoLead
-0
-39
-25
-Package_DFN_QFN
 Texas_RGE0024C_VQFN-24-1EP_4x4mm_P0.5mm_EP2.1x2.1mm
 Texas RGE0024C VQFN, 24 Pin (http://www.ti.com/lit/ds/symlink/pca9548a.pdf#page=37), generated with kicad-footprint-generator ipc_noLead_generator.py
 Texas VQFN NoLead
@@ -73034,20 +72789,6 @@ Package_DFN_QFN
 Texas_RGE0024C_VQFN-24-1EP_4x4mm_P0.5mm_EP2.1x2.1mm_ThermalVias
 Texas RGE0024C VQFN, 24 Pin (http://www.ti.com/lit/ds/symlink/pca9548a.pdf#page=37), generated with kicad-footprint-generator ipc_noLead_generator.py
 Texas VQFN NoLead
-0
-39
-25
-Package_DFN_QFN
-Texas_RGE0024H_EP2.7x2.7mm
-Texas  QFN, 24 Pin (http://www.ti.com/lit/ds/symlink/tlc5971.pdf#page=39), generated with kicad-footprint-generator ipc_noLead_generator.py
-Texas QFN NoLead
-0
-29
-25
-Package_DFN_QFN
-Texas_RGE0024H_EP2.7x2.7mm_ThermalVias
-Texas  QFN, 24 Pin (http://www.ti.com/lit/ds/symlink/tlc5971.pdf#page=39), generated with kicad-footprint-generator ipc_noLead_generator.py
-Texas QFN NoLead
 0
 39
 25
@@ -73104,20 +72845,6 @@ Package_DFN_QFN
 Texas_RGV0016A_VQFN-16-1EP_4x4mm_P0.65mm_EP2.1x2.1mm_ThermalVias
 Texas RGV0016A VQFN, 16 Pin (http://www.ti.com/lit/ds/symlink/ina3221.pdf#page=44), generated with kicad-footprint-generator ipc_noLead_generator.py
 Texas VQFN NoLead
-0
-31
-17
-Package_DFN_QFN
-Texas_RGV_S-PVQFN-N16_EP2.1x2.1mm
-QFN, 16 Pin (http://www.ti.com/lit/ds/symlink/ina3221.pdf#page=44), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-21
-17
-Package_DFN_QFN
-Texas_RGV_S-PVQFN-N16_EP2.1x2.1mm_ThermalVias
-QFN, 16 Pin (http://www.ti.com/lit/ds/symlink/ina3221.pdf#page=44), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
 0
 31
 17
@@ -73367,20 +73094,6 @@ Texas WQFN NoLead
 31
 17
 Package_DFN_QFN
-Texas_RUM0016A_EP2.6x2.6mm
-QFN, 16 Pin (http://www.ti.com/lit/ds/symlink/lmh0074.pdf#page=13), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-21
-17
-Package_DFN_QFN
-Texas_RUM0016A_EP2.6x2.6mm_ThermalVias
-QFN, 16 Pin (http://www.ti.com/lit/ds/symlink/lmh0074.pdf#page=13), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-31
-17
-Package_DFN_QFN
 Texas_RUM0016A_WQFN-16-1EP_4x4mm_P0.65mm_EP2.6x2.6mm
 Texas RUM0016A WQFN, 16 Pin (http://www.ti.com/lit/ds/symlink/lmh0074.pdf#page=13), generated with kicad-footprint-generator ipc_noLead_generator.py
 Texas WQFN NoLead
@@ -73465,236 +73178,12 @@ Texas_S-PVQFN-N14_ThermalVias
 24
 15
 Package_DFN_QFN
-Texas_S-PVQFN-N16_EP2.7x2.7mm
-QFN, 16 Pin (http://www.ti.com/lit/ds/symlink/msp430g2001.pdf#page=43), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-26
-17
-Package_DFN_QFN
-Texas_S-PVQFN-N16_EP2.7x2.7mm_ThermalVias
-QFN, 16 Pin (http://www.ti.com/lit/ds/symlink/msp430g2001.pdf#page=43), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-31
-17
-Package_DFN_QFN
-Texas_S-PVQFN-N20_EP2.4x2.4mm
-QFN, 20 Pin (http://www.ti.com/lit/ds/symlink/cc1101.pdf#page=101), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-25
-21
-Package_DFN_QFN
-Texas_S-PVQFN-N20_EP2.4x2.4mm_ThermalVias
-QFN, 20 Pin (http://www.ti.com/lit/ds/symlink/cc1101.pdf#page=101), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-35
-21
-Package_DFN_QFN
-Texas_S-PVQFN-N20_EP2.7x2.7mm
-QFN, 20 Pin (http://www.ti.com/lit/ds/symlink/drv8662.pdf#page=23), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-25
-21
-Package_DFN_QFN
-Texas_S-PVQFN-N20_EP2.7x2.7mm_ThermalVias
-QFN, 20 Pin (http://www.ti.com/lit/ds/symlink/drv8662.pdf#page=23), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-35
-21
-Package_DFN_QFN
-Texas_S-PVQFN-N20_EP3.15x3.15mm
-QFN, 20 Pin (www.ti.com/lit/ds/symlink/tps7a7200.pdf#page=36), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-25
-21
-Package_DFN_QFN
-Texas_S-PVQFN-N20_EP3.15x3.15mm_ThermalVias
-QFN, 20 Pin (www.ti.com/lit/ds/symlink/tps7a7200.pdf#page=36), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-47
-21
-Package_DFN_QFN
-Texas_S-PVQFN-N24_EP2.1x2.1mm
-QFN, 24 Pin (http://www.ti.com/lit/ds/symlink/msp430fr5720.pdf#page=108), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-29
-25
-Package_DFN_QFN
-Texas_S-PVQFN-N24_EP2.1x2.1mm_ThermalVias
-QFN, 24 Pin (http://www.ti.com/lit/ds/symlink/msp430fr5720.pdf#page=108), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-39
-25
-Package_DFN_QFN
-Texas_S-PVQFN-N32_EP3.45x3.45mm
-QFN, 32 Pin (http://www.ti.com/lit/ds/symlink/msp430f1122.pdf#page=54), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-42
-33
-Package_DFN_QFN
-Texas_S-PVQFN-N32_EP3.45x3.45mm_ThermalVias
-QFN, 32 Pin (http://www.ti.com/lit/ds/symlink/msp430f1122.pdf#page=54), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-59
-33
-Package_DFN_QFN
-Texas_S-PVQFN-N36_EP4.4x4.4mm
-QFN, 36 Pin (http://www.ti.com/lit/ds/slvsba5d/slvsba5d.pdf#page=35), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-46
-37
-Package_DFN_QFN
-Texas_S-PVQFN-N36_EP4.4x4.4mm_ThermalVias
-QFN, 36 Pin (http://www.ti.com/lit/ds/slvsba5d/slvsba5d.pdf#page=35), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-79
-37
-Package_DFN_QFN
-Texas_S-PVQFN-N40_EP2.9x2.9mm
-QFN, 40 Pin (http://www.ti.com/lit/ds/symlink/msp430fr5731.pdf#page=111 JEDEC MO-220 variation VJJD-2), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-45
-41
-Package_DFN_QFN
-Texas_S-PVQFN-N40_EP2.9x2.9mm_ThermalVias
-QFN, 40 Pin (http://www.ti.com/lit/ds/symlink/msp430fr5731.pdf#page=111 JEDEC MO-220 variation VJJD-2), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-55
-41
-Package_DFN_QFN
-Texas_S-PVQFN-N40_EP3.52x2.62mm
-QFN, 40 Pin (http://www.ti.com/lit/ds/symlink/drv8308.pdf#page=56 JEDEC MO-220 variation VJJD-2), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-47
-41
-Package_DFN_QFN
-Texas_S-PVQFN-N40_EP3.52x2.62mm_ThermalVias
-QFN, 40 Pin (http://www.ti.com/lit/ds/symlink/drv8308.pdf#page=56 JEDEC MO-220 variation VJJD-2), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-60
-41
-Package_DFN_QFN
-Texas_S-PVQFN-N40_EP4.6x4.6mm
-QFN, 40 Pin (http://www.ti.com/lit/ds/symlink/dac7750.pdf#page=54), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-50
-41
-Package_DFN_QFN
-Texas_S-PVQFN-N40_EP4.6x4.6mm_ThermalVias
-QFN, 40 Pin (http://www.ti.com/lit/ds/symlink/dac7750.pdf#page=54), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-83
-41
-Package_DFN_QFN
-Texas_S-PVQFN-N40_EP4.15x4.15mm
-QFN, 40 Pin (http://www.ti.com/lit/ds/symlink/msp430g2755.pdf#page=70 JEDEC MO-220 variation VJJD-2), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-50
-41
-Package_DFN_QFN
-Texas_S-PVQFN-N40_EP4.15x4.15mm_ThermalVias
-QFN, 40 Pin (http://www.ti.com/lit/ds/symlink/msp430g2755.pdf#page=70 JEDEC MO-220 variation VJJD-2), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-83
-41
-Package_DFN_QFN
-Texas_S-PVQFN-N48_EP5.15x5.15mm
-QFN, 48 Pin (http://www.ti.com/lit/ds/symlink/msp430f5232.pdf#page=111), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-65
-49
-Package_DFN_QFN
-Texas_S-PVQFN-N48_EP5.15x5.15mm_ThermalVias
-QFN, 48 Pin (http://www.ti.com/lit/ds/symlink/msp430f5232.pdf#page=111), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-111
-49
-Package_DFN_QFN
-Texas_S-PVQFN-N64_EP4.25x4.25mm
-QFN, 64 Pin (http://www.ti.com/lit/ds/symlink/msp430f5217.pdf#page=120), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-69
-65
-Package_DFN_QFN
-Texas_S-PVQFN-N64_EP4.25x4.25mm_ThermalVias
-QFN, 64 Pin (http://www.ti.com/lit/ds/symlink/msp430f5217.pdf#page=120), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-127
-65
-Package_DFN_QFN
-Texas_S-PWQFN-N16_EP2.1x2.1mm
-QFN, 16 Pin (http://www.ti.com/lit/ds/symlink/drv8801.pdf#page=31 MO-220 variation VGGC), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-21
-17
-Package_DFN_QFN
-Texas_S-PWQFN-N16_EP2.1x2.1mm_ThermalVias
-QFN, 16 Pin (http://www.ti.com/lit/ds/symlink/drv8801.pdf#page=31 MO-220 variation VGGC), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-31
-17
-Package_DFN_QFN
 Texas_S-PWQFN-N20
 20-Pin Plastic Quad Flatpack No-Lead Package, Body 3.0x3.0x0.8mm, Texas Instruments (http://www.ti.com/lit/ds/symlink/tps22993.pdf)
 QFN 0.4
 0
 24
 20
-Package_DFN_QFN
-Texas_S-PWQFN-N24_EP2.7x2.7mm
-QFN, 24 Pin (http://www.ti.com/lit/ds/symlink/bq25601.pdf#page=54), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-29
-25
-Package_DFN_QFN
-Texas_S-PWQFN-N24_EP2.7x2.7mm_ThermalVias
-QFN, 24 Pin (http://www.ti.com/lit/ds/symlink/bq25601.pdf#page=54), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-39
-25
-Package_DFN_QFN
-Texas_S-PWQFN-N32_EP2.8x2.8mm
-QFN, 32 Pin (https://www.ti.com/lit/ds/symlink/bq25703a.pdf#page=90), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-37
-33
-Package_DFN_QFN
-Texas_S-PWQFN-N32_EP2.8x2.8mm_ThermalVias
-QFN, 32 Pin (https://www.ti.com/lit/ds/symlink/bq25703a.pdf#page=90), generated with kicad-footprint-generator ipc_noLead_generator.py
-QFN NoLead
-0
-47
-33
 Package_DFN_QFN
 Texas_S-PWQFN-N100_EP5.5x5.5mm
 http://www.ti.com/general/docs/lit/getliterature.tsp?baseLiteratureNumber=szza059&fileType=pdf,http://www.ti.com/lit/ds/sllse76m/sllse76m.pdf
@@ -73765,20 +73254,6 @@ TI RNR0011A
 0
 20
 11
-Package_DFN_QFN
-Texas_VSON-HR-8_1.5x2mm_P0.5mm
-Texas  VSON-HR, 8 Pin (http://www.ti.com/lit/ds/symlink/tps62823.pdf#page=29), generated with kicad-footprint-generator ipc_noLead_generator.py
-Texas VSON-HR NoLead
-0
-8
-8
-Package_DFN_QFN
-Texas_WQFN-10_2x2mm_P0.5mm
-Texas  WQFN, 10 Pin (https://www.ti.com/lit/ds/symlink/tmp461.pdf#page=35 (RUN0010A)), generated with kicad-footprint-generator ipc_noLead_generator.py
-Texas WQFN NoLead
-0
-10
-10
 Package_DFN_QFN
 Texas_WQFN-MR-100_3x3-DapStencil
 http://www.ti.com/general/docs/lit/getliterature.tsp?baseLiteratureNumber=szza059&fileType=pdf,http://www.ti.com/general/docs/lit/getliterature.tsp?baseLiteratureNumber=mpqf258&fileType=pdf,http://www.ti.com/general/docs/lit/getliterature.tsp?baseLiteratureNumber=LPPD235&fileType=pdf
@@ -78617,13 +78092,6 @@ QSOP SO
 28
 28
 Package_SO
-SC-74-6_1.5x2.9mm_P0.95mm
-SC-74, 6 Pin (https://www.nxp.com/docs/en/package-information/SOT457.pdf), generated with kicad-footprint-generator ipc_gullwing_generator.py
-SC-74 SO
-0
-6
-6
-Package_SO
 SO-4_4.4x2.3mm_P1.27mm
 4-Lead Plastic Small Outline (SO), see http://datasheet.octopart.com/OPIA403BTRE-Optek-datasheet-5328560.pdf
 SO SOIC 1.27
@@ -80142,13 +79610,6 @@ HSOIC SO
 0
 23
 9
-Package_SO
-Texas_R-PDSO-N5
-Plastic Small outline http://www.ti.com/lit/ml/mpds158c/mpds158c.pdf
-SOT23 R-PDSO-N5
-0
-5
-5
 Package_SO
 Texas_S-PDSO-G8_3x3mm_P0.65mm
 plastic small outline, https://www.ti.com/lit/ml/mpds028d/mpds028d.pdf, https://www.ti.com/lit/ds/symlink/dac8552.pdf#page=23
@@ -84784,13 +84245,6 @@ xL865 gsm umts
 52
 48
 RF_GSM
-ublox_SARA-G3_LGA-96
-ublox Sara GSM/HSPA modem, https://www.u-blox.com/sites/default/files/SARA-G3-U2_SysIntegrManual_%28UBX-13000995%29.pdf, pag.162
-ublox SARA-G3 SARA-U2 GSM HSPA
-0
-192
-96
-RF_GSM
 ublox_SARA_LGA-96
 ublox SARA cellular/GNSS module, https://www.u-blox.com/sites/default/files/SARA-G3-U2_SysIntegrManual_%28UBX-13000995%29.pdf, pag.162
 ublox u-blox SARA-R41 SARA-R42 SARA-R5 SARA-N2 SARA-N3 SARA-G3 SARA-G4 SARA-U2 cellular LTE IoT GSM HSPA GNSS GPS
@@ -85812,13 +85266,6 @@ Relay 1-Form-C Schrack-RYII RM3.2mm SPDT
 0
 5
 5
-Relay_THT
-Relay_1P1T_NO_10x24x18.8mm_Panasonic_ADW11xxxxW_THT
-Panasonic Relay SPST 10mm 24mm, https://www.panasonic-electric-works.com/pew/es/downloads/ds_dw_hl_en.pdf
-Panasonic Relay SPST
-0
-4
-4
 Relay_THT
 Relay_3PST_COTO_3650
 Low thermal EMF 3PST-NO reed relay, 150V 0.25A, similar to 3660 but with independent shield, https://cotorelay.com/wp-content/uploads/2014/09/3600_series_reed_relay_datasheet.pdf
@@ -87724,20 +87171,6 @@ rotary encoder
 7
 6
 Rotary_Encoder
-RotaryEncoder_Bourns_Horizontal_PEC12R-2xxxF-Nxxxx
-Bourns rotary encoder, PEC12R, without switch, horizontal shaft, https://www.bourns.com/docs/product-datasheets/pec12r.pdf
-rotary encoder
-0
-5
-4
-Rotary_Encoder
-RotaryEncoder_Bourns_Horizontal_PEC12R-2xxxF-Sxxxx
-Bourns rotary encoder, PEC12R, with switch, horizontal shaft, https://www.bourns.com/docs/product-datasheets/pec12r.pdf
-rotary encoder
-0
-7
-6
-Rotary_Encoder
 RotaryEncoder_Bourns_Vertical_PEC12R-3x17F-Nxxxx
 Bourns rotary encoder, PEC12R, without switch, with bushing, vertical shaft, 17.5mm shaft, https://www.bourns.com/docs/product-datasheets/pec12r.pdf
 rotary encoder
@@ -87747,20 +87180,6 @@ rotary encoder
 Rotary_Encoder
 RotaryEncoder_Bourns_Vertical_PEC12R-3x17F-Sxxxx
 Bourns rotary encoder, PEC12R, with switch, with bushing, vertical shaft, 17.5mm shaft, https://www.bourns.com/docs/product-datasheets/pec12r.pdf
-rotary encoder
-0
-7
-6
-Rotary_Encoder
-RotaryEncoder_Bourns_Vertical_PEC12R-3xxxF-Nxxxx
-Bourns rotary encoder, PEC12R, without switch, vertical shaft, https://www.bourns.com/docs/product-datasheets/pec12r.pdf
-rotary encoder
-0
-5
-4
-Rotary_Encoder
-RotaryEncoder_Bourns_Vertical_PEC12R-3xxxF-Sxxxx
-Bourns rotary encoder, PEC12R, with switch, vertical shaft, https://www.bourns.com/docs/product-datasheets/pec12r.pdf
 rotary encoder
 0
 7
@@ -89117,20 +88536,6 @@ Logo RoHS
 0
 0
 Symbol
-Symbol_Attention_CopperTop_Big
-Symbol, Attention, Copper Top, Big,
-Symbol, Attention, Copper Top, Big,
-0
-0
-0
-Symbol
-Symbol_Attention_CopperTop_Small
-Symbol, Attention, Copper Top, Small,
-Symbol, Attention, Copper Top, Small,
-0
-0
-0
-Symbol
 Symbol_Attention_Triangle_8x7mm_Copper
 Symbol, Attention, 8x7mm, copper layer
 warning graphic
@@ -89271,20 +88676,6 @@ warning graphic
 0
 0
 Symbol
-Symbol_Danger_CopperTop_Big
-Symbol, Danger, CopperTop, Big,
-Symbol, Danger, CopperTop, Big,
-0
-0
-0
-Symbol
-Symbol_Danger_CopperTop_Small
-Symbol, Danger, Copper Top, Small,
-Symbol, Danger, Copper Top, Small,
-0
-0
-0
-Symbol
 Symbol_ESD-Logo-Text_CopperTop
 
 
@@ -89358,41 +88749,6 @@ Symbol
 Symbol_HighVoltage_Triangle_17x15mm_Copper
 High voltage symbol, in triangle, 17x15mm, copper layer
 warning graphic
-0
-0
-0
-Symbol
-Symbol_HighVoltage_Type1_CopperTop_Big
-Symbol, HighVoltage, Type1, Copper Top, Big,
-Symbol, HighVoltage, Type1, Copper Top, Big,
-0
-0
-0
-Symbol
-Symbol_HighVoltage_Type2_CopperTop_Big
-Symbol, HighVoltage, Type2, Copper Top, Big,
-Symbol, HighVoltage, Type2, Copper Top, Big,
-0
-0
-0
-Symbol
-Symbol_HighVoltage_Type2_CopperTop_VerySmall
-Symbol, High Voltage, Type 2, Copper Top, Very Small,
-Symbol, High Voltage, Type 2, Copper Top, Very Small,
-0
-0
-0
-Symbol
-Symbol_Highvoltage_Type1_CopperTop_Small
-Symbol, Highvoltage, Type 1, Copper Top, Small,
-Symbol, Highvoltage, Type 1, Copper Top, Small,
-0
-0
-0
-Symbol
-Symbol_Highvoltage_Type2_CopperTop_Small
-Symbol, Highvoltage, Type 2, Copper Top, Small,
-Symbol, Highvoltage, Type 2, Copper Top, Small,
 0
 0
 0
