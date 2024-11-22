@@ -58,10 +58,7 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [
-        "starved_thermal|125908000|66335000|775f4bd5-afad-4be7-bbb6-a94d9a7aacd4|e34309a6-b214-48bf-82fc-f9c310ca0dd8|F.Cu",
-        "starved_thermal|137529000|59914000|775f4bd5-afad-4be7-bbb6-a94d9a7aacd4|9c646be3-2d80-461c-8703-2af222374cc3|F.Cu"
-      ],
+      "drc_exclusions": [],
       "meta": {
         "version": 2
       },
@@ -183,6 +180,8 @@
         0.0,
         0.0,
         0.2,
+        0.3,
+        0.4,
         0.5,
         0.6,
         0.8,
