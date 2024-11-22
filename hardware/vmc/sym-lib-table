@@ -1,0 +1,5 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "microchip-local")(type "KiCad")(uri "${LOCALMOD}/microchip-local.kicad_sym")(options "")(descr ""))
+  (lib (name "motor-local")(type "KiCad")(uri "${LOCALMOD}/motor-local.kicad_sym")(options "")(descr ""))
+)

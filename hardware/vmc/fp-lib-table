@@ -1,0 +1,5 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "motors-local")(type "KiCad")(uri "${USERMOD}/motors-local.pretty")(options "")(descr ""))
+  (lib (name "conn-local")(type "KiCad")(uri "${USERMOD}/conn-local.pretty")(options "")(descr ""))
+)
