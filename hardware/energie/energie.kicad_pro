@@ -58,10 +58,7 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [
-        "items_not_allowed|175010051|52637391|7d5b8d34-a6af-4fd3-a1ef-cfbaa4a1ea43|00000000-0000-0000-0000-000000000000",
-        "items_not_allowed|79014500|52250000|955b4fe0-dca5-4451-91e0-ac53c9986267|00000000-0000-0000-0000-000000000000"
-      ],
+      "drc_exclusions": [],
       "meta": {
         "version": 2
       },
@@ -552,6 +549,8 @@
       "Net-(J5-Pin_5)": "pilote",
       "Net-(J5-Pin_7)": "pilote",
       "Net-(J5-Pin_9)": "pilote",
+      "Net-(J9-Pin_1)": "secteur",
+      "Net-(J9-Pin_2)": "secteur",
       "Net-(R14-Pad1)": "pilote",
       "Net-(R14-Pad2)": "pilote",
       "Net-(R16-Pad2)": "pilote",

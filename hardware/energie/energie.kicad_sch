@@ -1823,6 +1823,279 @@
 				)
 			)
 		)
+		(symbol "Converter_ACDC:IRM-02-5"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "PS"
+				(at 0 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "IRM-02-5"
+				(at 0 -5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "Converter_ACDC:Converter_ACDC_MeanWell_IRM-02-xx_THT"
+				(at 0 -7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.meanwell.com/Upload/PDF/IRM-02/IRM-02-SPEC.PDF"
+				(at 10.16 -8.89 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "5V, 400mA, 2W, Isolated, AC-DC, IRM02"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "Miniature Module-type Power Supply MeanWell"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Converter*ACDC*MeanWell*IRM*02*THT*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "IRM-02-5_0_1"
+				(rectangle
+					(start -7.62 3.81)
+					(end 7.62 -3.81)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(arc
+					(start -5.334 0.635)
+					(mid -4.699 0.2495)
+					(end -4.064 0.635)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start -2.794 0.635)
+					(mid -3.429 1.0072)
+					(end -4.064 0.635)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -5.334 -0.635) (xy -2.794 -0.635)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.794 -0.635) (xy 5.334 -0.635)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.794 0.635) (xy 3.302 0.635)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 3.81 0.635) (xy 4.318 0.635)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 4.826 0.635) (xy 5.334 0.635)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "IRM-02-5_1_1"
+				(polyline
+					(pts
+						(xy 0 -1.27) (xy 0 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 1.27) (xy 0 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 3.81) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin power_in line
+					(at -10.16 -2.54 0)
+					(length 2.54)
+					(name "AC/N"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at -10.16 2.54 0)
+					(length 2.54)
+					(name "AC/L"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_out line
+					(at 10.16 -2.54 180)
+					(length 2.54)
+					(name "-Vo"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_out line
+					(at 10.16 2.54 180)
+					(length 2.54)
+					(name "+Vo"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
 		(symbol "Device:C_Polarized_Small"
 			(pin_numbers hide)
 			(pin_names
@@ -4990,6 +5263,12 @@
 		(uuid "05196ded-f1eb-475a-b331-3d390f862e36")
 	)
 	(junction
+		(at 254 69.85)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "08fcc259-189f-4d7f-a9d1-42219fcf3fc2")
+	)
+	(junction
 		(at 190.5 26.67)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5054,6 +5333,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "54a6d459-fb14-4e2e-a6d7-a1584a0e27be")
+	)
+	(junction
+		(at 264.16 69.85)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "567a95f9-a96d-437e-9b36-2c8a77bb17b6")
 	)
 	(junction
 		(at 99.06 158.75)
@@ -5643,6 +5928,16 @@
 	)
 	(wire
 		(pts
+			(xy 264.16 69.85) (xy 264.16 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2051c604-c986-4ed9-92c7-64c4b5c90964")
+	)
+	(wire
+		(pts
 			(xy 138.43 58.42) (xy 138.43 59.69)
 		)
 		(stroke
@@ -5793,6 +6088,16 @@
 	)
 	(wire
 		(pts
+			(xy 259.08 104.14) (xy 259.08 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "37504ce6-e6f4-4e3f-8164-ba291e6fd8f4")
+	)
+	(wire
+		(pts
 			(xy 22.86 58.42) (xy 53.34 58.42)
 		)
 		(stroke
@@ -5823,7 +6128,7 @@
 	)
 	(wire
 		(pts
-			(xy 257.81 69.85) (xy 254 69.85)
+			(xy 254 69.85) (xy 257.81 69.85)
 		)
 		(stroke
 			(width 0)
@@ -6283,6 +6588,16 @@
 	)
 	(wire
 		(pts
+			(xy 264.16 81.28) (xy 260.35 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "70cd2c4a-85b2-425f-9316-670a0aa7f0f3")
+	)
+	(wire
+		(pts
 			(xy 210.82 74.93) (xy 214.63 74.93)
 		)
 		(stroke
@@ -6453,6 +6768,16 @@
 	)
 	(wire
 		(pts
+			(xy 256.54 101.6) (xy 255.27 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "825e42f8-23dd-4113-843b-0ab4d9327421")
+	)
+	(wire
+		(pts
 			(xy 264.16 69.85) (xy 264.16 60.96)
 		)
 		(stroke
@@ -6500,6 +6825,16 @@
 			(type default)
 		)
 		(uuid "86416bf2-cb85-4565-acd2-0c98c6d05314")
+	)
+	(wire
+		(pts
+			(xy 256.54 104.14) (xy 256.54 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "87736ed5-64ad-4692-b964-c53b6416b42c")
 	)
 	(wire
 		(pts
@@ -6590,6 +6925,16 @@
 			(type default)
 		)
 		(uuid "8d690faf-c0ce-4724-b7a0-bf9dd1a657e4")
+	)
+	(wire
+		(pts
+			(xy 254 81.28) (xy 255.27 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8d719c8d-50bf-4f13-a653-36a253c68078")
 	)
 	(wire
 		(pts
@@ -6803,6 +7148,16 @@
 	)
 	(wire
 		(pts
+			(xy 254 69.85) (xy 254 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a2e6ea30-65e3-434d-93a5-692d47dae86e")
+	)
+	(wire
+		(pts
 			(xy 114.3 129.54) (xy 114.3 130.81)
 		)
 		(stroke
@@ -6850,6 +7205,16 @@
 			(type default)
 		)
 		(uuid "a7dcb07f-4034-4961-9119-5f752ad2136c")
+	)
+	(wire
+		(pts
+			(xy 259.08 101.6) (xy 260.35 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a81f6831-c23f-4249-846a-bcf5d38e2acd")
 	)
 	(wire
 		(pts
@@ -7790,6 +8155,28 @@
 	(netclass_flag ""
 		(length 1.27)
 		(shape round)
+		(at 259.08 104.14 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "37277fdd-6d24-48cc-aa27-fa08cf2b6af1")
+		(property "Netclass" "secteur"
+			(at 261.62 103.378 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(justify left)
+			)
+		)
+	)
+	(netclass_flag ""
+		(length 1.27)
+		(shape round)
 		(at 222.25 121.92 0)
 		(fields_autoplaced yes)
 		(effects
@@ -7801,6 +8188,28 @@
 		(uuid "7806683b-7e85-4cf3-8647-d20c9c95833c")
 		(property "Netclass" "pilote"
 			(at 222.9485 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(justify left)
+			)
+		)
+	)
+	(netclass_flag ""
+		(length 1.27)
+		(shape round)
+		(at 256.54 104.14 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "96af11f6-44ef-4765-9647-86cd25bee8a9")
+		(property "Netclass" "secteur"
+			(at 247.142 103.124 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8447,9 +8856,9 @@
 		(at 152.4 116.84 180)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
-		(dnp no)
+		(dnp yes)
 		(fields_autoplaced yes)
 		(uuid "18eabfd4-269c-46b5-9ea5-e3a998ef9d9a")
 		(property "Reference" "J7"
@@ -8906,9 +9315,9 @@
 		(at 151.13 86.36 180)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
-		(dnp no)
+		(dnp yes)
 		(fields_autoplaced yes)
 		(uuid "25ddc4cd-e2c3-4671-b2f3-556611f3ddb0")
 		(property "Reference" "J6"
@@ -11349,6 +11758,85 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector:Screw_Terminal_01x02")
+		(at 259.08 109.22 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "8626ab5c-7eac-4d0c-afe6-519af75f5550")
+		(property "Reference" "J9"
+			(at 261.62 107.9499 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "ACin"
+			(at 261.62 110.4899 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_Phoenix_MC:PhoenixContact_MCV_1,5_2-G-3.5_1x02_P3.50mm_Vertical"
+			(at 259.08 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 259.08 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic screw terminal, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 259.08 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "P/N" "YO0201500000G x1"
+			(at 259.08 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "26362f37-f590-44d0-88c6-daf565a4ae53")
+		)
+		(pin "1"
+			(uuid "f9a07eb9-b84e-4bd1-9656-f5db5812638b")
+		)
+		(instances
+			(project "energie"
+				(path "/febe0e94-4f23-4511-b87b-1ed085781444"
+					(reference "J9")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C_Small")
 		(at 186.69 26.67 270)
 		(unit 1)
@@ -11972,6 +12460,82 @@
 		)
 	)
 	(symbol
+		(lib_id "Converter_ACDC:IRM-02-5")
+		(at 257.81 91.44 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "aa65aa6b-6da4-43d9-a64d-69063c475450")
+		(property "Reference" "PS1"
+			(at 262.89 90.1699 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "IRM-02-5"
+			(at 262.89 92.7099 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Converter_ACDC:Converter_ACDC_MeanWell_IRM-02-xx_THT"
+			(at 265.43 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.meanwell.com/Upload/PDF/IRM-02/IRM-02-SPEC.PDF"
+			(at 266.7 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "5V, 400mA, 2W, Isolated, AC-DC, IRM02"
+			(at 257.81 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "4"
+			(uuid "5837796e-f802-484c-b57f-9fd596de19ae")
+		)
+		(pin "3"
+			(uuid "83f8db94-fcc3-405b-98b8-8b52238fc9f8")
+		)
+		(pin "2"
+			(uuid "e12b2053-d578-4e9f-9cab-65c8704df3a0")
+		)
+		(pin "1"
+			(uuid "8c187dad-d0e7-44cd-b858-e0f60f6ec4e7")
+		)
+		(instances
+			(project "energie"
+				(path "/febe0e94-4f23-4511-b87b-1ed085781444"
+					(reference "PS1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+5V")
 		(at 184.15 109.22 0)
 		(unit 1)
@@ -12194,9 +12758,9 @@
 		(at 257.81 74.93 90)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
-		(dnp no)
+		(dnp yes)
 		(fields_autoplaced yes)
 		(uuid "cfee171a-bba4-4c52-926e-9fb93b167560")
 		(property "Reference" "J8"
