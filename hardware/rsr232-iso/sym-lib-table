@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "logic-local")(type "KiCad")(uri "${LOCALMOD}/logic-local.kicad_sym")(options "")(descr ""))
+)
