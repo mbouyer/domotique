@@ -5677,7 +5677,7 @@
 	)
 	(wire
 		(pts
-			(xy 91.44 87.63) (xy 91.44 73.66)
+			(xy 91.44 87.63) (xy 91.44 82.55)
 		)
 		(stroke
 			(width 0)
@@ -5807,7 +5807,7 @@
 	)
 	(wire
 		(pts
-			(xy 27.94 102.87) (xy 27.94 48.26)
+			(xy 27.94 102.87) (xy 27.94 82.55)
 		)
 		(stroke
 			(width 0)
@@ -6427,6 +6427,16 @@
 	)
 	(wire
 		(pts
+			(xy 27.94 77.47) (xy 27.94 48.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5edf7f55-6a5a-4d73-bc1d-d47733a6a8eb")
+	)
+	(wire
+		(pts
 			(xy 147.32 158.75) (xy 147.32 160.02)
 		)
 		(stroke
@@ -6507,7 +6517,7 @@
 	)
 	(wire
 		(pts
-			(xy 40.64 100.33) (xy 40.64 53.34)
+			(xy 40.64 100.33) (xy 40.64 82.55)
 		)
 		(stroke
 			(width 0)
@@ -6604,6 +6614,16 @@
 			(type default)
 		)
 		(uuid "6fd16b57-b191-4812-8b78-7b71689d3922")
+	)
+	(wire
+		(pts
+			(xy 40.64 77.47) (xy 40.64 53.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "703ec3b0-44f3-4c6c-9131-3764f28492a5")
 	)
 	(wire
 		(pts
@@ -6817,7 +6837,7 @@
 	)
 	(wire
 		(pts
-			(xy 53.34 97.79) (xy 53.34 58.42)
+			(xy 53.34 97.79) (xy 53.34 82.55)
 		)
 		(stroke
 			(width 0)
@@ -7437,7 +7457,7 @@
 	)
 	(wire
 		(pts
-			(xy 66.04 92.71) (xy 66.04 63.5)
+			(xy 66.04 92.71) (xy 66.04 82.55)
 		)
 		(stroke
 			(width 0)
@@ -7577,6 +7597,16 @@
 	)
 	(wire
 		(pts
+			(xy 78.74 77.47) (xy 78.74 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d0aa95c0-9dfc-4262-87f1-5b94158beb60")
+	)
+	(wire
+		(pts
 			(xy 151.13 58.42) (xy 147.32 58.42)
 		)
 		(stroke
@@ -7594,6 +7624,16 @@
 			(type default)
 		)
 		(uuid "d3318893-540e-4375-be0c-c81daf562f75")
+	)
+	(wire
+		(pts
+			(xy 53.34 77.47) (xy 53.34 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d3693d35-d691-42d1-b36f-d82c41311edd")
 	)
 	(wire
 		(pts
@@ -7674,6 +7714,16 @@
 			(type default)
 		)
 		(uuid "ddccefe9-76d1-4b22-8cf8-a3a1549b8fe2")
+	)
+	(wire
+		(pts
+			(xy 91.44 77.47) (xy 91.44 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dde4fff7-dac2-4093-a3f0-8382572cd3e2")
 	)
 	(wire
 		(pts
@@ -7807,6 +7857,16 @@
 	)
 	(wire
 		(pts
+			(xy 66.04 77.47) (xy 66.04 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ee979e90-4eb4-40f4-8fce-b9bf55ff817e")
+	)
+	(wire
+		(pts
 			(xy 189.23 26.67) (xy 190.5 26.67)
 		)
 		(stroke
@@ -7917,7 +7977,7 @@
 	)
 	(wire
 		(pts
-			(xy 78.74 90.17) (xy 78.74 68.58)
+			(xy 78.74 90.17) (xy 78.74 82.55)
 		)
 		(stroke
 			(width 0)
@@ -9744,6 +9804,82 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R_Small")
+		(at 91.44 80.01 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "2d9a9539-ddd6-4546-9dc6-60d7beb522cb")
+		(property "Reference" "R21"
+			(at 93.472 80.01 90)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+			)
+		)
+		(property "Value" "330"
+			(at 91.6178 79.9846 90)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
+			(at 89.662 80.01 90)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 91.44 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, small symbol"
+			(at 91.44 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "P/N" "stock ?"
+			(at 91.44 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "73645763-847b-4b68-b8de-0e5e837c43eb")
+		)
+		(pin "2"
+			(uuid "34d8665d-bf39-4710-9f72-3582bc152f17")
+		)
+		(instances
+			(project "energie"
+				(path "/febe0e94-4f23-4511-b87b-1ed085781444"
+					(reference "R21")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C_Small")
 		(at 111.76 73.66 270)
 		(unit 1)
@@ -9892,6 +10028,82 @@
 			(project "energie"
 				(path "/febe0e94-4f23-4511-b87b-1ed085781444"
 					(reference "R7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small")
+		(at 78.74 80.01 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "3e3ff168-29d9-4a94-a02d-fb5eee8b64f2")
+		(property "Reference" "R22"
+			(at 80.772 80.01 90)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+			)
+		)
+		(property "Value" "330"
+			(at 78.9178 79.9846 90)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
+			(at 76.962 80.01 90)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 78.74 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, small symbol"
+			(at 78.74 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "P/N" "stock ?"
+			(at 78.74 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c86d7e7d-6579-43c8-8027-f7fa38cc84cb")
+		)
+		(pin "2"
+			(uuid "db2a5a2d-70dc-4557-b34c-a2a55902502a")
+		)
+		(instances
+			(project "energie"
+				(path "/febe0e94-4f23-4511-b87b-1ed085781444"
+					(reference "R22")
 					(unit 1)
 				)
 			)
@@ -10124,6 +10336,82 @@
 			(project "energie"
 				(path "/febe0e94-4f23-4511-b87b-1ed085781444"
 					(reference "R14")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small")
+		(at 27.94 80.01 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "4d71afe9-6936-476e-ba81-63cc7de950a0")
+		(property "Reference" "R26"
+			(at 29.972 80.01 90)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+			)
+		)
+		(property "Value" "330"
+			(at 28.1178 79.9846 90)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
+			(at 26.162 80.01 90)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 27.94 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, small symbol"
+			(at 27.94 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "P/N" "stock ?"
+			(at 27.94 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "ad914244-e00b-4a8e-971b-00a860251c60")
+		)
+		(pin "2"
+			(uuid "c6c86516-a752-4677-b385-d379a69f4d75")
+		)
+		(instances
+			(project "energie"
+				(path "/febe0e94-4f23-4511-b87b-1ed085781444"
+					(reference "R26")
 					(unit 1)
 				)
 			)
@@ -11803,6 +12091,82 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R_Small")
+		(at 53.34 80.01 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "841dc30e-0755-4e90-a0a2-c0ce60031337")
+		(property "Reference" "R24"
+			(at 55.372 80.01 90)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+			)
+		)
+		(property "Value" "330"
+			(at 53.5178 79.9846 90)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
+			(at 51.562 80.01 90)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 53.34 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, small symbol"
+			(at 53.34 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "P/N" "stock ?"
+			(at 53.34 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2a8f8ea1-6d94-4b7d-a351-09e39acc79b7")
+		)
+		(pin "2"
+			(uuid "795e4afa-e2d4-4097-9ed1-2f287843ba58")
+		)
+		(instances
+			(project "energie"
+				(path "/febe0e94-4f23-4511-b87b-1ed085781444"
+					(reference "R24")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector:Screw_Terminal_01x02")
 		(at 259.08 109.22 270)
 		(unit 1)
@@ -13030,6 +13394,82 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R_Small")
+		(at 40.64 80.01 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "d2a45893-a4a6-4518-9890-0d361ba7accd")
+		(property "Reference" "R25"
+			(at 42.672 80.01 90)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+			)
+		)
+		(property "Value" "330"
+			(at 40.8178 79.9846 90)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
+			(at 38.862 80.01 90)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 40.64 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, small symbol"
+			(at 40.64 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "P/N" "stock ?"
+			(at 40.64 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "7836fa24-dd82-4ad1-a3b6-e54643349a1f")
+		)
+		(pin "2"
+			(uuid "c2231e79-5162-4f9e-9ede-dc0667922ab7")
+		)
+		(instances
+			(project "energie"
+				(path "/febe0e94-4f23-4511-b87b-1ed085781444"
+					(reference "R25")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 106.68 162.56 0)
 		(unit 1)
@@ -13336,6 +13776,82 @@
 			(project "energie"
 				(path "/febe0e94-4f23-4511-b87b-1ed085781444"
 					(reference "C8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small")
+		(at 66.04 80.01 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "d8fb8994-3aa6-4bc8-84ed-76f910bb6553")
+		(property "Reference" "R23"
+			(at 68.072 80.01 90)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+			)
+		)
+		(property "Value" "330"
+			(at 66.2178 79.9846 90)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
+			(at 64.262 80.01 90)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 66.04 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, small symbol"
+			(at 66.04 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "P/N" "stock ?"
+			(at 66.04 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "e60e3bf4-e294-4ffd-b58d-30149d1a1aa0")
+		)
+		(pin "2"
+			(uuid "61c54abb-f23a-4f96-b05f-1e6477c2d576")
+		)
+		(instances
+			(project "energie"
+				(path "/febe0e94-4f23-4511-b87b-1ed085781444"
+					(reference "R23")
 					(unit 1)
 				)
 			)
