@@ -8558,28 +8558,28 @@
 			)
 		)
 		(pin "8"
-			(uuid "f15b73f3-84fb-4d27-87b9-84ff4f0b87d3")
+			(uuid "f15b73f3-84fb-4d27-87b9-84ff4f0b87d4")
 		)
 		(pin "4"
-			(uuid "3f64471a-0e19-4637-b96d-9473b42f0343")
+			(uuid "3f64471a-0e19-4637-b96d-9473b42f0344")
 		)
 		(pin "7"
-			(uuid "d086c961-c2c3-4b4f-bb02-18dbd5a91560")
+			(uuid "d086c961-c2c3-4b4f-bb02-18dbd5a91561")
 		)
 		(pin "6"
-			(uuid "c58eaca8-ee4d-4d5f-8be2-c5c4d1ab012c")
+			(uuid "c58eaca8-ee4d-4d5f-8be2-c5c4d1ab012d")
 		)
 		(pin "5"
-			(uuid "f8d1b5b6-2119-4706-8bcc-14417ea98ab9")
+			(uuid "f8d1b5b6-2119-4706-8bcc-14417ea98aba")
 		)
 		(pin "3"
-			(uuid "9e3d8e45-10e6-4367-959c-a0e7f78d1387")
+			(uuid "9e3d8e45-10e6-4367-959c-a0e7f78d1388")
 		)
 		(pin "1"
-			(uuid "e1329232-fd88-4b4c-bff6-af9f4ae8fc27")
+			(uuid "e1329232-fd88-4b4c-bff6-af9f4ae8fc28")
 		)
 		(pin "2"
-			(uuid "eb304d81-7ec4-4891-a2d3-9ae6f9c7c0e8")
+			(uuid "eb304d81-7ec4-4891-a2d3-9ae6f9c7c0e9")
 		)
 		(instances
 			(project "energie"
@@ -8608,7 +8608,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "2.4V"
+		(property "Value" "2.7V"
 			(at 52.07 37.084 90)
 			(effects
 				(font
@@ -8617,7 +8617,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "bouyer-smd.mod:SOT-663"
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23_Handsoldering"
 			(at 45.72 34.29 0)
 			(effects
 				(font
@@ -8644,7 +8644,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "BZB984-C2V4"
+		(property "P/N" "BZB84-B2V7"
 			(at 45.72 34.29 0)
 			(effects
 				(font
@@ -9915,7 +9915,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "2.4V"
+		(property "Value" "2.7V"
 			(at 102.87 37.084 90)
 			(effects
 				(font
@@ -9924,7 +9924,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "bouyer-smd.mod:SOT-663"
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23_Handsoldering"
 			(at 96.52 34.29 0)
 			(effects
 				(font
@@ -9951,7 +9951,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "BZB984-C2V4"
+		(property "P/N" "BZB84-B2V7"
 			(at 96.52 34.29 0)
 			(effects
 				(font
@@ -10147,7 +10147,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "2.4V"
+		(property "Value" "2.7V"
 			(at 90.17 37.084 90)
 			(effects
 				(font
@@ -10156,7 +10156,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "bouyer-smd.mod:SOT-663"
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23_Handsoldering"
 			(at 83.82 34.29 0)
 			(effects
 				(font
@@ -10183,7 +10183,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "BZB984-C2V4"
+		(property "P/N" "BZB84-B2V7"
 			(at 83.82 34.29 0)
 			(effects
 				(font
@@ -11035,7 +11035,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "    TLP184(GB-TPL,SE(T"
+		(property "P/N" "140814243000"
 			(at 213.36 124.46 0)
 			(effects
 				(font
@@ -11083,7 +11083,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "2.4V"
+		(property "Value" "2.7V"
 			(at 77.47 37.084 90)
 			(effects
 				(font
@@ -11092,7 +11092,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "bouyer-smd.mod:SOT-663"
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23_Handsoldering"
 			(at 71.12 34.29 0)
 			(effects
 				(font
@@ -11119,7 +11119,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "BZB984-C2V4"
+		(property "P/N" "BZB84-B2V7"
 			(at 71.12 34.29 0)
 			(effects
 				(font
@@ -13200,7 +13200,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "2.4V"
+		(property "Value" "2.7V"
 			(at 39.37 37.084 90)
 			(effects
 				(font
@@ -13209,7 +13209,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "bouyer-smd.mod:SOT-663"
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23_Handsoldering"
 			(at 33.02 34.29 0)
 			(effects
 				(font
@@ -13236,7 +13236,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "BZB984-C2V4"
+		(property "P/N" "BZB84-B2V7"
 			(at 33.02 34.29 0)
 			(effects
 				(font
@@ -13588,28 +13588,28 @@
 			)
 		)
 		(pin "8"
-			(uuid "f15b73f3-84fb-4d27-87b9-84ff4f0b87d3")
+			(uuid "f15b73f3-84fb-4d27-87b9-84ff4f0b87d5")
 		)
 		(pin "4"
-			(uuid "3f64471a-0e19-4637-b96d-9473b42f0343")
+			(uuid "3f64471a-0e19-4637-b96d-9473b42f0345")
 		)
 		(pin "7"
-			(uuid "d086c961-c2c3-4b4f-bb02-18dbd5a91560")
+			(uuid "d086c961-c2c3-4b4f-bb02-18dbd5a91562")
 		)
 		(pin "6"
-			(uuid "c58eaca8-ee4d-4d5f-8be2-c5c4d1ab012c")
+			(uuid "c58eaca8-ee4d-4d5f-8be2-c5c4d1ab012e")
 		)
 		(pin "5"
-			(uuid "f8d1b5b6-2119-4706-8bcc-14417ea98ab9")
+			(uuid "f8d1b5b6-2119-4706-8bcc-14417ea98abb")
 		)
 		(pin "3"
-			(uuid "9e3d8e45-10e6-4367-959c-a0e7f78d1387")
+			(uuid "9e3d8e45-10e6-4367-959c-a0e7f78d1389")
 		)
 		(pin "1"
-			(uuid "e1329232-fd88-4b4c-bff6-af9f4ae8fc27")
+			(uuid "e1329232-fd88-4b4c-bff6-af9f4ae8fc29")
 		)
 		(pin "2"
-			(uuid "eb304d81-7ec4-4891-a2d3-9ae6f9c7c0e8")
+			(uuid "eb304d81-7ec4-4891-a2d3-9ae6f9c7c0ea")
 		)
 		(instances
 			(project "energie"
@@ -13946,7 +13946,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "2.4V"
+		(property "Value" "2.7V"
 			(at 64.77 37.084 90)
 			(effects
 				(font
@@ -13955,7 +13955,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "bouyer-smd.mod:SOT-663"
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23_Handsoldering"
 			(at 58.42 34.29 0)
 			(effects
 				(font
@@ -13982,7 +13982,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "BZB984-C2V4"
+		(property "P/N" "BZB84-B2V7"
 			(at 58.42 34.29 0)
 			(effects
 				(font
