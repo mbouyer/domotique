@@ -1,0 +1,5 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "local")(type "KiCad")(uri "${LOCALMOD}/local.pretty")(options "")(descr ""))
+  (lib (name "A20_OLIMEXINO_LIME2_SHIELD.mod")(type "KiCad")(uri "${LOCALMOD}/A20_OLIMEXINO_LIME2_SHIELD.mod.pretty")(options "")(descr ""))
+)
