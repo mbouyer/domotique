@@ -5073,7 +5073,7 @@
 				)
 			)
 		)
-		(property "Value" "ADuM1201AR"
+		(property "Value" "2DIB1411F"
 			(at 93.98 94.7998 0)
 			(effects
 				(font
@@ -5091,7 +5091,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://www.analog.com/media/en/technical-documentation/data-sheets/ADuM1200_1201.pdf"
+		(property "Datasheet" ""
 			(at 93.98 106.68 0)
 			(effects
 				(font
@@ -5101,6 +5101,15 @@
 			)
 		)
 		(property "Description" "Dual-channel digital isolator, bidirectional communication, 3V/5V level translation, SOIC-8"
+			(at 93.98 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "P/N" "2DIB1411F"
 			(at 93.98 104.14 0)
 			(effects
 				(font
