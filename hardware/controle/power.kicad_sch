@@ -2085,7 +2085,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
 			(at 92.71 92.71 0)
 			(effects
 				(font
@@ -2111,7 +2111,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "GRM21BR71E105KA99L"
+		(property "P/N" "CGA3E1X7R1V105K080AC (stock)"
 			(at 92.71 92.71 0)
 			(effects
 				(font
@@ -2720,7 +2720,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 			(at 92.71 71.12 0)
 			(effects
 				(font
@@ -2739,6 +2739,15 @@
 		)
 		(property "Description" ""
 			(at 92.71 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "P/N" "stock"
+			(at 92.71 71.12 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3535,7 +3544,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "C0603C100J5GACTU"
+		(property "P/N" "C0603C100J5ACTU"
 			(at 148.59 92.71 0)
 			(effects
 				(font

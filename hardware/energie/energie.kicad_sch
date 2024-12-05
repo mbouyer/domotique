@@ -10937,7 +10937,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "APT1608EC"
+		(property "P/N" "APT1608EC (stock)"
 			(at 147.32 170.18 0)
 			(effects
 				(font
@@ -11168,7 +11168,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "C1808X104KBRAC"
+		(property "P/N" " C1808V104KBRACTU"
 			(at 227.33 121.92 90)
 			(effects
 				(font
@@ -12887,7 +12887,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "IRM-02-5"
+		(property "Value" "IRM-01-5"
 			(at 262.89 92.7099 90)
 			(effects
 				(font
@@ -12916,6 +12916,15 @@
 		)
 		(property "Description" "5V, 400mA, 2W, Isolated, AC-DC, IRM02"
 			(at 257.81 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "P/N" "IRM-01-5"
+			(at 257.81 91.44 90)
 			(effects
 				(font
 					(size 1.27 1.27)
