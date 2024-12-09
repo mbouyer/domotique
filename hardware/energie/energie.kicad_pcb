@@ -42,13 +42,13 @@
 		(pad_to_mask_clearance 0)
 		(allow_soldermask_bridges_in_footprints no)
 		(pcbplotparams
-			(layerselection 0x00010fc_ffffffff)
+			(layerselection 0x00010c0_ffffffff)
 			(plot_on_all_layers_selection 0x0000000_00000000)
 			(disableapertmacros no)
 			(usegerberextensions no)
 			(usegerberattributes yes)
 			(usegerberadvancedattributes yes)
-			(creategerberjobfile yes)
+			(creategerberjobfile no)
 			(dashed_line_dash_ratio 12.000000)
 			(dashed_line_gap_ratio 3.000000)
 			(svgprecision 4)
@@ -74,9 +74,9 @@
 			(subtractmaskfromsilk no)
 			(outputformat 1)
 			(mirror no)
-			(drillshape 1)
+			(drillshape 0)
 			(scaleselection 1)
-			(outputdirectory "")
+			(outputdirectory "fab")
 		)
 	)
 	(net 0 "")
@@ -21447,7 +21447,7 @@
 		(descr "Resistor SMD 2512 (6332 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "resistor handsolder")
 		(property "Reference" "R14"
-			(at 0 2.62 360)
+			(at 0 2.62 0)
 			(layer "B.SilkS")
 			(uuid "b8d148be-1480-40ca-831d-6473b857b738")
 			(effects
@@ -21459,7 +21459,7 @@
 			)
 		)
 		(property "Value" "1k1W"
-			(at 0 -2.62 360)
+			(at 0 -2.62 0)
 			(layer "B.Fab")
 			(uuid "64a45d90-3c18-44e9-a3ce-0a1beecdf572")
 			(effects
@@ -21629,7 +21629,7 @@
 			(uuid "676b04a8-ccfe-42d6-947b-4a275a841f12")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "B.Fab")
 			(uuid "12fb8ecb-c592-4f4c-b22c-2d2dccdb17f0")
 			(effects
