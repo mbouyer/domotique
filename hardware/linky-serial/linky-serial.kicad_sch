@@ -2544,7 +2544,7 @@
 				)
 			)
 		)
-		(property "Value" "10K"
+		(property "Value" "4k7"
 			(at 122.0978 115.5446 90)
 			(effects
 				(font

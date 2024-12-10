@@ -580,7 +580,7 @@
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "resistor handsolder")
 		(property "Reference" "R3"
-			(at 0 -1.65 270)
+			(at 0 -1.65 -90)
 			(layer "F.SilkS")
 			(uuid "c63adc65-f712-4009-b8aa-a12d616a535e")
 			(effects
@@ -590,8 +590,8 @@
 				)
 			)
 		)
-		(property "Value" "10K"
-			(at 0 1.65 270)
+		(property "Value" "4k7"
+			(at 0 1.65 -90)
 			(layer "F.Fab")
 			(uuid "d18bf827-2219-4d57-9ebd-0ec0dbfd17d2")
 			(effects
@@ -756,7 +756,7 @@
 			(uuid "56ae1dfc-dc67-4773-a4ba-eb6c878386b6")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 270)
+			(at 0 0 -90)
 			(layer "F.Fab")
 			(uuid "caa20820-6c12-41ba-ab4d-c7fd2301351a")
 			(effects
@@ -1080,7 +1080,7 @@
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "resistor handsolder")
 		(property "Reference" "R1"
-			(at 0 -1.65 270)
+			(at 0 -1.65 -90)
 			(layer "F.SilkS")
 			(uuid "da9b3883-af82-49f3-a800-958996fd9276")
 			(effects
@@ -1091,7 +1091,7 @@
 			)
 		)
 		(property "Value" "10K"
-			(at 0 1.65 270)
+			(at 0 1.65 -90)
 			(layer "F.Fab")
 			(uuid "e80431fb-bac7-4416-b334-ce8ef2582ded")
 			(effects
@@ -1256,7 +1256,7 @@
 			(uuid "5cb4e191-fd78-44bc-bf5e-5bfcab233c34")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 270)
+			(at 0 0 -90)
 			(layer "F.Fab")
 			(uuid "82f08ca9-30cb-4a35-a98d-8a5bc9f011a6")
 			(effects
@@ -1562,7 +1562,7 @@
 		(descr "Through hole straight pin header, 1x03, 2.54mm pitch, single row")
 		(tags "Through hole pin header THT 1x03 2.54mm single row")
 		(property "Reference" "J2"
-			(at 0 2.33 360)
+			(at 0 2.33 0)
 			(layer "B.SilkS")
 			(uuid "fbffc40e-e23f-421d-ad60-481e014473dc")
 			(effects
@@ -1574,7 +1574,7 @@
 			)
 		)
 		(property "Value" "Conn_01x03_Pin"
-			(at 0 -7.41 360)
+			(at 0 -7.41 0)
 			(layer "B.Fab")
 			(uuid "67ce54ba-729b-4025-a590-3305abc7f5fb")
 			(effects
