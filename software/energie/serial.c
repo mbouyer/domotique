@@ -30,6 +30,8 @@
 #include <stdio.h>
 #include <serial.h>
 
+/* uart1 (debug) support */
+
 char uart_txbuf[UART_TXBUFSIZE];
 unsigned char uart_txbuf_prod;
 volatile unsigned char uart_txbuf_cons;
@@ -144,6 +146,113 @@ irql_uart1rx(void)
 		default:
 			/* overflow condition, wait for next \n */
 			uart_rxbuf_idx = UART_RXBUFSIZE;
+			(void)c;
+		}
+	}
+}
+
+/* UART2 (rs232) support */
+char uart232_txbuf[UART232_TXBUFSIZE];
+unsigned char uart232_txbuf_prod;
+volatile unsigned char uart232_txbuf_cons;
+
+void
+uart232_putchar (char c)
+{
+	unsigned char new_uart232_txbuf_prod = (uart232_txbuf_prod + 1) & UART232_TXBUFSIZE_MASK;
+
+again:
+        while (new_uart232_txbuf_prod == uart232_txbuf_cons) {
+		PIE8bits.U2TXIE = 1; /* ensure we'll make progress */
+	}
+	uart232_txbuf[uart232_txbuf_prod] = c;
+	uart232_txbuf_prod = new_uart232_txbuf_prod;
+	PIE8bits.U2TXIE = 1;
+	if (c == '\n') {
+		c = '\r';
+		new_uart232_txbuf_prod = (uart232_txbuf_prod + 1) & UART232_TXBUFSIZE_MASK;
+		goto again;
+	}
+}
+
+void __interrupt(__irq(U2TX), __low_priority, base(IVECT_BASE))
+irql_uart2321tx(void)
+{
+	if (PIE8bits.U2TXIE && PIR8bits.U2TXIF) {
+		if (uart232_txbuf_prod == uart232_txbuf_cons) {
+			PIE8bits.U2TXIE = 0; /* buffer empty */
+		} else {
+			/* Place char in TXREG - this starts transmition */
+			U2TXB = uart232_txbuf[uart232_txbuf_cons];
+			uart232_txbuf_cons = (uart232_txbuf_cons + 1) & UART232_TXBUFSIZE_MASK;
+		}
+	}
+}
+
+char uart232_rxbuf1[UART232_RXBUFSIZE];
+char uart232_rxbuf2[UART232_RXBUFSIZE];
+unsigned char uart232_rxbuf_idx;
+unsigned char uart232_rxbuf_a;
+volatile union uart_softintrs uart_softintrs;
+
+void __interrupt(__irq(U2RX), __low_priority, base(IVECT_BASE))
+irql_uart2321rx(void)
+{
+	if (PIR8bits.U2RXIF) {
+		char c = U2RXB;
+
+		if (U2ERRIRbits.RXFOIF) {
+			(void)c;
+			U2ERRIRbits.RXFOIF = 0;
+			/* error; ignore line */
+			uart232_rxbuf_idx = UART232_RXBUFSIZE;
+			return;
+		}
+		if (c == 0x0a)
+			return;
+
+		if (uart232_rxbuf_idx == UART232_RXBUFSIZE) {
+			/* overflow, reset on \n */
+			if (c == 0x0d)
+				uart232_rxbuf_idx = 0;
+			return;
+		}
+		switch(uart232_rxbuf_a) {
+		case 1:
+			if (c == 0x0d) {
+				uart232_rxbuf1[uart232_rxbuf_idx] = 0;
+				uart232_rxbuf_idx = 0;
+				uart_softintrs.bits.uart232_line1 = 1;
+				if (uart_softintrs.bits.uart232_line2) {
+					/* overflow */
+					uart232_rxbuf_a = 0;
+				} else {
+					uart232_rxbuf_a = 2;
+				}
+			} else {
+				uart232_rxbuf1[uart232_rxbuf_idx] = c;
+				uart232_rxbuf_idx++;
+			}
+			return;
+		case 2:
+			if (c == 0x0d) {
+				uart232_rxbuf2[uart232_rxbuf_idx] = 0;
+				uart232_rxbuf_idx = 0;
+				uart_softintrs.bits.uart232_line2 = 1;
+				if (uart_softintrs.bits.uart232_line1) {
+					/* overflow */
+					uart232_rxbuf_a = 0;
+				} else {
+					uart232_rxbuf_a = 1;
+				}
+			} else {
+				uart232_rxbuf2[uart232_rxbuf_idx] = c;
+				uart232_rxbuf_idx++;
+			}
+			return;
+		default:
+			/* overflow condition, wait for next \n */
+			uart232_rxbuf_idx = UART232_RXBUFSIZE;
 			(void)c;
 		}
 	}

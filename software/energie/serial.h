@@ -26,8 +26,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-int getchar(void);
-
 /* #define UART_TXBUFSIZE 16 */
 /* #define UART_TXBUFSIZE_MASK 0x0f */
 #define UART_TXBUFSIZE 128
@@ -54,9 +52,35 @@ extern unsigned char uart_rxbuf_a;
 
 union uart_softintrs {
         struct uart_softintrs_bits {
-		char uart1_line1 : 1;     /* a line is ready in uart_rxbuf1 */
-		char uart1_line2 : 1;     /* a line is ready in uart_rxbuf2 */
+		char uart1_line1 : 1;    /* a line is ready in uart_rxbuf1 */
+		char uart1_line2 : 1;    /* a line is ready in uart_rxbuf2 */
+		char uart232_line1 : 1;  /* a line is ready in uart232_rxbuf1 */
+		char uart232_line2 : 1;  /* a line is ready in uart232_rxbuf2 */
 	} bits;
 	char byte;
 };
 extern volatile union uart_softintrs uart_softintrs;
+
+#define UART232_TXBUFSIZE 32
+#define UART232_TXBUFSIZE_MASK 0x1f
+
+extern char uart232_txbuf[UART232_TXBUFSIZE];
+extern unsigned char uart232_txbuf_prod;
+extern volatile unsigned char uart232_txbuf_cons;
+void uart232_putchar (char c);
+
+#define UART232_RXBUFSIZE 16
+extern char uart232_rxbuf1[UART232_RXBUFSIZE];
+extern char uart232_rxbuf2[UART232_RXBUFSIZE];
+extern unsigned char uart232_rxbuf_idx;
+extern unsigned char uart232_rxbuf_a;
+
+#define UART232_INIT(p) { \
+		IPR8bits.U2TXIP=p; \
+		IPR8bits.U2RXIP=p; \
+		uart232_txbuf_prod = uart232_txbuf_cons = 0; \
+		uart232_rxbuf_idx = 0; uart232_rxbuf_a= 1;\
+		PIE8bits.U2RXIE = 1; \
+	}
+
+extern volatile union uart232_softintrs uart232_softintrs;

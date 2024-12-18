@@ -145,6 +145,18 @@ main(void)
 
 	USART_INIT(0);
 
+	/* configure UART2 */
+	TRISBbits.TRISB2 = 0 ;
+	LATBbits.LATB2 = 1 ;
+	U2RXPPS = 0x0b; /* RB3, 001 011 */
+	RB2PPS = 0x23; /* RB2 */
+	U2BRGL = 68; /* 57600 at 64Mhz */
+	U2CON0 = 0x30; /* 00110000 */
+	U2CON2bits.U2RUNOVF = 1;
+	U2CON1bits.U2ON = 1;
+	UART232_INIT(0);
+
+
 	/* configure timer0 as free-running counter at 9.765625Khz */
 	T0CON0 = 0x0;
 	T0CON0bits.MD16 = 1; /* 16 bits */
@@ -202,6 +214,11 @@ again:
 		if (time_events.bits.ev_1hz) {
 			LEDN ^= 1;
 			printf("st %d %d\n", uart_rxbuf_idx, uart_rxbuf_a);
+			printf("st232 %d %d\n", uart232_rxbuf_idx, uart232_rxbuf_a);
+			uart232_putchar('a');
+			uart232_putchar('b');
+			uart232_putchar('\r');
+			uart232_putchar('\n');
 		}
 
 		if (uart_softintrs.bits.uart1_line1) {
@@ -217,6 +234,16 @@ again:
 		} else if (uart_rxbuf_a == 0) {
 			/* clear overflow */
 			uart_rxbuf_a = 1;
+		}
+		if (uart_softintrs.bits.uart232_line1) {
+			printf("line232_1: %s\n", uart232_rxbuf1);
+			uart_softintrs.bits.uart232_line1 = 0;
+		} else if (uart_softintrs.bits.uart232_line2) {
+			printf("line232_2: %s\n", uart232_rxbuf2);
+			uart_softintrs.bits.uart232_line2 = 0;
+		} else if (uart232_rxbuf_a == 0) {
+			/* clear overflow */
+			uart232_rxbuf_a = 1;
 		}
 				
 		if (default_src != 0) {
