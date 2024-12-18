@@ -199,11 +199,26 @@ again:
 
 		CLRWDT();
 
-		if (time_events.bits.ev_1hz)
+		if (time_events.bits.ev_1hz) {
 			LEDN ^= 1;
+			printf("st %d %d\n", uart_rxbuf_idx, uart_rxbuf_a);
+		}
+
+		if (uart_softintrs.bits.uart1_line1) {
+			printf("line1: %s\n", uart_rxbuf1);
+			if (strcmp(uart_rxbuf1, "reb") == 0)
+				break;
+			uart_softintrs.bits.uart1_line1 = 0;
+		} else if (uart_softintrs.bits.uart1_line2) {
+			printf("line2: %s\n", uart_rxbuf2);
+			uart_softintrs.bits.uart1_line2 = 0;
+			if (strcmp(uart_rxbuf2, "reb") == 0)
+				break;
+		} else if (uart_rxbuf_a == 0) {
+			/* clear overflow */
+			uart_rxbuf_a = 1;
+		}
 				
-		if (PIR4bits.U1RXIF && (U1RXB == 'r'))
-			break;
 		if (default_src != 0) {
 			printf("default handler called for 0x%x\n",
 			    default_src);
@@ -211,13 +226,9 @@ again:
 		}
 
 	}
-	while ((c = (char)getchar()) != 'r') {
-		printf("resumed %u\n", timer0_read());
-		goto again;
-	}
 	WDTCON0bits.SEN = 0;
 	printf("returning\n");
-	while (!PIR4bits.U1TXIF) {
+	while (!PIR4bits.U1TXIF || PIE4bits.U1TXIE) {
 		; /* wait */ 
 	}
 	RESET();

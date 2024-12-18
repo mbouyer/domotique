@@ -1,6 +1,6 @@
 /* $Id: autopilot_serial.h,v 1.2 2017/06/05 11:00:18 bouyer Exp $ */
 /*
- * Copyright (c) 2022 Manuel Bouyer
+ * Copyright (c) 2024 Manuel Bouyer
  *
  * All rights reserved.
  *
@@ -28,18 +28,35 @@
 
 int getchar(void);
 
-/* #define UART_BUFSIZE 16 */
-/* #define UART_BUFSIZE_MASK 0x0f */
-#define UART_BUFSIZE 128
-#define UART_BUFSIZE_MASK 0x7f
+/* #define UART_TXBUFSIZE 16 */
+/* #define UART_TXBUFSIZE_MASK 0x0f */
+#define UART_TXBUFSIZE 128
+#define UART_TXBUFSIZE_MASK 0x7f
 
-extern char uart_txbuf[UART_BUFSIZE];
+extern char uart_txbuf[UART_TXBUFSIZE];
 extern unsigned char uart_txbuf_prod;
 extern volatile unsigned char uart_txbuf_cons;
 void usart_putchar (char c);
+
+#define UART_RXBUFSIZE 16
+extern char uart_rxbuf1[UART_RXBUFSIZE];
+extern char uart_rxbuf2[UART_RXBUFSIZE];
+extern unsigned char uart_rxbuf_idx;
+extern unsigned char uart_rxbuf_a;
 
 #define USART_INIT(p) { \
 		IPR4bits.U1TXIP=p; \
 		IPR4bits.U1RXIP=p; \
 		uart_txbuf_prod = uart_txbuf_cons = 0; \
+		uart_softintrs.byte = 0; uart_rxbuf_idx = 0; uart_rxbuf_a= 1;\
+		PIE4bits.U1RXIE = 1; \
 	}
+
+union uart_softintrs {
+        struct uart_softintrs_bits {
+		char uart1_line1 : 1;     /* a line is ready in uart_rxbuf1 */
+		char uart1_line2 : 1;     /* a line is ready in uart_rxbuf2 */
+	} bits;
+	char byte;
+};
+extern volatile union uart_softintrs uart_softintrs;

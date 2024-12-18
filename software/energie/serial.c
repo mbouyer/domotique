@@ -1,6 +1,6 @@
 /* $Id: serial.c,v 1.2 2017/06/05 11:00:19 bouyer Exp $ */
 /*
- * Copyright (c) 2022 Manuel Bouyer
+ * Copyright (c) 2024 Manuel Bouyer
  *
  * All rights reserved.
  *
@@ -30,7 +30,7 @@
 #include <stdio.h>
 #include <serial.h>
 
-char uart_txbuf[UART_BUFSIZE];
+char uart_txbuf[UART_TXBUFSIZE];
 unsigned char uart_txbuf_prod;
 volatile unsigned char uart_txbuf_cons;
 
@@ -38,7 +38,7 @@ void
 usart_putchar (char c)
 {
 #if 1
-	unsigned char new_uart_txbuf_prod = (uart_txbuf_prod + 1) & UART_BUFSIZE_MASK;
+	unsigned char new_uart_txbuf_prod = (uart_txbuf_prod + 1) & UART_TXBUFSIZE_MASK;
 
 again:
         while (new_uart_txbuf_prod == uart_txbuf_cons) {
@@ -49,7 +49,7 @@ again:
 	PIE4bits.U1TXIE = 1;
 	if (c == '\n') {
 		c = '\r';
-		new_uart_txbuf_prod = (uart_txbuf_prod + 1) & UART_BUFSIZE_MASK;
+		new_uart_txbuf_prod = (uart_txbuf_prod + 1) & UART_TXBUFSIZE_MASK;
 		goto again;
 	}
 #else
@@ -67,7 +67,7 @@ again:
 }
 
 void __interrupt(__irq(U1TX), __low_priority, base(IVECT_BASE))
-irql_uart1(void)
+irql_uart1tx(void)
 {
 	if (PIE4bits.U1TXIE && PIR4bits.U1TXIF) {
 		if (uart_txbuf_prod == uart_txbuf_cons) {
@@ -75,19 +75,76 @@ irql_uart1(void)
 		} else {
 			/* Place char in TXREG - this starts transmition */
 			U1TXB = uart_txbuf[uart_txbuf_cons];
-			uart_txbuf_cons = (uart_txbuf_cons + 1) & UART_BUFSIZE_MASK;
+			uart_txbuf_cons = (uart_txbuf_cons + 1) & UART_TXBUFSIZE_MASK;
 		}
 	}
 }
 
-int
-getchar(void)
+char uart_rxbuf1[UART_RXBUFSIZE];
+char uart_rxbuf2[UART_RXBUFSIZE];
+unsigned char uart_rxbuf_idx;
+unsigned char uart_rxbuf_a;
+volatile union uart_softintrs uart_softintrs;
+
+void __interrupt(__irq(U1RX), __low_priority, base(IVECT_BASE))
+irql_uart1rx(void)
 {
-	char c;
-	while (!PIR4bits.U1RXIF); /* wait for a char */
-	c = U1RXB;
-	if (U1ERRIRbits.RXFOIF) {
-		U1ERRIRbits.RXFOIF = 0;
+	if (PIR4bits.U1RXIF) {
+		char c = U1RXB;
+
+		if (U1ERRIRbits.RXFOIF) {
+			(void)c;
+			U1ERRIRbits.RXFOIF = 0;
+			/* error; ignore line */
+			uart_rxbuf_idx = UART_RXBUFSIZE;
+			return;
+		}
+		if (c == 0x0a)
+			return;
+
+		if (uart_rxbuf_idx == UART_RXBUFSIZE) {
+			/* overflow, reset on \n */
+			if (c == 0x0d)
+				uart_rxbuf_idx = 0;
+			return;
+		}
+		switch(uart_rxbuf_a) {
+		case 1:
+			if (c == 0x0d) {
+				uart_rxbuf1[uart_rxbuf_idx] = 0;
+				uart_rxbuf_idx = 0;
+				uart_softintrs.bits.uart1_line1 = 1;
+				if (uart_softintrs.bits.uart1_line2) {
+					/* overflow */
+					uart_rxbuf_a = 0;
+				} else {
+					uart_rxbuf_a = 2;
+				}
+			} else {
+				uart_rxbuf1[uart_rxbuf_idx] = c;
+				uart_rxbuf_idx++;
+			}
+			return;
+		case 2:
+			if (c == 0x0d) {
+				uart_rxbuf2[uart_rxbuf_idx] = 0;
+				uart_rxbuf_idx = 0;
+				uart_softintrs.bits.uart1_line2 = 1;
+				if (uart_softintrs.bits.uart1_line1) {
+					/* overflow */
+					uart_rxbuf_a = 0;
+				} else {
+					uart_rxbuf_a = 1;
+				}
+			} else {
+				uart_rxbuf2[uart_rxbuf_idx] = c;
+				uart_rxbuf_idx++;
+			}
+			return;
+		default:
+			/* overflow condition, wait for next \n */
+			uart_rxbuf_idx = UART_RXBUFSIZE;
+			(void)c;
+		}
 	}
-	return c;
 }
