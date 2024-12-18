@@ -8107,6 +8107,28 @@
 		)
 		(uuid "2223e2d6-82c1-4493-8613-c193b94fd832")
 	)
+	(label "rs232_RX"
+		(at 219.71 80.01 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "01eb04fc-8e55-47d6-86ab-7d3ee08a7fd8")
+	)
+	(label "rs232_TX"
+		(at 219.71 69.85 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "759c7b60-9768-4bd0-82db-76631b66282d")
+	)
 	(label "~{MCLR}"
 		(at 99.06 130.81 90)
 		(fields_autoplaced yes)
