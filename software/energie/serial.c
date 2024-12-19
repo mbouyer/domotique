@@ -208,6 +208,8 @@ irql_uart2321rx(void)
 			uart232_rxbuf_idx = UART232_RXBUFSIZE;
 			return;
 		}
+		if (U2ERRIRbits.RXBKIF)
+			U2ERRIRbits.RXBKIF = 0;
 		if (c == 0x0a)
 			return;
 
