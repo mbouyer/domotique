@@ -94,7 +94,7 @@ irql_uart1rx(void)
 	if (PIR4bits.U1RXIF) {
 		char c = U1RXB;
 
-		if (U1ERRIRbits.RXFOIF) {
+		if (U1ERRIRbits.RXFOIF || U1ERRIRbits.FERIF) {
 			(void)c;
 			U1ERRIRbits.RXFOIF = 0;
 			/* error; ignore line */
@@ -201,7 +201,7 @@ irql_uart2321rx(void)
 	if (PIR8bits.U2RXIF) {
 		char c = U2RXB;
 
-		if (U2ERRIRbits.RXFOIF) {
+		if (U2ERRIRbits.RXFOIF || U2ERRIRbits.FERIF) {
 			(void)c;
 			U2ERRIRbits.RXFOIF = 0;
 			/* error; ignore line */

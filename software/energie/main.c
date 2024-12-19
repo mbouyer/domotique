@@ -70,6 +70,14 @@ static union time_events {
 	char byte;
 } time_events;
 
+static union uout {
+	struct _uout {
+		char debug : 1;
+		char rs232 : 1;
+	} bits;
+	char byte;
+} uout;
+
 void
 putch(char c)
 {
@@ -85,6 +93,10 @@ main(void)
 	char c;
 
 	default_src = 0;
+	uout.byte = 0;
+        if (PORTBbits.RB7)
+		uout.bits.debug = 1;
+	U1CON1bits.U1RXBIMD = 1; /* detect RX going low */
 
 	ANSELC = 0;
 	ANSELB = 0;
@@ -193,6 +205,17 @@ main(void)
 
 again:
 	while (1) {
+		if (PORTBbits.RB7) {
+			uout.bits.debug = 1;
+			PIE4bits.U1RXIE = 1;
+			U1CON1bits.U1ON = 1;
+		} else if (U1ERRIRbits.RXBKIF) {
+			/* TX disconnected */
+			uout.bits.debug = 0;
+			PIE4bits.U1RXIE = 0;
+			U1ERRIRbits.RXBKIF = 0;
+			U1CON1bits.U1ON = 0;
+		}
 		time_events.byte = 0;
 		if (softintrs.bits.int_100hz) {
 			softintrs.bits.int_100hz = 0;
@@ -214,6 +237,7 @@ again:
 		if (time_events.bits.ev_1hz) {
 			LEDN ^= 1;
 			printf("st %d %d\n", uart_rxbuf_idx, uart_rxbuf_a);
+			printf("0x%x 0x%x 0x%x 0x%x\n", U1CON0, U1CON1, U1CON2, U1ERRIR);
 			printf("st232 %d %d\n", uart232_rxbuf_idx, uart232_rxbuf_a);
 			uart232_putchar('a');
 			uart232_putchar('b');
