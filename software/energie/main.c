@@ -39,9 +39,6 @@ typedef unsigned long u_long;
 
 static u_char default_src;
 
-#define LEDN LATCbits.LATC7
-
-
 u_int timer0_read(void);
 
 #define TIMER0_1MS    10
@@ -87,6 +84,39 @@ putch(char c)
 }
 
 
+/*
+ * portC outputs and definitions
+ * portC/latC are updated from the arrays below by DMA engines
+ */
+
+#define	O_LED	0x80 /* RC7 */
+#define O1	0x20 /* RC5 */
+#define O2	0x40 /* RC6 */
+#define OA	0x04 /* RC2 */
+#define OB	0x02 /* RC1 */
+#define OC	0x01 /* RC0 */
+#define O_I2C	0x18 /* RC3, RC4 */
+
+#define O1_OA	0
+#define O2_OA	1
+#define O1_OB	2
+#define O2_OB	3
+#define O1_OC	4
+#define O2_OC	5
+
+static const u_char trisc_data[] = {
+	(u_char)(~(O_LED | O_I2C | O1 | OA)),
+	(u_char)(~(O_LED | O_I2C | O2 | OA)),
+	(u_char)(~(O_LED | O_I2C | O1 | OB)),
+	(u_char)(~(O_LED | O_I2C | O2 | OB)),
+	(u_char)(~(O_LED | O_I2C | O1 | OC)),
+	(u_char)(~(O_LED | O_I2C | O2 | OC))
+};
+
+#define LATC_DATA_SIZE ((O2_OC + 1) * 3)
+static char latc_data[LATC_DATA_SIZE];
+	
+
 int
 main(void)
 {
@@ -103,9 +133,6 @@ main(void)
 	ANSELA = 0x7F; /* RA0->RA6 analog */
 
 	LATA = 0;
-
-	LEDN = 0;
-	TRISCbits.TRISC7 = 0; /* RC7/LED output */
 
 	/* configure watchdog timer for 2s */
 	WDTCON0 = 0x16;
@@ -189,6 +216,51 @@ main(void)
 	INTCON0bits.GIEH=1;  /* enable high-priority interrupts */   
 	INTCON0bits.GIEL=1; /* enable low-priority interrrupts */   
 
+	/*
+	 * set up DMA engines for portC outputs.
+	 * we want DMA0 to update LATC on each timer4 tick; and every 
+	 * 3 writes we want DMA1 to update TRISC. Unfortunably there's 
+	 * no way to do this in HW so we'll have to use an interrupts for this.
+	 */
+	/* set up timer4 for 10kHz output */
+	T4CON = 0x60; /* b01100000: postscaller 1/1, prescaler 1/64 */
+	T4PR = /* 25 XXX */ 22; /* 10kHz output */
+	T4CLKCON = 0x01; /* Fosc / 4 */
+
+	/* at startup every data is low */
+	for (c = 0; c < LATC_DATA_SIZE; c++)
+		latc_data[c] = 0;
+	LATC = 0;
+	/*
+	 * set up DMA1 to update LATC on timer4 interrupt.
+	 */
+	DMASELECT = 0;
+	DMAnCON0 = 0x40; /* !SIRQEN */
+	DMAnCON1 = 0x02; /* 00 0 00 01 0 */
+	DMAnSSA = (__uint24)&latc_data[0];
+	DMAnSSZ = LATC_DATA_SIZE;
+	DMAnDSA = (uint16_t)&LATC;
+	DMAnDSZ = 1;
+	DMAnSIRQ = 0x5b; /* timer4 */
+	IPR2bits.DMA1DCNTIP = 1; /* high prio */
+	PIR2bits.DMA1DCNTIF = 0;
+	/* set up DMA2 to update TRISC on request */
+	DMASELECT = 1;
+	DMAnCON0 = 0x00; /* !SIRQEN */
+	DMAnCON1 = 0x0a; /* 00 0 01 01 0 */
+	DMAnSSA = (__uint24)&trisc_data[0];
+	DMAnSSZ = O2_OC + 1;;
+	DMAnDSA = (uint16_t)&TRISC;
+	DMAnDSZ = 1;
+
+	DMAnCON0bits.EN = 1;
+	DMAnCON0bits.DGO = 1;
+	DMASELECT = 0;
+	DMAnCON0bits.EN = 1;
+	PIE2bits.DMA1DCNTIE = 1;
+	/* enable the whole C outputs updates */
+	T4CONbits.TMR4ON = 1;
+
 	printf("energie %d.%d %s\n", MAJOR, MINOR, buildstr);
 
 	/* enable watchdog */
@@ -201,7 +273,10 @@ main(void)
 	ADCON0bits.ADON = 1;
 
 	printf("enter loop\n");
-	LEDN = 1;
+#if 0
+	for (c = 0; c < LATC_DATA_SIZE; c++)
+		latc_data[c] |= O_LED;
+#endif
 
 again:
 	while (1) {
@@ -235,7 +310,58 @@ again:
 		CLRWDT();
 
 		if (time_events.bits.ev_1hz) {
-			LEDN ^= 1;
+			seconds++;
+#if 0
+			for (c = 0; c < LATC_DATA_SIZE; c++)
+				latc_data[c] ^= O_LED;
+#endif
+			latc_data[0] ^= O_LED;
+			switch(seconds % 10) {
+			case 0:
+				latc_data[O2_OC * 3] &= ~OC;
+				latc_data[O1_OA * 3] |= O1;
+				break;
+			case 1:
+				latc_data[O1_OA * 3] &= ~O1;
+				latc_data[O1_OA * 3 + 1] |= OA;
+				break;
+			case 2:
+				latc_data[O1_OA * 3 + 1] &= ~OA;
+				latc_data[O2_OA * 3] |= O2;
+				break;
+			case 3:
+				latc_data[O2_OA * 3] &= ~O2;
+				latc_data[O2_OA * 3 + 1] |= OA;
+				break;
+			case 4:
+				latc_data[O2_OA * 3 + 1] &= ~OA;
+				latc_data[O1_OB * 3] |= O1;
+				break;
+			case 5:
+				latc_data[O1_OB * 3] &= ~O1;
+				latc_data[O1_OB * 3 + 1] |= OB;
+				break;
+			case 6:
+				latc_data[O1_OB * 3 + 1] &= ~OB;
+				latc_data[O2_OB * 3] |= O2;
+				break;
+			case 7:
+				latc_data[O2_OB * 3] &= ~O2;
+				latc_data[O2_OB * 3 + 1] |= OB;
+				break;
+			case 8:
+				latc_data[O2_OB * 3 + 1] &= ~OB;
+				latc_data[O1_OC * 3] |= OC;
+				break;
+			case 9:
+				latc_data[O1_OC * 3] &= ~OC;
+				latc_data[O2_OC * 3] |= OC;
+				break;
+			}
+			for (c = 0; c < LATC_DATA_SIZE; c++)
+				printf("0x%x ", latc_data[c]);
+			printf("\n");
+			/*
 			printf("st %d %d\n", uart_rxbuf_idx, uart_rxbuf_a);
 			printf("0x%x 0x%x 0x%x 0x%x\n", U1CON0, U1CON1, U1CON2, U1ERRIR);
 			printf("st232 %d %d\n", uart232_rxbuf_idx, uart232_rxbuf_a);
@@ -243,6 +369,13 @@ again:
 			uart232_putchar('b');
 			uart232_putchar('\r');
 			uart232_putchar('\n');
+			*/
+			printf("portC 0x%x 0x%x\n", LATC, TRISC);
+			DMASELECT = 0;
+			printf(" DMA0 0x%x 0x%lx 0x%x 0x%x 0x%x\n", DMAnCON0, (uint32_t)DMAnSSA, DMAnSSZ, DMAnSCNT, DMAnDCNT);
+			DMASELECT = 1;
+			printf(" DMA1 0x%x 0x%lx 0x%x 0x%x 0x%x\n", DMAnCON0, (uint32_t)DMAnSSA, DMAnSSZ, DMAnSCNT, DMAnDCNT);
+			printf("0x%x 0x%x\n", PIR2, PIR6);
 		}
 
 		if (uart_softintrs.bits.uart1_line1) {
@@ -275,7 +408,8 @@ again:
 			    default_src);
 			default_src = 0;
 		}
-
+		if (softintrs.byte == 0 &&  uart_softintrs.byte == 0)
+			SLEEP();
 	}
 	WDTCON0bits.SEN = 0;
 	printf("returning\n");
@@ -304,6 +438,23 @@ irqh_timer2(void)
 {
 	PIR3bits.TMR2IF = 0;
 	softintrs.bits.int_100hz = 1;
+}
+
+void __interrupt(__irq(DMA1DCNT), __high_priority, base(IVECT_BASE))
+irqh_dma1(void)
+{
+	PIR2bits.DMA1DCNTIF = 0;
+	DMASELECT = 0;
+	switch(DMAnSCNTL) {
+	case (u_char)(LATC_DATA_SIZE):
+	case (u_char)(LATC_DATA_SIZE - 3):
+	case (u_char)(LATC_DATA_SIZE - 6):
+	case (u_char)(LATC_DATA_SIZE - 9):
+	case (u_char)(LATC_DATA_SIZE - 12):
+	case (u_char)(LATC_DATA_SIZE - 15):
+		DMASELECT = 1;
+		DMAnCON0bits.DGO = 1;
+	}
 }
 
 void __interrupt(__irq(default), __low_priority, base(IVECT_BASE))
