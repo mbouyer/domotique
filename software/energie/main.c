@@ -218,8 +218,8 @@ main(void)
 
 	/*
 	 * set up DMA engines for portC outputs.
-	 * we want DMA0 to update LATC on each timer4 tick; and every 
-	 * 3 writes we want DMA1 to update TRISC. Unfortunably there's 
+	 * we want DMA1 to update LATC on each timer4 tick; and every 
+	 * 3 writes we want DMA2 to update TRISC. Unfortunably there's 
 	 * no way to do this in HW so we'll have to use an interrupts for this.
 	 */
 	/* set up timer4 for 10kHz output */
