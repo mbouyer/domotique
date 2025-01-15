@@ -89,33 +89,183 @@ putch(char c)
  * portC/latC are updated from the arrays below by DMA engines
  */
 
-#define	O_LED	0x80 /* RC7 */
-#define O1	0x20 /* RC5 */
-#define O2	0x40 /* RC6 */
-#define OA	0x04 /* RC2 */
-#define OB	0x02 /* RC1 */
-#define OC	0x01 /* RC0 */
-#define O_I2C	0x18 /* RC3, RC4 */
+#define	O_LED	(u_char)0x80 /* RC7 */
+#define O1	(u_char)0x20 /* RC5 */
+#define O2	(u_char)0x40 /* RC6 */
+#define OA	(u_char)0x04 /* RC2 */
+#define OB	(u_char)0x02 /* RC1 */
+#define OC	(u_char)0x01 /* RC0 */
+#define O_I2C	(u_char)0x18 /* RC3, RC4 */
 
-#define O1_OA	0
-#define O2_OA	1
-#define O1_OB	2
-#define O2_OB	3
-#define O1_OC	4
-#define O2_OC	5
+#define O1_L	0
+#define O1_H	1
+#define NOP_O12	2
+#define O2_L	3
+#define O2_H	4
+#define NOP_O21	5
 
-static const u_char trisc_data[] = {
-	(u_char)(~(O_LED | O_I2C | O1 | OA)),
-	(u_char)(~(O_LED | O_I2C | O2 | OA)),
-	(u_char)(~(O_LED | O_I2C | O1 | OB)),
-	(u_char)(~(O_LED | O_I2C | O2 | OB)),
-	(u_char)(~(O_LED | O_I2C | O1 | OC)),
-	(u_char)(~(O_LED | O_I2C | O2 | OC))
-};
-
-#define LATC_DATA_SIZE ((O2_OC + 1) * 3)
+#define LATC_DATA_SIZE (NOP_O21 + 1)
 static char latc_data[LATC_DATA_SIZE];
-	
+
+#define NOUTS 6
+static char output_status[NOUTS];
+
+#define PIL_OFF 0
+#define PIL_ON 1
+#define PIL_POS 2
+#define PIL_NEG 3
+
+static char
+do_output(__ram char *buf)
+{
+	if (buf[1] != ' ')
+		return 0;
+	switch (buf[0]) {
+	case 0:
+		switch(buf[2]) {
+		case 0:
+			latc_data[O2_L] &= ~OC;
+			output_status[0] = 0;
+			return 1;
+		case 1:
+			latc_data[O2_L] |= OC;
+			output_status[0] = 1;
+			return 1;
+		}
+		return 0;
+	case 1:
+		switch(buf[2]) {
+		case 0:
+			latc_data[O1_L] &= ~OC;
+			output_status[1] = 0;
+			return 1;
+		case 1:
+			latc_data[O1_L] |= OC;
+			output_status[1] = 1;
+			return 1;
+		}
+		return 0;
+	}
+	return 0;
+}
+
+static char
+do_pilote(__ram char *buf)
+{
+	if (buf[1] != ' ')
+		return 0;
+	switch (buf[0]) {
+	case 0:
+		switch(buf[2]) {
+		case PIL_OFF:
+			latc_data[O2_L] &= ~OB;
+			latc_data[O2_H] |= OB;
+			output_status[2] = PIL_OFF;
+			return 1;
+		case PIL_ON:
+			latc_data[O2_L] |= OB;
+			latc_data[O2_H] &= ~OB;
+			output_status[2] = PIL_ON;
+			return 1;
+		case PIL_POS:
+			latc_data[O2_L] &= ~OB;
+			latc_data[O2_H] &= ~OB;
+			output_status[2] = PIL_POS;
+			return 1;
+		case PIL_NEG:
+			latc_data[O2_L] |= OB;
+			latc_data[O2_H] |= OB;
+			output_status[2] = PIL_NEG;
+			return 1;
+		}
+		return 0;
+	case 1:
+		switch(buf[2]) {
+		case PIL_OFF:
+			latc_data[O1_L] &= ~OB;
+			latc_data[O1_H] |= OB;
+			output_status[3] = PIL_OFF;
+			return 1;
+		case PIL_ON:
+			latc_data[O1_L] |= OB;
+			latc_data[O1_H] &= ~OB;
+			output_status[3] = PIL_ON;
+			return 1;
+		case PIL_POS:
+			latc_data[O1_L] &= ~OB;
+			latc_data[O1_H] &= ~OB;
+			output_status[3] = PIL_POS;
+			return 1;
+		case PIL_NEG:
+			latc_data[O1_L] |= OB;
+			latc_data[O1_H] |= OB;
+			output_status[3] = PIL_NEG;
+			return 1;
+		}
+		return 0;
+	case 2:
+		switch(buf[2]) {
+		case PIL_OFF:
+			latc_data[O2_L] &= ~OA;
+			latc_data[O2_H] |= OA;
+			output_status[4] = PIL_OFF;
+			return 1;
+		case PIL_ON:
+			latc_data[O2_L] |= OA;
+			latc_data[O2_H] &= ~OA;
+			output_status[4] = PIL_ON;
+			return 1;
+		case PIL_POS:
+			latc_data[O2_L] &= ~OA;
+			latc_data[O2_H] &= ~OA;
+			output_status[4] = PIL_POS;
+			return 1;
+		case PIL_NEG:
+			latc_data[O2_L] |= OA;
+			latc_data[O2_H] |= OA;
+			output_status[4] = PIL_NEG;
+			return 1;
+		}
+		return 0;
+	case 3:
+		switch(buf[2]) {
+		case PIL_OFF:
+			latc_data[O1_L] &= ~OA;
+			latc_data[O1_H] |= OA;
+			output_status[5] = PIL_OFF;
+			return 1;
+		case PIL_ON:
+			latc_data[O1_L] |= OA;
+			latc_data[O1_H] &= ~OA;
+			output_status[5] = PIL_ON;
+			return 1;
+		case PIL_POS:
+			latc_data[O1_L] &= ~OA;
+			latc_data[O1_H] &= ~OA;
+			output_status[5] = PIL_POS;
+			return 1;
+		case PIL_NEG:
+			latc_data[O1_L] |= OA;
+			latc_data[O1_H] |= OA;
+			output_status[5] = PIL_NEG;
+			return 1;
+		}
+		return 0;
+	}
+	return 0;
+}
+
+static char
+command(__ram char *buf)
+{
+	switch (buf[0]) {
+	case 'O':
+		return do_output(&buf[1]);
+	case 'P':
+		return do_pilote(&buf[1]);
+	}
+	return 0;
+}
 
 int
 main(void)
@@ -219,7 +369,7 @@ main(void)
 	/*
 	 * set up DMA engines for portC outputs.
 	 * we want DMA1 to update LATC on each timer4 tick; and every 
-	 * 3 writes we want DMA2 to update TRISC. Unfortunably there's 
+	 * 3 writes we want to update TRISC. Unfortunably there's 
 	 * no way to do this in HW so we'll have to use an interrupts for this.
 	 */
 	/* set up timer4 for 10kHz output */
@@ -227,10 +377,20 @@ main(void)
 	T4PR = /* 25 XXX */ 22; /* 10kHz output */
 	T4CLKCON = 0x01; /* Fosc / 4 */
 
-	/* at startup every data is low */
+	/* All outputs off */
+
 	for (c = 0; c < LATC_DATA_SIZE; c++)
 		latc_data[c] = 0;
+	latc_data[O1_L] = 0;
+	latc_data[NOP_O12] = 0;
+	latc_data[O2_L] = 0;
+	latc_data[NOP_O21] = 0;
+	latc_data[O1_H] = O1 | OA | OB | OC;
+	latc_data[O2_H] = O2 | OA | OB | OC;
+	for (c = 0; c < NOUTS; c++)
+		output_status[c] = 0;
 	LATC = 0;
+	TRISC = (u_char)(~(O_LED | O1 | OA | OB | OC));
 	/*
 	 * set up DMA1 to update LATC on timer4 interrupt.
 	 */
@@ -244,18 +404,6 @@ main(void)
 	DMAnSIRQ = 0x5b; /* timer4 */
 	IPR2bits.DMA1DCNTIP = 1; /* high prio */
 	PIR2bits.DMA1DCNTIF = 0;
-	/* set up DMA2 to update TRISC on request */
-	DMASELECT = 1;
-	DMAnCON0 = 0x00; /* !SIRQEN */
-	DMAnCON1 = 0x0a; /* 00 0 01 01 0 */
-	DMAnSSA = (__uint24)&trisc_data[0];
-	DMAnSSZ = O2_OC + 1;;
-	DMAnDSA = (uint16_t)&TRISC;
-	DMAnDSZ = 1;
-
-	DMAnCON0bits.EN = 1;
-	DMAnCON0bits.DGO = 1;
-	DMASELECT = 0;
 	DMAnCON0bits.EN = 1;
 	PIE2bits.DMA1DCNTIE = 1;
 	/* enable the whole C outputs updates */
@@ -273,10 +421,8 @@ main(void)
 	ADCON0bits.ADON = 1;
 
 	printf("enter loop\n");
-#if 0
 	for (c = 0; c < LATC_DATA_SIZE; c++)
 		latc_data[c] |= O_LED;
-#endif
 
 again:
 	while (1) {
@@ -311,56 +457,8 @@ again:
 
 		if (time_events.bits.ev_1hz) {
 			seconds++;
-#if 0
 			for (c = 0; c < LATC_DATA_SIZE; c++)
 				latc_data[c] ^= O_LED;
-#endif
-			latc_data[0] ^= O_LED;
-			switch(seconds % 10) {
-			case 0:
-				latc_data[O2_OC * 3] &= ~OC;
-				latc_data[O1_OA * 3] |= O1;
-				break;
-			case 1:
-				latc_data[O1_OA * 3] &= ~O1;
-				latc_data[O1_OA * 3 + 1] |= OA;
-				break;
-			case 2:
-				latc_data[O1_OA * 3 + 1] &= ~OA;
-				latc_data[O2_OA * 3] |= O2;
-				break;
-			case 3:
-				latc_data[O2_OA * 3] &= ~O2;
-				latc_data[O2_OA * 3 + 1] |= OA;
-				break;
-			case 4:
-				latc_data[O2_OA * 3 + 1] &= ~OA;
-				latc_data[O1_OB * 3] |= O1;
-				break;
-			case 5:
-				latc_data[O1_OB * 3] &= ~O1;
-				latc_data[O1_OB * 3 + 1] |= OB;
-				break;
-			case 6:
-				latc_data[O1_OB * 3 + 1] &= ~OB;
-				latc_data[O2_OB * 3] |= O2;
-				break;
-			case 7:
-				latc_data[O2_OB * 3] &= ~O2;
-				latc_data[O2_OB * 3 + 1] |= OB;
-				break;
-			case 8:
-				latc_data[O2_OB * 3 + 1] &= ~OB;
-				latc_data[O1_OC * 3] |= OC;
-				break;
-			case 9:
-				latc_data[O1_OC * 3] &= ~OC;
-				latc_data[O2_OC * 3] |= OC;
-				break;
-			}
-			for (c = 0; c < LATC_DATA_SIZE; c++)
-				printf("0x%x ", latc_data[c]);
-			printf("\n");
 			/*
 			printf("st %d %d\n", uart_rxbuf_idx, uart_rxbuf_a);
 			printf("0x%x 0x%x 0x%x 0x%x\n", U1CON0, U1CON1, U1CON2, U1ERRIR);
@@ -388,6 +486,11 @@ again:
 			uart_softintrs.bits.uart1_line2 = 0;
 			if (strcmp(uart_rxbuf2, "reb") == 0)
 				break;
+			if (command(uart_rxbuf2)) {
+				for (c = 0; c < LATC_DATA_SIZE; c++)
+					printf("0x%x ", latc_data[c]);
+				printf("0x%x\n", TRISC);
+			}
 		} else if (uart_rxbuf_a == 0) {
 			/* clear overflow */
 			uart_rxbuf_a = 1;
@@ -446,14 +549,14 @@ irqh_dma1(void)
 	PIR2bits.DMA1DCNTIF = 0;
 	DMASELECT = 0;
 	switch(DMAnSCNTL) {
-	case (u_char)(LATC_DATA_SIZE):
-	case (u_char)(LATC_DATA_SIZE - 3):
-	case (u_char)(LATC_DATA_SIZE - 6):
-	case (u_char)(LATC_DATA_SIZE - 9):
-	case (u_char)(LATC_DATA_SIZE - 12):
-	case (u_char)(LATC_DATA_SIZE - 15):
-		DMASELECT = 1;
-		DMAnCON0bits.DGO = 1;
+	case (u_char)(NOP_O12):
+		TRISC |= O2;
+		TRISC &= ~O1;
+		break;
+	case (u_char)(NOP_O21):
+		TRISC |= O1;
+		TRISC &= ~O2;
+		break;
 	}
 }
 
