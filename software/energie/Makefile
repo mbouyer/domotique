@@ -6,7 +6,7 @@ IVECT_BASE=0x308
 .PATH: ${.CURDIR}/../../../pic18_n2k
 
 CC= xc8-cc -mcpu=18f25q43 -mno-config -mkeep-startup -O2
-CC+= -mcodeoffset=${ROM_BASE} -mreserve=rom@0x10000:0x1ffff -mreserve=ram@0x0d00:0x0dff
+CC+= -mcodeoffset=${ROM_BASE} -mreserve=rom@0x80000:0xfffff -mreserve=ram@0x0d00:0x0dff
 CFLAGS= -DIVECT_BASE=${IVECT_BASE} -I${.CURDIR} -I${.CURDIR}/../../../pic18_n2k
 CFLAGS+= -DN2K_PRINTF
 OBJECTS= main.p1 serial.p1
