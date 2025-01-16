@@ -115,6 +115,118 @@ static char output_status[NOUTS];
 #define PIL_POS 2
 #define PIL_NEG 3
 
+static void
+update_outputs(void)
+{
+	switch(output_status[0]) {
+	case 0:
+		latc_data[O2_OC] &= ~(O2|OC);
+		break;
+	case 1:
+		latc_data[O2_OC] |= OC;
+		latc_data[O2_OC] &= ~O2;
+		break;
+	}
+	switch(output_status[1]) {
+	case 0:
+		latc_data[O1_OC] &= ~(O1|OC);
+		break;
+	case 1:
+		latc_data[O1_OC] |= OC;
+		latc_data[O1_OC] &= ~O1;
+		break;
+	}
+	switch(output_status[2]) {
+	case PIL_OFF:
+		latc_data[O2_OB] &= ~(O2|OB);
+		latc_data[O2_OB+1] &= ~(O2|OB);
+		break;
+	case PIL_ON:
+		latc_data[O2_OB] |= O2;
+		latc_data[O2_OB] &= ~OB;
+		latc_data[O2_OB+1] |= OB;
+		latc_data[O2_OB+1] &= ~O2;
+		break;
+	case PIL_POS:
+		latc_data[O2_OB] |= O2;
+		latc_data[O2_OB] &= ~OB;
+		latc_data[O2_OB+1] &= ~(O2|OB);
+		break;
+	case PIL_NEG:
+		latc_data[O2_OB+1] |= OB;
+		latc_data[O2_OB+1] &= ~O2;
+		latc_data[O2_OB] &= ~(O2|OB);
+		break;
+	}
+	switch(output_status[3]) {
+	case PIL_OFF:
+		latc_data[O1_OB] &= ~(O1|OB);
+		latc_data[O1_OB+1] &= ~(O1|OB);
+		break;
+	case PIL_ON:
+		latc_data[O1_OB] |= O1;
+		latc_data[O1_OB] &= ~OB;
+		latc_data[O1_OB+1] |= OB;
+		latc_data[O1_OB+1] &= ~O1;
+		break;
+	case PIL_POS:
+		latc_data[O1_OB] |= O1;
+		latc_data[O1_OB] &= ~OB;
+		latc_data[O1_OB+1] &= ~(O1|OB);
+		break;
+	case PIL_NEG:
+		latc_data[O1_OB+1] |= OB;
+		latc_data[O1_OB+1] &= ~O1;
+		latc_data[O1_OB] &= ~(O1|OB);
+		break;
+	}
+	switch(output_status[4]) {
+	case PIL_OFF:
+		latc_data[O2_OA] &= ~(O2|OA);
+		latc_data[O2_OA+1] &= ~(O2|OA);
+		break;
+	case PIL_ON:
+		latc_data[O2_OA] |= O2;
+		latc_data[O2_OA] &= ~OA;
+		latc_data[O2_OA+1] |= OA;
+		latc_data[O2_OA+1] &= ~O2;
+		break;
+	case PIL_POS:
+		latc_data[O2_OA] |= O2;
+		latc_data[O2_OA] &= ~OA;
+		latc_data[O2_OA+1] &= ~(O2|OA);
+		break;
+	case PIL_NEG:
+		latc_data[O2_OA+1] |= OA;
+		latc_data[O2_OA+1] &= ~O2;
+		latc_data[O2_OA] &= ~(O2|OA);
+		break;
+	}
+	switch(output_status[5]) {
+	case PIL_OFF:
+		latc_data[O1_OA] &= ~(O1|OA);
+		latc_data[O1_OA+1] &= ~(O1|OA);
+		break;
+	case PIL_ON:
+		latc_data[O1_OA] |= O1;
+		latc_data[O1_OA] &= ~OA;
+		latc_data[O1_OA+1] |= OA;
+		latc_data[O1_OA+1] &= ~O1;
+		break;
+	case PIL_POS:
+		latc_data[O1_OA] |= O1;
+		latc_data[O1_OA] &= ~OA;
+		latc_data[O1_OA+1] &= ~(O1|OA);
+		break;
+	case PIL_NEG:
+		latc_data[O1_OA+1] |= OA;
+		latc_data[O1_OA+1] &= ~O1;
+		latc_data[O1_OA] &= ~(O1|OA);
+		break;
+	}
+
+}
+
 static char
 do_output(__ram char *buf)
 {
@@ -124,12 +236,9 @@ do_output(__ram char *buf)
 	case '0':
 		switch(buf[2]) {
 		case '0':
-			latc_data[O2_OC] &= ~(O2|OC);
 			output_status[0] = 0;
 			return 1;
 		case '1':
-			latc_data[O2_OC] |= OC;
-			latc_data[O2_OC] &= ~O2;
 			output_status[0] = 1;
 			return 1;
 		}
@@ -137,12 +246,9 @@ do_output(__ram char *buf)
 	case '1':
 		switch(buf[2]) {
 		case '0':
-			latc_data[O1_OC] &= ~(O1|OC);
 			output_status[1] = 0;
 			return 1;
 		case '1':
-			latc_data[O1_OC] |= OC;
-			latc_data[O1_OC] &= ~O1;
 			output_status[1] = 1;
 			return 1;
 		}
@@ -161,27 +267,15 @@ do_pilote(__ram char *buf)
 	case '0':
 		switch(c) {
 		case PIL_OFF:
-			latc_data[O2_OB] &= ~(O2|OB);
-			latc_data[O2_OB+1] &= ~(O2|OB);
 			output_status[2] = PIL_OFF;
 			return 1;
 		case PIL_ON:
-			latc_data[O2_OB] |= O2;
-			latc_data[O2_OB] &= ~OB;
-			latc_data[O2_OB+1] |= OB;
-			latc_data[O2_OB+1] &= ~O2;
 			output_status[2] = PIL_ON;
 			return 1;
 		case PIL_POS:
-			latc_data[O2_OB] |= O2;
-			latc_data[O2_OB] &= ~OB;
-			latc_data[O2_OB+1] &= ~(O2|OB);
 			output_status[2] = PIL_POS;
 			return 1;
 		case PIL_NEG:
-			latc_data[O2_OB+1] |= OB;
-			latc_data[O2_OB+1] &= ~O2;
-			latc_data[O2_OB] &= ~(O2|OB);
 			output_status[2] = PIL_NEG;
 			return 1;
 		}
@@ -189,27 +283,15 @@ do_pilote(__ram char *buf)
 	case '1':
 		switch(c) {
 		case PIL_OFF:
-			latc_data[O1_OB] &= ~(O1|OB);
-			latc_data[O1_OB+1] &= ~(O1|OB);
 			output_status[3] = PIL_OFF;
 			return 1;
 		case PIL_ON:
-			latc_data[O1_OB] |= O1;
-			latc_data[O1_OB] &= ~OB;
-			latc_data[O1_OB+1] |= OB;
-			latc_data[O1_OB+1] &= ~O1;
 			output_status[3] = PIL_ON;
 			return 1;
 		case PIL_POS:
-			latc_data[O1_OB] |= O1;
-			latc_data[O1_OB] &= ~OB;
-			latc_data[O1_OB+1] &= ~(O1|OB);
 			output_status[3] = PIL_POS;
 			return 1;
 		case PIL_NEG:
-			latc_data[O1_OB+1] |= OB;
-			latc_data[O1_OB+1] &= ~O1;
-			latc_data[O1_OB] &= ~(O1|OB);
 			output_status[3] = PIL_NEG;
 			return 1;
 		}
@@ -217,28 +299,15 @@ do_pilote(__ram char *buf)
 	case '2':
 		switch(c) {
 		case PIL_OFF:
-			latc_data[O2_OA] &= ~(O2|OA);
-			latc_data[O2_OA+1] &= ~(O2|OA);
-	case (u_char)(O1_OC + 2):
 			output_status[4] = PIL_OFF;
 			return 1;
 		case PIL_ON:
-			latc_data[O2_OA] |= O2;
-			latc_data[O2_OA] &= ~OA;
-			latc_data[O2_OA+1] |= OA;
-			latc_data[O2_OA+1] &= ~O2;
 			output_status[4] = PIL_ON;
 			return 1;
 		case PIL_POS:
-			latc_data[O2_OA] |= O2;
-			latc_data[O2_OA] &= ~OA;
-			latc_data[O2_OA+1] &= ~(O2|OA);
 			output_status[4] = PIL_POS;
 			return 1;
 		case PIL_NEG:
-			latc_data[O2_OA+1] |= OA;
-			latc_data[O2_OA+1] &= ~O2;
-			latc_data[O2_OA] &= ~(O2|OA);
 			output_status[4] = PIL_NEG;
 			return 1;
 		}
@@ -246,27 +315,15 @@ do_pilote(__ram char *buf)
 	case '3':
 		switch(c) {
 		case PIL_OFF:
-			latc_data[O1_OA] &= ~(O1|OA);
-			latc_data[O1_OA+1] &= ~(O1|OA);
 			output_status[5] = PIL_OFF;
 			return 1;
 		case PIL_ON:
-			latc_data[O1_OA] |= O1;
-			latc_data[O1_OA] &= ~OA;
-			latc_data[O1_OA+1] |= OA;
-			latc_data[O1_OA+1] &= ~O1;
 			output_status[5] = PIL_ON;
 			return 1;
 		case PIL_POS:
-			latc_data[O1_OA] |= O1;
-			latc_data[O1_OA] &= ~OA;
-			latc_data[O1_OA+1] &= ~(O1|OA);
 			output_status[5] = PIL_POS;
 			return 1;
 		case PIL_NEG:
-			latc_data[O1_OA+1] |= OA;
-			latc_data[O1_OA+1] &= ~O1;
-			latc_data[O1_OA] &= ~(O1|OA);
 			output_status[5] = PIL_NEG;
 			return 1;
 		}
@@ -278,13 +335,23 @@ do_pilote(__ram char *buf)
 static char
 command(__ram char *buf)
 {
+	char r = 0;
 	switch (buf[0]) {
 	case 'O':
-		return do_output(&buf[1]);
+		r = do_output(&buf[1]);
+		break;
 	case 'P':
-		return do_pilote(&buf[1]);
+		r = do_pilote(&buf[1]);
+		break;
 	}
-	return 0;
+	if (r != 0) {
+		char c;
+		update_outputs();
+		for (c = 0; c < LATC_DATA_SIZE; c++)
+			printf("0x%x ", (latc_data[c] & ~O_LED));
+		printf("0x%x\n", TRISC);
+	}
+	return r;
 }
 
 int
@@ -495,22 +562,14 @@ again:
 			printf("line1: %s\n", uart_rxbuf1);
 			if (strcmp(uart_rxbuf1, "reb") == 0)
 				break;
-			if (command(uart_rxbuf1)) {
-				for (c = 0; c < LATC_DATA_SIZE; c++)
-					printf("0x%x ", (latc_data[c] & ~O_LED));
-				printf("0x%x\n", TRISC);
-			}
+			command(uart_rxbuf1);
 			uart_softintrs.bits.uart1_line1 = 0;
 		} else if (uart_softintrs.bits.uart1_line2) {
 			printf("line2: %s\n", uart_rxbuf2);
-			uart_softintrs.bits.uart1_line2 = 0;
 			if (strcmp(uart_rxbuf2, "reb") == 0)
 				break;
-			if (command(uart_rxbuf2)) {
-				for (c = 0; c < LATC_DATA_SIZE; c++)
-					printf("0x%x ", (latc_data[c] & ~O_LED));
-				printf("0x%x\n", TRISC);
-			}
+			command(uart_rxbuf2);
+			uart_softintrs.bits.uart1_line2 = 0;
 		} else if (uart_rxbuf_a == 0) {
 			/* clear overflow */
 			uart_rxbuf_a = 1;
