@@ -152,12 +152,13 @@ irql_uart1rx(void)
 }
 
 /* UART2 (rs232) support */
-char uart232_txbuf[UART232_TXBUFSIZE];
+static char uart232_txbuf[UART232_TXBUFSIZE];
 unsigned char uart232_txbuf_prod;
 volatile unsigned char uart232_txbuf_cons;
+static char uart232_txsum;
 
-void
-uart232_putchar (char c)
+static void
+_uart232_putchar (char c)
 {
 	unsigned char new_uart232_txbuf_prod = (uart232_txbuf_prod + 1) & UART232_TXBUFSIZE_MASK;
 
@@ -172,6 +173,23 @@ again:
 		c = '\r';
 		new_uart232_txbuf_prod = (uart232_txbuf_prod + 1) & UART232_TXBUFSIZE_MASK;
 		goto again;
+	}
+}
+
+void
+uart232_putchar (char c)
+{
+	if (c == '\n') {
+		/* append checksum */
+		uart232_txsum += ' ';
+		_uart232_putchar(' ');
+		uart232_txsum = (uart232_txsum & 0x3f) + 0x20;
+		_uart232_putchar(uart232_txsum);
+		_uart232_putchar('\n');
+		_uart232_putchar('\r');
+	} else {
+		uart232_txsum += c;
+		_uart232_putchar(c);
 	}
 }
 
@@ -194,12 +212,14 @@ char uart232_rxbuf2[UART232_RXBUFSIZE];
 unsigned char uart232_rxbuf_idx;
 unsigned char uart232_rxbuf_a;
 volatile union uart_softintrs uart_softintrs;
+static char uart232_rxsum;
 
 void __interrupt(__irq(U2RX), __low_priority, base(IVECT_BASE))
 irql_uart2321rx(void)
 {
 	if (PIR8bits.U2RXIF) {
 		char c = U2RXB;
+		__ram char *buf;
 
 		if (U2ERRIRbits.RXFOIF || U2ERRIRbits.FERIF) {
 			(void)c;
@@ -215,31 +235,48 @@ irql_uart2321rx(void)
 
 		if (uart232_rxbuf_idx == UART232_RXBUFSIZE) {
 			/* overflow, reset on \n */
-			if (c == 0x0d)
+			if (c == 0x0d) {
 				uart232_rxbuf_idx = 0;
+				if (uart_softintrs.bits.uart232_line1 == 0)
+					uart232_rxbuf_a = 1;
+				else if (uart_softintrs.bits.uart232_line2 == 0)
+					uart232_rxbuf_a = 2;
+			}
 			return;
 		}
 		switch(uart232_rxbuf_a) {
 		case 1:
-			if (c == 0x0d) {
-				uart232_rxbuf1[uart232_rxbuf_idx] = 0;
-				uart232_rxbuf_idx = 0;
-				uart_softintrs.bits.uart232_line1 = 1;
-				if (uart_softintrs.bits.uart232_line2) {
-					/* overflow */
-					uart232_rxbuf_a = 0;
-				} else {
-					uart232_rxbuf_a = 2;
-				}
-			} else {
-				uart232_rxbuf1[uart232_rxbuf_idx] = c;
-				uart232_rxbuf_idx++;
-			}
-			return;
+			buf = uart232_rxbuf1;
+			break;
 		case 2:
-			if (c == 0x0d) {
-				uart232_rxbuf2[uart232_rxbuf_idx] = 0;
+			buf = uart232_rxbuf2;
+			break;
+		default:
+			/* overflow condition, wait for next \n */
+			uart232_rxbuf_idx = UART232_RXBUFSIZE;
+			(void)c;
+			return;
+		}
+		if (c == 0x0d) {
+			if (uart232_rxbuf_idx < 2) {
+				/* not enough chars */
 				uart232_rxbuf_idx = 0;
+				return;
+			}
+			/* finalize checksum */
+			uart232_rxsum -= buf[uart232_rxbuf_idx - 1];
+			uart232_rxsum = (uart232_rxsum & 0x3f) + 0x20;
+#if 0
+			if (uart232_rxsum != buf[uart232_rxbuf_idx - 1]) {
+				/* wrong csum */
+				uart232_rxbuf_idx = 0;
+				return;
+			}
+#endif
+			buf[uart232_rxbuf_idx - 2] = 0;
+			uart232_rxbuf_idx = 0;
+			uart232_rxsum = 0;
+			if (uart232_rxbuf_a == 2) {
 				uart_softintrs.bits.uart232_line2 = 1;
 				if (uart_softintrs.bits.uart232_line1) {
 					/* overflow */
@@ -248,14 +285,30 @@ irql_uart2321rx(void)
 					uart232_rxbuf_a = 1;
 				}
 			} else {
-				uart232_rxbuf2[uart232_rxbuf_idx] = c;
-				uart232_rxbuf_idx++;
+				uart_softintrs.bits.uart232_line1 = 1;
+				if (uart_softintrs.bits.uart232_line2) {
+					/* overflow */
+					uart232_rxbuf_a = 0;
+				} else {
+					uart232_rxbuf_a = 2;
+				}
 			}
-			return;
-		default:
-			/* overflow condition, wait for next \n */
-			uart232_rxbuf_idx = UART232_RXBUFSIZE;
-			(void)c;
+		} else {
+			buf[uart232_rxbuf_idx] = c;
+			uart232_rxsum += c;
+			uart232_rxbuf_idx++;
 		}
+		return;
 	}
+}
+
+void
+uart232_init() {
+	IPR8bits.U2TXIP=0;
+	IPR8bits.U2RXIP=0;
+	uart232_txbuf_prod = uart232_txbuf_cons = 0;
+	uart232_txsum = uart232_rxsum = 0;
+	uart232_rxbuf_idx = 0;
+	uart232_rxbuf_a= 1;
+	PIE8bits.U2RXIE = 1;
 }

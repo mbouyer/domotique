@@ -78,8 +78,11 @@ static union uout {
 void
 putch(char c)
 {
-        if (PORTBbits.RB7) {
+	if (uout.bits.debug) {
 		usart_putchar(c);
+	}
+	if (uout.bits.rs232) {
+		uart232_putchar(c);
 	}
 }
 
@@ -350,8 +353,22 @@ command(__ram char *buf)
 		for (c = 0; c < LATC_DATA_SIZE; c++)
 			printf("0x%x ", (latc_data[c] & ~O_LED));
 		printf("0x%x\n", TRISC);
+		uout.bits.rs232 = 1;
+		for (c = 0; c < 2; c++)
+			printf("O%d %d\n", c, output_status[c]);
+		for (c = 0; c < 4; c++)
+			printf("P%d %d\n", c, output_status[c + 2]);
+		uout.bits.rs232 = 0;
 	}
 	return r;
+}
+
+static void
+debug(void)
+{
+	printf("PIR8 0x%x U2ERR 0x%x prod %d cons %d idx %d a %d\n",
+	    PIR8, U2ERRIR, uart232_txbuf_prod, uart232_txbuf_cons,
+	    uart232_rxbuf_idx, uart232_rxbuf_a);
 }
 
 int
@@ -430,7 +447,7 @@ main(void)
 	U2CON0 = 0x30; /* 00110000 */
 	U2CON2bits.U2RUNOVF = 1;
 	U2CON1bits.U2ON = 1;
-	UART232_INIT(0);
+	uart232_init();
 
 
 	/* configure timer0 as free-running counter at 9.765625Khz */
@@ -558,18 +575,27 @@ again:
 #endif
 		}
 
+		if (uart_softintrs.bits.uart232_line1) {
+			printf("rsr232_1: %s\n", uart232_rxbuf1);
+			uart_softintrs.bits.uart232_line1 = 0;
+		} else if (uart_softintrs.bits.uart232_line2) {
+			printf("rsr232_2: %s\n", uart232_rxbuf2);
+			uart_softintrs.bits.uart232_line2 = 0;
+		}
 		if (uart_softintrs.bits.uart1_line1) {
 			printf("line1: %s\n", uart_rxbuf1);
 			if (strcmp(uart_rxbuf1, "reb") == 0)
 				break;
 			command(uart_rxbuf1);
 			uart_softintrs.bits.uart1_line1 = 0;
+			debug();
 		} else if (uart_softintrs.bits.uart1_line2) {
 			printf("line2: %s\n", uart_rxbuf2);
 			if (strcmp(uart_rxbuf2, "reb") == 0)
 				break;
 			command(uart_rxbuf2);
 			uart_softintrs.bits.uart1_line2 = 0;
+			debug();
 		} else if (uart_rxbuf_a == 0) {
 			/* clear overflow */
 			uart_rxbuf_a = 1;
