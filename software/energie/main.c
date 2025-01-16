@@ -111,7 +111,7 @@ putch(char c)
 static char latc_data[LATC_DATA_SIZE];
 
 #define NOUTS 6
-static char output_status[NOUTS];
+static char outputs_status[NOUTS];
 
 #define PIL_OFF 0
 #define PIL_ON 1
@@ -119,9 +119,21 @@ static char output_status[NOUTS];
 #define PIL_NEG 3
 
 static void
+do_outputs_status(void)
+{
+	char c;
+	uout.bits.rs232 = 1;
+	for (c = 0; c < 2; c++)
+		printf("O%d %d\n", c, outputs_status[c]);
+	for (c = 0; c < 4; c++)
+		printf("P%d %d\n", c, outputs_status[c + 2]);
+	uout.bits.rs232 = 0;
+}
+
+static void
 update_outputs(void)
 {
-	switch(output_status[0]) {
+	switch(outputs_status[0]) {
 	case 0:
 		latc_data[O2_OC] &= ~(O2|OC);
 		break;
@@ -130,7 +142,7 @@ update_outputs(void)
 		latc_data[O2_OC] &= ~O2;
 		break;
 	}
-	switch(output_status[1]) {
+	switch(outputs_status[1]) {
 	case 0:
 		latc_data[O1_OC] &= ~(O1|OC);
 		break;
@@ -139,7 +151,7 @@ update_outputs(void)
 		latc_data[O1_OC] &= ~O1;
 		break;
 	}
-	switch(output_status[2]) {
+	switch(outputs_status[2]) {
 	case PIL_OFF:
 		latc_data[O2_OB] &= ~(O2|OB);
 		latc_data[O2_OB+1] &= ~(O2|OB);
@@ -161,7 +173,7 @@ update_outputs(void)
 		latc_data[O2_OB] &= ~(O2|OB);
 		break;
 	}
-	switch(output_status[3]) {
+	switch(outputs_status[3]) {
 	case PIL_OFF:
 		latc_data[O1_OB] &= ~(O1|OB);
 		latc_data[O1_OB+1] &= ~(O1|OB);
@@ -183,7 +195,7 @@ update_outputs(void)
 		latc_data[O1_OB] &= ~(O1|OB);
 		break;
 	}
-	switch(output_status[4]) {
+	switch(outputs_status[4]) {
 	case PIL_OFF:
 		latc_data[O2_OA] &= ~(O2|OA);
 		latc_data[O2_OA+1] &= ~(O2|OA);
@@ -205,7 +217,7 @@ update_outputs(void)
 		latc_data[O2_OA] &= ~(O2|OA);
 		break;
 	}
-	switch(output_status[5]) {
+	switch(outputs_status[5]) {
 	case PIL_OFF:
 		latc_data[O1_OA] &= ~(O1|OA);
 		latc_data[O1_OA+1] &= ~(O1|OA);
@@ -239,20 +251,20 @@ do_output(__ram char *buf)
 	case '0':
 		switch(buf[2]) {
 		case '0':
-			output_status[0] = 0;
+			outputs_status[0] = 0;
 			return 1;
 		case '1':
-			output_status[0] = 1;
+			outputs_status[0] = 1;
 			return 1;
 		}
 		return 0;
 	case '1':
 		switch(buf[2]) {
 		case '0':
-			output_status[1] = 0;
+			outputs_status[1] = 0;
 			return 1;
 		case '1':
-			output_status[1] = 1;
+			outputs_status[1] = 1;
 			return 1;
 		}
 		return 0;
@@ -270,64 +282,64 @@ do_pilote(__ram char *buf)
 	case '0':
 		switch(c) {
 		case PIL_OFF:
-			output_status[2] = PIL_OFF;
+			outputs_status[2] = PIL_OFF;
 			return 1;
 		case PIL_ON:
-			output_status[2] = PIL_ON;
+			outputs_status[2] = PIL_ON;
 			return 1;
 		case PIL_POS:
-			output_status[2] = PIL_POS;
+			outputs_status[2] = PIL_POS;
 			return 1;
 		case PIL_NEG:
-			output_status[2] = PIL_NEG;
+			outputs_status[2] = PIL_NEG;
 			return 1;
 		}
 		return 0;
 	case '1':
 		switch(c) {
 		case PIL_OFF:
-			output_status[3] = PIL_OFF;
+			outputs_status[3] = PIL_OFF;
 			return 1;
 		case PIL_ON:
-			output_status[3] = PIL_ON;
+			outputs_status[3] = PIL_ON;
 			return 1;
 		case PIL_POS:
-			output_status[3] = PIL_POS;
+			outputs_status[3] = PIL_POS;
 			return 1;
 		case PIL_NEG:
-			output_status[3] = PIL_NEG;
+			outputs_status[3] = PIL_NEG;
 			return 1;
 		}
 		return 0;
 	case '2':
 		switch(c) {
 		case PIL_OFF:
-			output_status[4] = PIL_OFF;
+			outputs_status[4] = PIL_OFF;
 			return 1;
 		case PIL_ON:
-			output_status[4] = PIL_ON;
+			outputs_status[4] = PIL_ON;
 			return 1;
 		case PIL_POS:
-			output_status[4] = PIL_POS;
+			outputs_status[4] = PIL_POS;
 			return 1;
 		case PIL_NEG:
-			output_status[4] = PIL_NEG;
+			outputs_status[4] = PIL_NEG;
 			return 1;
 		}
 		return 0;
 	case '3':
 		switch(c) {
 		case PIL_OFF:
-			output_status[5] = PIL_OFF;
+			outputs_status[5] = PIL_OFF;
 			return 1;
 		case PIL_ON:
-			output_status[5] = PIL_ON;
+			outputs_status[5] = PIL_ON;
 			return 1;
 		case PIL_POS:
-			output_status[5] = PIL_POS;
+			outputs_status[5] = PIL_POS;
 			return 1;
 		case PIL_NEG:
-			output_status[5] = PIL_NEG;
+			outputs_status[5] = PIL_NEG;
 			return 1;
 		}
 		return 0;
@@ -353,12 +365,6 @@ command(__ram char *buf)
 		for (c = 0; c < LATC_DATA_SIZE; c++)
 			printf("0x%x ", (latc_data[c] & ~O_LED));
 		printf("0x%x\n", TRISC);
-		uout.bits.rs232 = 1;
-		for (c = 0; c < 2; c++)
-			printf("O%d %d\n", c, output_status[c]);
-		for (c = 0; c < 4; c++)
-			printf("P%d %d\n", c, output_status[c + 2]);
-		uout.bits.rs232 = 0;
 	}
 	return r;
 }
@@ -486,7 +492,7 @@ main(void)
 	for (c = 0; c < LATC_DATA_SIZE; c++)
 		latc_data[c] = 0;
 	for (c = 0; c < NOUTS; c++)
-		output_status[c] = 0;
+		outputs_status[c] = 0;
 	LATC = 0;
 	/*
 	 * set up DMA1 to update LATC on timer4 interrupt.
@@ -588,6 +594,7 @@ again:
 				break;
 			command(uart_rxbuf1);
 			uart_softintrs.bits.uart1_line1 = 0;
+			do_outputs_status();
 			debug();
 		} else if (uart_softintrs.bits.uart1_line2) {
 			printf("line2: %s\n", uart_rxbuf2);
@@ -595,6 +602,7 @@ again:
 				break;
 			command(uart_rxbuf2);
 			uart_softintrs.bits.uart1_line2 = 0;
+			do_outputs_status();
 			debug();
 		} else if (uart_rxbuf_a == 0) {
 			/* clear overflow */
