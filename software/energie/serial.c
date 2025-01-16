@@ -187,6 +187,7 @@ uart232_putchar (char c)
 		_uart232_putchar(uart232_txsum);
 		_uart232_putchar('\n');
 		_uart232_putchar('\r');
+		uart232_txsum = 0;
 	} else {
 		uart232_txsum += c;
 		_uart232_putchar(c);
@@ -237,6 +238,7 @@ irql_uart2321rx(void)
 			/* overflow, reset on \n */
 			if (c == 0x0d) {
 				uart232_rxbuf_idx = 0;
+				uart232_rxsum = 0;
 				if (uart_softintrs.bits.uart232_line1 == 0)
 					uart232_rxbuf_a = 1;
 				else if (uart_softintrs.bits.uart232_line2 == 0)
@@ -261,18 +263,18 @@ irql_uart2321rx(void)
 			if (uart232_rxbuf_idx < 2) {
 				/* not enough chars */
 				uart232_rxbuf_idx = 0;
+				uart232_rxsum = 0;
 				return;
 			}
 			/* finalize checksum */
 			uart232_rxsum -= buf[uart232_rxbuf_idx - 1];
 			uart232_rxsum = (uart232_rxsum & 0x3f) + 0x20;
-#if 0
 			if (uart232_rxsum != buf[uart232_rxbuf_idx - 1]) {
 				/* wrong csum */
 				uart232_rxbuf_idx = 0;
+				uart232_rxsum = 0;
 				return;
 			}
-#endif
 			buf[uart232_rxbuf_idx - 2] = 0;
 			uart232_rxbuf_idx = 0;
 			uart232_rxsum = 0;

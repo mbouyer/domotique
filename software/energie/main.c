@@ -581,13 +581,6 @@ again:
 #endif
 		}
 
-		if (uart_softintrs.bits.uart232_line1) {
-			printf("rsr232_1: %s\n", uart232_rxbuf1);
-			uart_softintrs.bits.uart232_line1 = 0;
-		} else if (uart_softintrs.bits.uart232_line2) {
-			printf("rsr232_2: %s\n", uart232_rxbuf2);
-			uart_softintrs.bits.uart232_line2 = 0;
-		}
 		if (uart_softintrs.bits.uart1_line1) {
 			printf("line1: %s\n", uart_rxbuf1);
 			if (strcmp(uart_rxbuf1, "reb") == 0)
@@ -610,9 +603,11 @@ again:
 		}
 		if (uart_softintrs.bits.uart232_line1) {
 			printf("line232_1: %s\n", uart232_rxbuf1);
+			command(uart232_rxbuf1);
 			uart_softintrs.bits.uart232_line1 = 0;
 		} else if (uart_softintrs.bits.uart232_line2) {
 			printf("line232_2: %s\n", uart232_rxbuf2);
+			command(uart232_rxbuf2);
 			uart_softintrs.bits.uart232_line2 = 0;
 		} else if (uart232_rxbuf_a == 0) {
 			/* clear overflow */
