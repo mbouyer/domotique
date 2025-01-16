@@ -372,9 +372,11 @@ command(__ram char *buf)
 static void
 debug(void)
 {
+#if 0
 	printf("PIR8 0x%x U2ERR 0x%x prod %d cons %d idx %d a %d\n",
 	    PIR8, U2ERRIR, uart232_txbuf_prod, uart232_txbuf_cons,
 	    uart232_rxbuf_idx, uart232_rxbuf_a);
+#endif
 }
 
 int
@@ -455,6 +457,14 @@ main(void)
 	U2CON1bits.U2ON = 1;
 	uart232_init();
 
+	/* configure UART3 */
+	U3RXPPS = 0x0c; /* RB4, 001 100 */
+	U3BRGL = 04; /* 1200 at 64Mhz */
+	U3BRGH = 13; /* 1200 at 64Mhz */
+	U3CON0 = 0x10; /* 00010000 */
+	U3CON2bits.U3RUNOVF = 1;
+	U3CON1bits.U3ON = 1;
+	linky_init();
 
 	/* configure timer0 as free-running counter at 9.765625Khz */
 	T0CON0 = 0x0;
@@ -609,11 +619,21 @@ again:
 			printf("line232_2: %s\n", uart232_rxbuf2);
 			command(uart232_rxbuf2);
 			uart_softintrs.bits.uart232_line2 = 0;
-		} else if (uart232_rxbuf_a == 0) {
-			/* clear overflow */
-			uart232_rxbuf_a = 1;
-		}
-				
+		} 
+		if (uart_softintrs.bits.linky_line1) {
+			printf("linelinky_1\n");
+			uout.bits.rs232 = 1;
+			printf("%s\n", linky_rxbuf1);
+			uout.bits.rs232 = 0;
+			uart_softintrs.bits.linky_line1 = 0;
+		} else if (uart_softintrs.bits.linky_line2) {
+			printf("linelinky_2\n");
+			uout.bits.rs232 = 1;
+			printf("%s\n", linky_rxbuf2);
+			uout.bits.rs232 = 0;
+			uart_softintrs.bits.linky_line2 = 0;
+		} 
+
 		if (default_src != 0) {
 			printf("default handler called for 0x%x\n",
 			    default_src);

@@ -56,6 +56,8 @@ union uart_softintrs {
 		char uart1_line2 : 1;    /* a line is ready in uart_rxbuf2 */
 		char uart232_line1 : 1;  /* a line is ready in uart232_rxbuf1 */
 		char uart232_line2 : 1;  /* a line is ready in uart232_rxbuf2 */
+		char linky_line1 : 1;  /* a line is ready in linky_rxbuf1 */
+		char linky_line2 : 1;  /* a line is ready in linky_rxbuf2 */
 	} bits;
 	char byte;
 };
@@ -73,7 +75,9 @@ extern char uart232_rxbuf2[UART232_RXBUFSIZE];
 extern unsigned char uart232_rxbuf_idx;
 extern unsigned char uart232_rxbuf_a;
 
-extern volatile union uart232_softintrs uart232_softintrs;
-
-extern unsigned char uart232_txbuf_prod;
-extern volatile unsigned char uart232_txbuf_cons;
+#define LINKY_RXBUFSIZE 32
+extern char linky_rxbuf1[LINKY_RXBUFSIZE];
+extern char linky_rxbuf2[LINKY_RXBUFSIZE];
+extern unsigned char linky_rxbuf_idx;
+extern unsigned char linky_rxbuf_a;
+void linky_init(void);

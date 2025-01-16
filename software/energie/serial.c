@@ -153,8 +153,8 @@ irql_uart1rx(void)
 
 /* UART2 (rs232) support */
 static char uart232_txbuf[UART232_TXBUFSIZE];
-unsigned char uart232_txbuf_prod;
-volatile unsigned char uart232_txbuf_cons;
+static unsigned char uart232_txbuf_prod;
+static volatile unsigned char uart232_txbuf_cons;
 static char uart232_txsum;
 
 static void
@@ -212,7 +212,6 @@ char uart232_rxbuf1[UART232_RXBUFSIZE];
 char uart232_rxbuf2[UART232_RXBUFSIZE];
 unsigned char uart232_rxbuf_idx;
 unsigned char uart232_rxbuf_a;
-volatile union uart_softintrs uart_softintrs;
 static char uart232_rxsum;
 
 void __interrupt(__irq(U2RX), __low_priority, base(IVECT_BASE))
@@ -313,4 +312,110 @@ uart232_init() {
 	uart232_rxbuf_idx = 0;
 	uart232_rxbuf_a= 1;
 	PIE8bits.U2RXIE = 1;
+}
+
+
+/* linky (UART3) support, input only */
+
+char linky_rxbuf1[LINKY_RXBUFSIZE];
+char linky_rxbuf2[LINKY_RXBUFSIZE];
+unsigned char linky_rxbuf_idx;
+unsigned char linky_rxbuf_a;
+static char linky_rxsum;
+
+void __interrupt(__irq(U3RX), __low_priority, base(IVECT_BASE))
+irql_linky1rx(void)
+{
+	if (PIR9bits.U3RXIF) {
+		char c = (U3RXB & 0x7f);
+		__ram char *buf;
+
+		if (U3ERRIRbits.RXFOIF || U3ERRIRbits.FERIF) {
+			(void)c;
+			U3ERRIRbits.RXFOIF = 0;
+			/* error; ignore line */
+			linky_rxbuf_idx = LINKY_RXBUFSIZE;
+			return;
+		}
+		if (U3ERRIRbits.RXBKIF)
+			U3ERRIRbits.RXBKIF = 0;
+
+		if (linky_rxbuf_idx == LINKY_RXBUFSIZE) {
+			/* overflow, reset on \n */
+			if (c == 0x0d) {
+				linky_rxbuf_idx = 0;
+				linky_rxsum = 0;
+				if (uart_softintrs.bits.linky_line1 == 0)
+					linky_rxbuf_a = 1;
+				else if (uart_softintrs.bits.linky_line2 == 0)
+					linky_rxbuf_a = 2;
+			}
+			return;
+		}
+		switch(linky_rxbuf_a) {
+		case 1:
+			buf = linky_rxbuf1;
+			break;
+		case 2:
+			buf = linky_rxbuf2;
+			break;
+		default:
+			/* overflow condition, wait for next \n */
+			linky_rxbuf_idx = LINKY_RXBUFSIZE;
+			(void)c;
+			return;
+		}
+		if (c == 0x0d) {
+			if (linky_rxbuf_idx < 2) {
+				/* not enough chars */
+				linky_rxbuf_idx = 0;
+				linky_rxsum = 0;
+				return;
+			}
+			/* finalize checksum */
+			linky_rxsum -= buf[linky_rxbuf_idx - 1];
+			linky_rxsum = (linky_rxsum & 0x3f) + 0x20;
+			if (linky_rxsum != buf[linky_rxbuf_idx - 1]) {
+				/* wrong csum */
+				linky_rxbuf_idx = 0;
+				linky_rxsum = 0;
+				return;
+			}
+			buf[linky_rxbuf_idx - 2] = 0;
+			linky_rxbuf_idx = 0;
+			linky_rxsum = 0;
+			if (linky_rxbuf_a == 2) {
+				uart_softintrs.bits.linky_line2 = 1;
+				if (uart_softintrs.bits.linky_line1) {
+					/* overflow */
+					linky_rxbuf_a = 0;
+				} else {
+					linky_rxbuf_a = 1;
+				}
+			} else {
+				uart_softintrs.bits.linky_line1 = 1;
+				if (uart_softintrs.bits.linky_line2) {
+					/* overflow */
+					linky_rxbuf_a = 0;
+				} else {
+					linky_rxbuf_a = 2;
+				}
+			}
+		} else if (c >= 32) {
+			buf[linky_rxbuf_idx] = c;
+			linky_rxsum += c;
+			linky_rxbuf_idx++;
+		}
+		return;
+	}
+}
+
+void
+linky_init() {
+	IPR9bits.U3TXIP=0;
+	IPR9bits.U3RXIP=0;
+	linky_rxsum = 0;
+	linky_rxbuf_idx = 0;
+	linky_rxbuf_a= 1;
+	PIE9bits.U3RXIE = 1;
 }
