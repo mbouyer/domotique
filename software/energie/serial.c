@@ -181,7 +181,6 @@ uart232_putchar (char c)
 {
 	if (c == '\n') {
 		/* append checksum */
-		uart232_txsum += ' ';
 		_uart232_putchar(' ');
 		uart232_txsum = (uart232_txsum & 0x3f) + 0x20;
 		_uart232_putchar(uart232_txsum);
@@ -267,6 +266,7 @@ irql_uart2321rx(void)
 			}
 			/* finalize checksum */
 			uart232_rxsum -= buf[uart232_rxbuf_idx - 1];
+			uart232_rxsum -= ' ';
 			uart232_rxsum = (uart232_rxsum & 0x3f) + 0x20;
 			if (uart232_rxsum != buf[uart232_rxbuf_idx - 1]) {
 				/* wrong csum */
@@ -374,6 +374,7 @@ irql_linky1rx(void)
 			}
 			/* finalize checksum */
 			linky_rxsum -= buf[linky_rxbuf_idx - 1];
+			linky_rxsum -= ' ';
 			linky_rxsum = (linky_rxsum & 0x3f) + 0x20;
 			if (linky_rxsum != buf[linky_rxbuf_idx - 1]) {
 				/* wrong csum */
