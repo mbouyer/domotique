@@ -30,6 +30,15 @@
 #include <stdio.h>
 #include <serial.h>
 
+/* statistisc */
+unsigned char rx_debug_ov;
+unsigned char tx_debug_w;
+unsigned char rx_232_ov;
+unsigned char rx_232_cs;
+unsigned char tx_232_w;
+unsigned char rx_linky_ov;
+unsigned char rx_linky_cs;
+
 /* uart1 (debug) support */
 
 char uart_txbuf[UART_TXBUFSIZE];
@@ -43,8 +52,11 @@ usart_putchar (char c)
 	unsigned char new_uart_txbuf_prod = (uart_txbuf_prod + 1) & UART_TXBUFSIZE_MASK;
 
 again:
-        while (new_uart_txbuf_prod == uart_txbuf_cons) {
-		PIE4bits.U1TXIE = 1; /* ensure we'll make progress */
+	if (new_uart_txbuf_prod == uart_txbuf_cons) {
+		tx_debug_w++;
+		while (new_uart_txbuf_prod == uart_txbuf_cons) {
+			PIE4bits.U1TXIE = 1; /* ensure we'll make progress */
+		}
 	}
 	uart_txbuf[uart_txbuf_prod] = c;
 	uart_txbuf_prod = new_uart_txbuf_prod;
@@ -98,6 +110,7 @@ irql_uart1rx(void)
 			(void)c;
 			U1ERRIRbits.RXFOIF = 0;
 			/* error; ignore line */
+			rx_232_cs++;
 			uart_rxbuf_idx = UART_RXBUFSIZE;
 			return;
 		}
@@ -106,8 +119,10 @@ irql_uart1rx(void)
 
 		if (uart_rxbuf_idx == UART_RXBUFSIZE) {
 			/* overflow, reset on \n */
-			if (c == 0x0d)
+			if (c == 0x0d) {
+				rx_debug_ov++;
 				uart_rxbuf_idx = 0;
+			}
 			return;
 		}
 		switch(uart_rxbuf_a) {
@@ -163,17 +178,15 @@ _uart232_putchar (char c)
 	unsigned char new_uart232_txbuf_prod = (uart232_txbuf_prod + 1) & UART232_TXBUFSIZE_MASK;
 
 again:
-        while (new_uart232_txbuf_prod == uart232_txbuf_cons) {
-		PIE8bits.U2TXIE = 1; /* ensure we'll make progress */
+        if (new_uart232_txbuf_prod == uart232_txbuf_cons) {
+		tx_232_w++;
+		while (new_uart232_txbuf_prod == uart232_txbuf_cons) {
+			PIE8bits.U2TXIE = 1; /* ensure we'll make progress */
+		}
 	}
 	uart232_txbuf[uart232_txbuf_prod] = c;
 	uart232_txbuf_prod = new_uart232_txbuf_prod;
 	PIE8bits.U2TXIE = 1;
-	if (c == '\n') {
-		c = '\r';
-		new_uart232_txbuf_prod = (uart232_txbuf_prod + 1) & UART232_TXBUFSIZE_MASK;
-		goto again;
-	}
 }
 
 void
@@ -184,8 +197,8 @@ uart232_putchar (char c)
 		_uart232_putchar(' ');
 		uart232_txsum = (uart232_txsum & 0x3f) + 0x20;
 		_uart232_putchar(uart232_txsum);
-		_uart232_putchar('\n');
 		_uart232_putchar('\r');
+		_uart232_putchar('\n');
 		uart232_txsum = 0;
 	} else {
 		uart232_txsum += c;
@@ -224,6 +237,7 @@ irql_uart2321rx(void)
 			(void)c;
 			U2ERRIRbits.RXFOIF = 0;
 			/* error; ignore line */
+			rx_232_cs++;
 			uart232_rxbuf_idx = UART232_RXBUFSIZE;
 			return;
 		}
@@ -235,6 +249,7 @@ irql_uart2321rx(void)
 		if (uart232_rxbuf_idx == UART232_RXBUFSIZE) {
 			/* overflow, reset on \n */
 			if (c == 0x0d) {
+				rx_232_ov++;
 				uart232_rxbuf_idx = 0;
 				uart232_rxsum = 0;
 				if (uart_softintrs.bits.uart232_line1 == 0)
@@ -262,6 +277,7 @@ irql_uart2321rx(void)
 				/* not enough chars */
 				uart232_rxbuf_idx = 0;
 				uart232_rxsum = 0;
+				rx_232_cs++;
 				return;
 			}
 			/* finalize checksum */
@@ -272,6 +288,7 @@ irql_uart2321rx(void)
 				/* wrong csum */
 				uart232_rxbuf_idx = 0;
 				uart232_rxsum = 0;
+				rx_232_cs++;
 				return;
 			}
 			buf[uart232_rxbuf_idx - 2] = 0;
@@ -334,6 +351,7 @@ irql_linky1rx(void)
 			(void)c;
 			U3ERRIRbits.RXFOIF = 0;
 			/* error; ignore line */
+			rx_linky_cs++;
 			linky_rxbuf_idx = LINKY_RXBUFSIZE;
 			return;
 		}
@@ -341,8 +359,9 @@ irql_linky1rx(void)
 			U3ERRIRbits.RXBKIF = 0;
 
 		if (linky_rxbuf_idx == LINKY_RXBUFSIZE) {
-			/* overflow, reset on \n */
+			/* overflow, reset on \r */
 			if (c == 0x0d) {
+				rx_linky_ov++;
 				linky_rxbuf_idx = 0;
 				linky_rxsum = 0;
 				if (uart_softintrs.bits.linky_line1 == 0)
@@ -370,6 +389,7 @@ irql_linky1rx(void)
 				/* not enough chars */
 				linky_rxbuf_idx = 0;
 				linky_rxsum = 0;
+				rx_linky_cs++;
 				return;
 			}
 			/* finalize checksum */
@@ -377,12 +397,21 @@ irql_linky1rx(void)
 			linky_rxsum -= ' ';
 			linky_rxsum = (linky_rxsum & 0x3f) + 0x20;
 			if (linky_rxsum != buf[linky_rxbuf_idx - 1]) {
+#if 0
 				/* wrong csum */
 				linky_rxbuf_idx = 0;
 				linky_rxsum = 0;
+				rx_linky_cs++;
 				return;
-			}
-			buf[linky_rxbuf_idx - 2] = 0;
+#else
+				if (linky_rxbuf_a == 2)
+					uart_softintrs.bits.linky_badcs_l2 = 1;
+				else
+					uart_softintrs.bits.linky_badcs_l1 = 1;
+				buf[linky_rxbuf_idx] = 0;
+			} else
+#endif
+				buf[linky_rxbuf_idx - 2] = 0;
 			linky_rxbuf_idx = 0;
 			linky_rxsum = 0;
 			if (linky_rxbuf_a == 2) {
@@ -406,6 +435,8 @@ irql_linky1rx(void)
 			buf[linky_rxbuf_idx] = c;
 			linky_rxsum += c;
 			linky_rxbuf_idx++;
+		} else {
+			(void)c;
 		}
 		return;
 	}

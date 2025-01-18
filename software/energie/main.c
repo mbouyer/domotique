@@ -379,6 +379,14 @@ debug(void)
 #endif
 }
 
+static void
+print_stats()
+{
+	printf("deb: rx_ov %d tx_w %d 232: rx_ov %d rx_cs %d tx_w %d linky: rx_ov %d rx_cs %d\n",
+	    rx_debug_ov, tx_debug_w, rx_232_ov, rx_232_cs, tx_232_w,
+	    rx_linky_ov, rx_linky_cs);
+}
+
 int
 main(void)
 {
@@ -595,6 +603,8 @@ again:
 			printf("line1: %s\n", uart_rxbuf1);
 			if (strcmp(uart_rxbuf1, "reb") == 0)
 				break;
+			if (strcmp(uart_rxbuf1, "stats") == 0)
+				print_stats();
 			command(uart_rxbuf1);
 			uart_softintrs.bits.uart1_line1 = 0;
 			do_outputs_status();
@@ -603,6 +613,8 @@ again:
 			printf("line2: %s\n", uart_rxbuf2);
 			if (strcmp(uart_rxbuf2, "reb") == 0)
 				break;
+			if (strcmp(uart_rxbuf2, "stats") == 0)
+				print_stats();
 			command(uart_rxbuf2);
 			uart_softintrs.bits.uart1_line2 = 0;
 			do_outputs_status();
@@ -621,16 +633,26 @@ again:
 			uart_softintrs.bits.uart232_line2 = 0;
 		} 
 		if (uart_softintrs.bits.linky_line1) {
-			printf("linelinky_1\n");
-			uout.bits.rs232 = 1;
-			printf("%s\n", linky_rxbuf1);
-			uout.bits.rs232 = 0;
+			if (uart_softintrs.bits.linky_badcs_l1) {
+				printf("linky1badcs: %s\n", linky_rxbuf1);
+			} else {
+				printf("linelinky_1 ");
+				uout.bits.rs232 = 1;
+				printf("%s\n", linky_rxbuf1);
+				uout.bits.rs232 = 0;
+			}
+			uart_softintrs.bits.linky_badcs_l1 = 0;
 			uart_softintrs.bits.linky_line1 = 0;
 		} else if (uart_softintrs.bits.linky_line2) {
-			printf("linelinky_2\n");
-			uout.bits.rs232 = 1;
-			printf("%s\n", linky_rxbuf2);
-			uout.bits.rs232 = 0;
+			if (uart_softintrs.bits.linky_badcs_l2) {
+				printf("linky2badcs: %s\n", linky_rxbuf2);
+			} else {
+				printf("linelinky_2 ");
+				uout.bits.rs232 = 1;
+				printf("%s\n", linky_rxbuf2);
+				uout.bits.rs232 = 0;
+			}
+			uart_softintrs.bits.linky_badcs_l2 = 0;
 			uart_softintrs.bits.linky_line2 = 0;
 		} 
 

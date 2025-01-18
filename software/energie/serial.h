@@ -48,6 +48,9 @@ extern unsigned char uart_rxbuf_a;
 		uart_txbuf_prod = uart_txbuf_cons = 0; \
 		uart_softintrs.byte = 0; uart_rxbuf_idx = 0; uart_rxbuf_a= 1;\
 		PIE4bits.U1RXIE = 1; \
+		rx_debug_ov = tx_debug_w = 0; \
+		rx_232_ov = rx_232_cs = tx_232_w = 0; \
+		rx_linky_ov = rx_linky_cs = 0; \
 	}
 
 union uart_softintrs {
@@ -56,8 +59,10 @@ union uart_softintrs {
 		char uart1_line2 : 1;    /* a line is ready in uart_rxbuf2 */
 		char uart232_line1 : 1;  /* a line is ready in uart232_rxbuf1 */
 		char uart232_line2 : 1;  /* a line is ready in uart232_rxbuf2 */
-		char linky_line1 : 1;  /* a line is ready in linky_rxbuf1 */
-		char linky_line2 : 1;  /* a line is ready in linky_rxbuf2 */
+		char linky_line1 : 1;    /* a line is ready in linky_rxbuf1 */
+		char linky_line2 : 1;    /* a line is ready in linky_rxbuf2 */
+		char linky_badcs_l1 : 1; /* bad checksum in linky_rxbuf1 */
+		char linky_badcs_l2 : 1; /* bad checksum in linky_rxbuf2 */
 	} bits;
 	char byte;
 };
@@ -81,3 +86,11 @@ extern char linky_rxbuf2[LINKY_RXBUFSIZE];
 extern unsigned char linky_rxbuf_idx;
 extern unsigned char linky_rxbuf_a;
 void linky_init(void);
+
+extern unsigned char rx_debug_ov;
+extern unsigned char tx_debug_w;
+extern unsigned char rx_232_ov;
+extern unsigned char rx_232_cs;
+extern unsigned char tx_232_w;
+extern unsigned char rx_linky_ov;
+extern unsigned char rx_linky_cs;
