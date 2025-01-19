@@ -118,6 +118,8 @@ static char outputs_status[NOUTS];
 #define PIL_POS 2
 #define PIL_NEG 3
 
+static uint16_t adc_results[25];
+
 static void
 do_outputs_status(void)
 {
@@ -421,6 +423,8 @@ main(void)
 	ISRPR = 0;
 	MAINPR = 4;
 	DMA1PR = 3;
+	DMA2PR = 3;
+	DMA3PR = 3;
 	PRLOCK = 0x55;
 	PRLOCK = 0xAA;
 	PRLOCKbits.PRLOCKED = 1;
@@ -502,7 +506,7 @@ main(void)
 	 */
 	/* set up timer4 for 10kHz output */
 	T4CON = 0x60; /* b01100000: postscaller 1/1, prescaler 1/64 */
-	T4PR = /* 25 XXX */ 22; /* 10kHz output */
+	T4PR = 25; /* 10kHz output */
 	T4CLKCON = 0x01; /* Fosc / 4 */
 
 	/* at startup every data is low */
@@ -516,7 +520,7 @@ main(void)
 	 * set up DMA1 to update LATC on timer4 interrupt.
 	 */
 	DMASELECT = 0;
-	DMAnCON0 = 0x40; /* !SIRQEN */
+	DMAnCON0 = 0x40; /* SIRQEN */
 	DMAnCON1 = 0x02; /* 00 0 00 01 0 */
 	DMAnSSA = (__uint24)&latc_data[0];
 	DMAnSSZ = LATC_DATA_SIZE;
@@ -527,19 +531,52 @@ main(void)
 	PIR2bits.DMA1DCNTIF = 0;
 	DMAnCON0bits.EN = 1;
 	PIE2bits.DMA1DCNTIE = 1;
-	/* enable the whole C outputs updates */
-	T4CONbits.TMR4ON = 1;
 
 	printf("energie %d.%d %s\n", MAJOR, MINOR, buildstr);
 
 	/* enable watchdog */
 	WDTCON0bits.SEN = 1;
 
-	/* set up ADC */
+	/*
+	 * set up ADC
+	 * triggered at 10kHz (timer4 postscaled by 2), values transfered
+	 * by DMA3. We want 200 measures to cover a full 50Hz cycle
+	 * this means we have 200us per measures, which should be plenty
+	 * with a 1Mhz (1us) ADC clock. We'll use the computation module
+	 * to sum up 8 values, so we'll have only 25 values to transfers.
+	 */
 	ADCON0 = 0x4; /* right-justified */
-	ADCLK = 0x7F; /* Fosc/64 */
+	ADCON1 = 0;
+	ADCON2 = 0x3a; /* divide by 8, clear, average mode */
+	ADCON3 = 0x07; /* always interrupt */
+	ADCLK = 0x7F; /* Fosc/64 => 1MHz*/
+	ADREF = 0x02; /* Vref- to GND, Vref+ to RA3 */
+	ADPCH = 1; /* input RA1 */
+	ADPRE = 0;
+	ADACQ = 128; /* 2us acquisition time */
+	ADRPT = 8;
+	PIR2bits.ADTIF = 0;
 
-	ADCON0bits.ADON = 1;
+	for (c = 0; c < 25; c++) {
+		adc_results[c] = 0;
+	}
+
+	DMASELECT = 2;
+	DMAnCON0 = 0x00; /* !SIRQEN */
+	DMAnCON1 = 0x62; /* 01 1 00 01 0 */
+	DMAnSSA = ADACCL_M2;
+	DMAnSSZ = 2;
+	DMAnDSA = (uint16_t)&adc_results[0];
+	DMAnDSZ = 25 * 2;
+	DMAnSIRQ = 0x10; /* ADC threshold interrupt */
+	IPR10bits.DMA3DCNTIP = 0; /* low prio */
+	PIR10bits.DMA3DCNTIF = 0;
+	DMAnCON0bits.EN = 1;
+	PIE10bits.DMA3DCNTIE = 1;
+	ADCON0bits.ON = 1;
+
+	/* enable the whole C outputs updates */
+	T4CONbits.TMR4ON = 1;
 
 	printf("enter loop\n");
 	for (c = 0; c < LATC_DATA_SIZE; c++)
@@ -559,6 +596,19 @@ again:
 			U1CON1bits.U1ON = 0;
 		}
 		time_events.byte = 0;
+		if (softintrs.bits.int_adcc) {
+			__uint24 adr = 0;
+			printf("adcc 0x%x 0x%lx, 0x%x 0x%x 0x%x\n",
+			    ADRES, (uint32_t)ADACC, ADCNT, ADSTAT, ADCON0);
+			ADCON2bits.ACLR = 1;
+			for (c = 0; c < 25; c++) {
+				adr += adc_results[c];
+			}
+			printf("adcc: %lu", (uint32_t)adr);
+			adr = ((uint24_t)4095 * 200) - adr;
+			printf(" %lu\n", (uint32_t)adr);
+			softintrs.bits.int_adcc = 0;
+		}
 		if (softintrs.bits.int_100hz) {
 			softintrs.bits.int_100hz = 0;
 			time_events.bits.ev_100hz = 1;
@@ -578,6 +628,16 @@ again:
 
 		if (time_events.bits.ev_1hz) {
 			seconds++;
+			if (ADACT == 0) {
+				di();
+				DMASELECT = 2;
+				DMAnCON0bits.SIRQEN = 1;
+				ei();
+				ADACT = 0x06; /* timer4_postscaled , start conversion */
+			} else {
+				printf("adcc 0x%x 0x%lx, 0x%x 0x%x 0x%x\n",
+				    ADRES, (uint32_t)ADACC, ADCNT, ADSTAT, ADCON0);
+			}
 			for (c = 0; c < LATC_DATA_SIZE; c++)
 				latc_data[c] ^= O_LED;
 			/*
@@ -633,6 +693,7 @@ again:
 			uart_softintrs.bits.uart232_line2 = 0;
 		} 
 		if (uart_softintrs.bits.linky_line1) {
+#if 0
 			if (uart_softintrs.bits.linky_badcs_l1) {
 				printf("linky1badcs: %s\n", linky_rxbuf1);
 			} else {
@@ -641,9 +702,11 @@ again:
 				printf("%s\n", linky_rxbuf1);
 				uout.bits.rs232 = 0;
 			}
+#endif
 			uart_softintrs.bits.linky_badcs_l1 = 0;
 			uart_softintrs.bits.linky_line1 = 0;
 		} else if (uart_softintrs.bits.linky_line2) {
+#if 0
 			if (uart_softintrs.bits.linky_badcs_l2) {
 				printf("linky2badcs: %s\n", linky_rxbuf2);
 			} else {
@@ -652,6 +715,7 @@ again:
 				printf("%s\n", linky_rxbuf2);
 				uout.bits.rs232 = 0;
 			}
+#endif
 			uart_softintrs.bits.linky_badcs_l2 = 0;
 			uart_softintrs.bits.linky_line2 = 0;
 		} 
@@ -718,6 +782,14 @@ irqh_dma1(void)
 		TRISC = (u_char)(~(O_LED | O_I2C | O2 | OC));
 		break;
 	}
+}
+
+void __interrupt(__irq(DMA3DCNT), __low_priority, base(IVECT_BASE))
+irqh_dma3(void)
+{
+	PIR10bits.DMA3DCNTIF = 0;
+	ADACT = 0;
+	softintrs.bits.int_adcc = 1;
 }
 
 void __interrupt(__irq(default), __low_priority, base(IVECT_BASE))
