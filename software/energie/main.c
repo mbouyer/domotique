@@ -852,6 +852,7 @@ irqh_dma1(void)
 		TRISC = (u_char)(~(O_LED | O_I2C | O2 | OC));
 		break;
 	}
+	DMAnCON0bits.DGO = 1;
 }
 
 void __interrupt(__irq(DMA3DCNT), __low_priority, base(IVECT_BASE))
