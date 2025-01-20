@@ -693,7 +693,6 @@ again:
 			uart_softintrs.bits.uart232_line2 = 0;
 		} 
 		if (uart_softintrs.bits.linky_line1) {
-#if 0
 			if (uart_softintrs.bits.linky_badcs_l1) {
 				printf("linky1badcs: %s\n", linky_rxbuf1);
 			} else {
@@ -702,11 +701,9 @@ again:
 				printf("%s\n", linky_rxbuf1);
 				uout.bits.rs232 = 0;
 			}
-#endif
 			uart_softintrs.bits.linky_badcs_l1 = 0;
 			uart_softintrs.bits.linky_line1 = 0;
 		} else if (uart_softintrs.bits.linky_line2) {
-#if 0
 			if (uart_softintrs.bits.linky_badcs_l2) {
 				printf("linky2badcs: %s\n", linky_rxbuf2);
 			} else {
@@ -715,7 +712,6 @@ again:
 				printf("%s\n", linky_rxbuf2);
 				uout.bits.rs232 = 0;
 			}
-#endif
 			uart_softintrs.bits.linky_badcs_l2 = 0;
 			uart_softintrs.bits.linky_line2 = 0;
 		} 
