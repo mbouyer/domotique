@@ -83,6 +83,14 @@ static union linky_state {
 	char byte;
 } linky_state;
 
+static union debug_out {
+	struct _dout {
+		char linky : 1;
+		char adc : 1;
+	} bits;
+	char byte;
+} debug_out;
+
 void
 putch(char c)
 {
@@ -398,13 +406,41 @@ print_stats()
 }
 
 static void
+do_debug(__ram char *buf)
+{
+	if (strcmp(buf, "stats") == 0)
+		print_stats();
+	else if (strncmp(buf, "debug ", 6) == 0) {
+		switch(buf[6]) {
+		case 'l':
+			debug_out.bits.linky = 0;
+			break;
+		case 'L':
+			debug_out.bits.linky = 1;
+			break;
+		case 'a':
+			debug_out.bits.adc = 0;
+			break;
+		case 'A':
+			debug_out.bits.adc = 1;
+			break;
+		}
+	} else {
+		command(buf);
+	}
+}
+
+static void
 do_linky(__ram char *buf)
 {
 	char c;
+	if (debug_out.bits.linky == 0)
+		uout.bits.debug = 0;
 	printf("linky ");
 	uout.bits.rs232 = 1;
 	printf("%s\n", buf);
 	uout.bits.rs232 = 0;
+	uout.bits.debug = 1;
 	if (strncmp(buf, "PTEC HC", 7) == 0 && linky_state.bits.hc == 0) {
 		linky_state.bits.hc = 1;
 		outputs_status[0] = 1;
@@ -438,9 +474,11 @@ main(void)
 
 	default_src = 0;
 	uout.byte = 0;
-	linky_state.byte = 0;
         if (PORTBbits.RB7)
 		uout.bits.debug = 1;
+	linky_state.byte = 0;
+	debug_out.byte = 0xff;
+
 	U1CON1bits.U1RXBIMD = 1; /* detect RX going low */
 
 	ANSELC = 0;
@@ -641,15 +679,18 @@ again:
 		time_events.byte = 0;
 		if (softintrs.bits.int_adcc) {
 			__uint24 adr = 0;
-			printf("adcc 0x%x 0x%lx, 0x%x 0x%x 0x%x\n",
-			    ADRES, (uint32_t)ADACC, ADCNT, ADSTAT, ADCON0);
+			if (debug_out.bits.adc) 
+				printf("adcc 0x%x 0x%lx, 0x%x 0x%x 0x%x\n",
+				 ADRES, (uint32_t)ADACC, ADCNT, ADSTAT, ADCON0);
 			ADCON2bits.ACLR = 1;
 			for (c = 0; c < 25; c++) {
 				adr += adc_results[c];
 			}
-			printf("adcc: %lu", (uint32_t)adr);
+			if (debug_out.bits.adc) 
+				printf("adcc: %lu", (uint32_t)adr);
 			adr = ((uint24_t)4095 * 200) - adr;
-			printf(" %lu\n", (uint32_t)adr);
+			if (debug_out.bits.adc) 
+				printf(" %lu\n", (uint32_t)adr);
 			softintrs.bits.int_adcc = 0;
 		}
 		if (softintrs.bits.int_100hz) {
@@ -706,9 +747,7 @@ again:
 			printf("line1: %s\n", uart_rxbuf1);
 			if (strcmp(uart_rxbuf1, "reb") == 0)
 				break;
-			if (strcmp(uart_rxbuf1, "stats") == 0)
-				print_stats();
-			command(uart_rxbuf1);
+			do_debug(uart_rxbuf1);
 			uart_softintrs.bits.uart1_line1 = 0;
 			do_outputs_status();
 			debug();
@@ -716,9 +755,7 @@ again:
 			printf("line2: %s\n", uart_rxbuf2);
 			if (strcmp(uart_rxbuf2, "reb") == 0)
 				break;
-			if (strcmp(uart_rxbuf2, "stats") == 0)
-				print_stats();
-			command(uart_rxbuf2);
+			do_debug(uart_rxbuf2);
 			uart_softintrs.bits.uart1_line2 = 0;
 			do_outputs_status();
 			debug();
