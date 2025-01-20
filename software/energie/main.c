@@ -75,6 +75,14 @@ static union uout {
 	char byte;
 } uout;
 
+static union linky_state {
+	struct _lstate {
+		char hc : 1;
+		char hpjr : 1;
+	} bits;
+	char byte;
+} linky_state;
+
 void
 putch(char c)
 {
@@ -389,6 +397,38 @@ print_stats()
 	    rx_linky_ov, rx_linky_cs);
 }
 
+static void
+do_linky(__ram char *buf)
+{
+	char c;
+	printf("linky ");
+	uout.bits.rs232 = 1;
+	printf("%s\n", buf);
+	uout.bits.rs232 = 0;
+	if (strncmp(buf, "PTEC HC", 7) == 0 && linky_state.bits.hc == 0) {
+		linky_state.bits.hc = 1;
+		outputs_status[0] = 1;
+		update_outputs();
+	} else if (strncmp(buf, "PTEC HP", 7) == 0 && linky_state.bits.hc == 1) {
+		linky_state.bits.hc = 0;
+		outputs_status[0] = 0;
+		update_outputs();
+	}
+	if (strncmp(buf, "PTEC HPJR", 9) == 0 && linky_state.bits.hpjr == 0) {
+		linky_state.bits.hpjr = 1;
+		for (c = 2; c < 6; c++) {
+			outputs_status[c] = PIL_NEG;
+		}
+		update_outputs();
+	} else if (linky_state.bits.hpjr == 1 && strncmp(buf, "PTEC H", 6) == 0) {
+		linky_state.bits.hpjr = 0;
+		for (c = 2; c < 6; c++) {
+			outputs_status[c] = 0;
+		}
+		update_outputs();
+	}
+}
+
 int
 main(void)
 {
@@ -396,6 +436,7 @@ main(void)
 
 	default_src = 0;
 	uout.byte = 0;
+	linky_state.byte = 0;
         if (PORTBbits.RB7)
 		uout.bits.debug = 1;
 	U1CON1bits.U1RXBIMD = 1; /* detect RX going low */
@@ -696,10 +737,7 @@ again:
 			if (uart_softintrs.bits.linky_badcs_l1) {
 				printf("linky1badcs: %s\n", linky_rxbuf1);
 			} else {
-				printf("linelinky_1 ");
-				uout.bits.rs232 = 1;
-				printf("%s\n", linky_rxbuf1);
-				uout.bits.rs232 = 0;
+				do_linky(linky_rxbuf1);
 			}
 			uart_softintrs.bits.linky_badcs_l1 = 0;
 			uart_softintrs.bits.linky_line1 = 0;
@@ -707,10 +745,7 @@ again:
 			if (uart_softintrs.bits.linky_badcs_l2) {
 				printf("linky2badcs: %s\n", linky_rxbuf2);
 			} else {
-				printf("linelinky_2 ");
-				uout.bits.rs232 = 1;
-				printf("%s\n", linky_rxbuf2);
-				uout.bits.rs232 = 0;
+				do_linky(linky_rxbuf2);
 			}
 			uart_softintrs.bits.linky_badcs_l2 = 0;
 			uart_softintrs.bits.linky_line2 = 0;
