@@ -100,14 +100,14 @@ putch(char c)
 #define OC	(u_char)0x01 /* RC0 */
 #define O_I2C	(u_char)0x18 /* RC3, RC4 */
 
-#define O1_OA	(u_char)(0 * 3)
-#define O2_OA	(u_char)(1 * 3)
-#define O1_OB	(u_char)(2 * 3)
-#define O2_OB	(u_char)(3 * 3)
-#define O1_OC	(u_char)(4 * 3)
-#define O2_OC	(u_char)(5 * 3)
+#define O1_OA	(u_char)(0)
+#define O2_OA	(u_char)(O1_OA + 3)
+#define O1_OB	(u_char)(O2_OA + 3)
+#define O2_OB	(u_char)(O1_OB + 3)
+#define O1_OC	(u_char)(O2_OB + 3)
+#define O2_OC	(u_char)(O1_OC + 2)
 
-#define LATC_DATA_SIZE (O2_OC + 3)
+#define LATC_DATA_SIZE (O2_OC + 2)
 static char latc_data[LATC_DATA_SIZE];
 
 #define NOUTS 6
