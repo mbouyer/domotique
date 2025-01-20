@@ -414,12 +414,14 @@ do_linky(__ram char *buf)
 		outputs_status[0] = 0;
 		update_outputs();
 	}
-	if (strncmp(buf, "PTEC HPJR", 9) == 0 && linky_state.bits.hpjr == 0) {
-		linky_state.bits.hpjr = 1;
-		for (c = 2; c < 6; c++) {
-			outputs_status[c] = PIL_NEG;
+	if (strncmp(buf, "PTEC HPJR", 9) == 0) {
+		if (linky_state.bits.hpjr == 0) {
+			linky_state.bits.hpjr = 1;
+			for (c = 2; c < 6; c++) {
+				outputs_status[c] = PIL_NEG;
+			}
+			update_outputs();
 		}
-		update_outputs();
 	} else if (linky_state.bits.hpjr == 1 && strncmp(buf, "PTEC H", 6) == 0) {
 		linky_state.bits.hpjr = 0;
 		for (c = 2; c < 6; c++) {
