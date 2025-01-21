@@ -104,9 +104,10 @@ void __interrupt(__irq(U1RX), __low_priority, base(IVECT_BASE))
 irql_uart1rx(void)
 {
 	if (PIR4bits.U1RXIF) {
-		char c = U1RXB;
+		char c;
 
 		if (U1ERRIRbits.RXFOIF || U1ERRIRbits.FERIF) {
+			c = U1RXB;
 			(void)c;
 			U1ERRIRbits.RXFOIF = 0;
 			/* error; ignore line */
@@ -114,6 +115,8 @@ irql_uart1rx(void)
 			uart_rxbuf_idx = UART_RXBUFSIZE;
 			return;
 		}
+
+		c = U1RXB;
 		if (c == 0x0a)
 			return;
 
