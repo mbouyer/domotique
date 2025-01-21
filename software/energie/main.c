@@ -475,11 +475,13 @@ main(void)
 	uout.byte = 0;
         if (PORTBbits.RB7)
 		uout.bits.debug_present = 1;
+		U1CON1bits.U1RXBIMD = 1; /* detect RX going low */
+	else {
+		U1CON1bits.U1ON = 0;
+	}
 	uout.bits.debug = 1;
 	linky_state.byte = 0;
 	debug_out.byte = 0xff;
-
-	U1CON1bits.U1RXBIMD = 1; /* detect RX going low */
 
 	ANSELC = 0;
 	ANSELB = 0;
