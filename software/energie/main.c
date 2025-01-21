@@ -69,6 +69,7 @@ static union time_events {
 
 static union uout {
 	struct _uout {
+		char debug_present : 1;
 		char debug : 1;
 		char rs232 : 1;
 	} bits;
@@ -94,7 +95,7 @@ static union debug_out {
 void
 putch(char c)
 {
-	if (uout.bits.debug) {
+	if (uout.bits.debug && uout.bits.debug_present) {
 		usart_putchar(c);
 	}
 	if (uout.bits.rs232) {
@@ -473,7 +474,8 @@ main(void)
 	default_src = 0;
 	uout.byte = 0;
         if (PORTBbits.RB7)
-		uout.bits.debug = 1;
+		uout.bits.debug_present = 1;
+	uout.bits.debug = 1;
 	linky_state.byte = 0;
 	debug_out.byte = 0xff;
 
@@ -664,12 +666,12 @@ main(void)
 again:
 	while (1) {
 		if (PORTBbits.RB7) {
-			uout.bits.debug = 1;
+			uout.bits.debug_present = 1;
 			PIE4bits.U1RXIE = 1;
 			U1CON1bits.U1ON = 1;
 		} else if (U1ERRIRbits.RXBKIF) {
-			/* TX disconnected */
-			uout.bits.debug = 0;
+			/* debug RX disconnected */
+			uout.bits.debug_present = 0;
 			PIE4bits.U1RXIE = 0;
 			U1ERRIRbits.RXBKIF = 0;
 			U1CON1bits.U1ON = 0;
