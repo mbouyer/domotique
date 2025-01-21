@@ -687,6 +687,9 @@ main(void)
 	PIE10bits.DMA3DCNTIE = 1;
 	ADCON0bits.ON = 1;
 
+	DMAnCON0bits.SIRQEN = 1;
+	ADACT = 0x06; /* timer4_postscaled , start conversion */
+
 	/* enable the whole C outputs updates */
 	T4CONbits.TMR4ON = 1;
 
@@ -761,6 +764,7 @@ again:
 			for (c = 0; c < LATC_DATA_SIZE; c++)
 				latc_data[c] ^= O_LED;
 			if ((time - I_timestamp) > 300) { /* 3s */
+				uout.bits.rs232 = 1;
 				printf("II %ld", (u_long)(time - I_timestamp));
 				for (c = 0; c < 6; c++) {
 					printf(" %ld/%d",
@@ -774,6 +778,7 @@ again:
 				 */
 				}
 				printf("\n");
+				uout.bits.rs232 = 0;
 				I_timestamp = time;
 			}
 			/*
