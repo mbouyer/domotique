@@ -380,9 +380,7 @@ command(__ram char *buf)
 	if (r != 0) {
 		char c;
 		update_outputs();
-		for (c = 0; c < LATC_DATA_SIZE; c++)
-			printf("0x%x ", (latc_data[c] & ~O_LED));
-		printf("0x%x\n", TRISC);
+		do_outputs_status();
 	}
 	return r;
 }
@@ -749,7 +747,6 @@ again:
 				break;
 			do_debug(uart_rxbuf1);
 			uart_softintrs.bits.uart1_line1 = 0;
-			do_outputs_status();
 			debug();
 		} else if (uart_softintrs.bits.uart1_line2) {
 			printf("line2: %s\n", uart_rxbuf2);
@@ -757,7 +754,6 @@ again:
 				break;
 			do_debug(uart_rxbuf2);
 			uart_softintrs.bits.uart1_line2 = 0;
-			do_outputs_status();
 			debug();
 		} else if (uart_rxbuf_a == 0) {
 			/* clear overflow */
