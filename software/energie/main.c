@@ -540,6 +540,8 @@ main(void)
 	INTCON0bits.IPEN=1; /* enable interrupt priority */
 
 	USART_INIT(0);
+	if (uout.bits.debug_present)
+		PIE4bits.U1RXIE = 1;
 
 	/* configure UART2 */
 	TRISBbits.TRISB2 = 0 ;

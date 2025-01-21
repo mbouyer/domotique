@@ -47,7 +47,6 @@ extern unsigned char uart_rxbuf_a;
 		IPR4bits.U1RXIP=p; \
 		uart_txbuf_prod = uart_txbuf_cons = 0; \
 		uart_softintrs.byte = 0; uart_rxbuf_idx = 0; uart_rxbuf_a= 1;\
-		PIE4bits.U1RXIE = 1; \
 		rx_debug_ov = tx_debug_w = 0; \
 		rx_232_ov = rx_232_cs = tx_232_w = 0; \
 		rx_linky_ov = rx_linky_cs = 0; \
