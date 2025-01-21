@@ -767,6 +767,11 @@ again:
 					    (u_long)I_average[c], I_count[c]);
 					I_average[c] = 0;
 					I_count[c] = 0;
+				/* intensity:
+				 * Iadc = I_average / I_count / 100 
+				 * Iadc = I(A) 3000 * 100 / 2.048 * 4096
+				 * I(A) = I_average / I_count / 6666.6667
+				 */
 				}
 				printf("\n");
 				I_timestamp = time;
