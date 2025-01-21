@@ -473,10 +473,10 @@ main(void)
 
 	default_src = 0;
 	uout.byte = 0;
-        if (PORTBbits.RB7)
+        if (PORTBbits.RB7) {
 		uout.bits.debug_present = 1;
 		U1CON1bits.U1RXBIMD = 1; /* detect RX going low */
-	else {
+	} else {
 		U1CON1bits.U1ON = 0;
 	}
 	uout.bits.debug = 1;
