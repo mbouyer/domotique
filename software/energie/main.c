@@ -47,9 +47,10 @@ u_int timer0_read(void);
 #define TIMER0_100MS  977
 
 static char counter_100hz;
-static char counter_100hz;
 static char counter_10hz;
 static uint16_t seconds;
+static __uint24 time; /* in 10ms units */
+
 static volatile union softintrs {
 	struct softintrs_bits {
 		char int_100hz : 1;	/* 0.01s timer */
@@ -135,7 +136,25 @@ static char outputs_status[NOUTS];
 #define PIL_POS 2
 #define PIL_NEG 3
 
+/*
+ * intensity measures
+ *  ADC value for 32A (RMS) is 2133
+ */
+/*
+ * Accumulates 200 (25 * 8) measures over 20ms (one 50Hz cycle)
+ * The sum will be intensity RMS * 100 (in ADC units), max about 213300
+ */
 static uint16_t adc_results[25];
+/*
+ * accumulate over a short period of time. In a __uint24 we can sum about 70
+ * samples, just a bit more than 1s. So use a uint32 so we can average over
+ * several seconds
+ */
+
+static __uint24 I_average[6];
+static u_char I_count[6]; /* count of samples */
+static __uint24 I_timestamp; /* time of first sample */
+static u_char channel; /* active channel */
 
 static void
 do_outputs_status(void)
@@ -515,9 +534,9 @@ main(void)
 
 	softintrs.byte = 0;
 	counter_100hz = 10;
-	counter_100hz = 10;
 	counter_10hz = 10;
 	seconds = 0;
+	time = 0;
 	time_events.byte = 0;
 
 	IPR1 = 0;
@@ -636,7 +655,6 @@ main(void)
 	ADCON3 = 0x07; /* always interrupt */
 	ADCLK = 0x7F; /* Fosc/64 => 1MHz*/
 	ADREF = 0x02; /* Vref- to GND, Vref+ to RA3 */
-	ADPCH = 1; /* input RA1 */
 	ADPRE = 0;
 	ADACQ = 128; /* 2us acquisition time */
 	ADRPT = 8;
@@ -645,6 +663,15 @@ main(void)
 	for (c = 0; c < 25; c++) {
 		adc_results[c] = 0;
 	}
+
+	ADPCH = 0; /* input RA0 */
+	channel = 0;
+
+	for (c = 0; c < 6; c++) {
+		I_average[c] = 0;
+		I_count[c] = 0;
+	}
+	I_timestamp = time;
 
 	DMASELECT = 2;
 	DMAnCON0 = 0x00; /* !SIRQEN */
@@ -695,11 +722,26 @@ again:
 			adr = ((uint24_t)4095 * 200) - adr;
 			if (debug_out.bits.adc) 
 				printf(" %lu\n", (uint32_t)adr);
+			I_average[channel] += adr;
+			I_count[channel]++;
+			channel++;
+			if (channel == 6)
+				channel = 0;
+			if (channel < 3)
+				ADPCH = channel;
+			else
+				ADPCH = channel + 1;
 			softintrs.bits.int_adcc = 0;
+			di();
+			DMASELECT = 2;
+			DMAnCON0bits.SIRQEN = 1;
+			ei();
+			ADACT = 0x06; /* timer4_postscaled , start conversion */
 		}
 		if (softintrs.bits.int_100hz) {
 			softintrs.bits.int_100hz = 0;
 			time_events.bits.ev_100hz = 1;
+			time++;
 			counter_100hz--;
 			if (counter_100hz == 0) {
 				counter_100hz = 10;
@@ -716,18 +758,19 @@ again:
 
 		if (time_events.bits.ev_1hz) {
 			seconds++;
-			if (ADACT == 0) {
-				di();
-				DMASELECT = 2;
-				DMAnCON0bits.SIRQEN = 1;
-				ei();
-				ADACT = 0x06; /* timer4_postscaled , start conversion */
-			} else {
-				printf("adcc 0x%x 0x%lx, 0x%x 0x%x 0x%x\n",
-				    ADRES, (uint32_t)ADACC, ADCNT, ADSTAT, ADCON0);
-			}
 			for (c = 0; c < LATC_DATA_SIZE; c++)
 				latc_data[c] ^= O_LED;
+			if ((time - I_timestamp) > 300) { /* 3s */
+				printf("II %ld", (u_long)(time - I_timestamp));
+				for (c = 0; c < 6; c++) {
+					printf(" %ld/%d",
+					    (u_long)I_average[c], I_count[c]);
+					I_average[c] = 0;
+					I_count[c] = 0;
+				}
+				printf("\n");
+				I_timestamp = time;
+			}
 			/*
 			printf("st %d %d\n", uart_rxbuf_idx, uart_rxbuf_a);
 			printf("0x%x 0x%x 0x%x 0x%x\n", U1CON0, U1CON1, U1CON2, U1ERRIR);
