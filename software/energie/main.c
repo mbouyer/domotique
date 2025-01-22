@@ -775,6 +775,7 @@ again:
 				 * Iadc = I_average / I_count / 100 
 				 * Iadc = I(A) 3000 * 100 / 2.048 * 4096
 				 * I(A) = I_average / I_count / 6666.6667
+				 * Irms = I(A) * 1.11
 				 */
 				}
 				printf("\n");
