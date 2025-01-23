@@ -979,24 +979,29 @@ irqh_dma1(void)
 	switch((u_char)DMAnSCNTL) {
 	case (u_char)(LATC_DATA_SIZE - O1_OA): /* O1_OA */
 		TRISC = (u_char)(~(O_LED | O_I2C | O1 | OA));
+		DMAnCON0bits.DGO = 1;
 		break;
 	case (u_char)(LATC_DATA_SIZE - O2_OA):
 		TRISC = (u_char)(~(O_LED | O_I2C | O2 | OA));
+		DMAnCON0bits.DGO = 1;
 		break;
 	case (u_char)(LATC_DATA_SIZE - O1_OB):
 		TRISC = (u_char)(~(O_LED | O_I2C | O1 | OB));
+		DMAnCON0bits.DGO = 1;
 		break;
 	case (u_char)(LATC_DATA_SIZE - O2_OB):
 		TRISC = (u_char)(~(O_LED | O_I2C | O2 | OB));
+		DMAnCON0bits.DGO = 1;
 		break;
 	case (u_char)(LATC_DATA_SIZE - O1_OC):
 		TRISC = (u_char)(~(O_LED | O_I2C | O1 | OC));
+		DMAnCON0bits.DGO = 1;
 		break;
 	case (u_char)(LATC_DATA_SIZE - O2_OC):
 		TRISC = (u_char)(~(O_LED | O_I2C | O2 | OC));
+		DMAnCON0bits.DGO = 1;
 		break;
 	}
-	DMAnCON0bits.DGO = 1;
 }
 
 void __interrupt(__irq(DMA3DCNT), __low_priority, base(IVECT_BASE))
