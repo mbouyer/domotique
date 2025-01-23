@@ -37,6 +37,7 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <sys/stat.h>
+#include <sys/time.h>
 #include <grp.h>
 #include <pwd.h>
 #include <termios.h>
@@ -82,6 +83,8 @@ static int nclients = 0;
 
 static int linky;
 static FILE *linky_f;
+
+static struct timeval msg_ts; /* timespamp of messages */
 
 static void
 linky_write(char *buf)
@@ -143,7 +146,7 @@ clients_write(char *buf)
 		if (clients_fds[i].f == NULL)
 			continue;
 		printf("send to client %d\n", i);
-		if (fprintf(clients_fds[i].f, "%s\n", buf) < 0 ||
+		if (fprintf(clients_fds[i].f, "%d %s\n", msg_ts.tv_sec, buf) < 0 ||
 		    fflush(clients_fds[i].f) < 0) {
 			printf("close client %d\n", i);
 			fclose(clients_fds[i].f);
@@ -343,6 +346,13 @@ getgroup:
 			}
 		}
 		if (fds[i].revents & POLLRDNORM) {
+			if (linkybufi == 0) {
+				if (gettimeofday(&msg_ts, NULL) != 0) {
+					mylog(LOG_ERR, "gettimeofday: %s",
+					    strerror(errno));
+					exit(1);
+				}
+			}
 			switch(read(linky, &linkybuf[linkybufi], 1)) {
 			case 0:
 				/* ignore short read */
