@@ -389,7 +389,7 @@ irql_linky1rx(void)
 			(void)c;
 			return;
 		}
-		if (c == 0x0d) {
+		if (c == 0x0a) {
 			if (linky_rxbuf_idx < 2) {
 				/* not enough chars */
 				linky_rxbuf_idx = 0;
