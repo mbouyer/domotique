@@ -35,7 +35,7 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 
-#define SOCKET_PATH "/tmp/.e_hub"
+#define SOCKET_PATH "/var/run/e_hub.sock"
 
 #define LINESZ 128
 

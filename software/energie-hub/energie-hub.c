@@ -44,7 +44,7 @@
 #include <syslog.h>
 #include <util.h>
 
-#define SOCKET_PATH "/tmp/.e_hub"
+#define SOCKET_PATH "/var/run/e_hub.sock"
 
 static void
 usage(void)
