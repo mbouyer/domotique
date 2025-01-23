@@ -145,8 +145,9 @@ clients_write(char *buf)
 	for (i = 0; i < nclients; i++) {
 		if (clients_fds[i].f == NULL)
 			continue;
-		printf("send to client %d\n", i);
-		if (fprintf(clients_fds[i].f, "%d %s\n", msg_ts.tv_sec, buf) < 0 ||
+		printf("send to client %d %s\n", i, buf);
+		if (fprintf(clients_fds[i].f, "%" PRIu64 " %s\n",
+		    msg_ts.tv_sec, buf) < 0 ||
 		    fflush(clients_fds[i].f) < 0) {
 			printf("close client %d\n", i);
 			fclose(clients_fds[i].f);
