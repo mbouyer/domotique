@@ -155,9 +155,8 @@ static uint16_t adc_results[25];
 
 static __uint24 I_average[6];
 static u_char I_count[6]; /* count of samples */
-static __uint24 I_timestamp[6]; /* time of first sample */
+static __uint24 I_timestamp; /* time of first sample */
 static u_char channel; /* active channel */
-static u_char I_idx; /* data being handled */
 
 static u_char output_status_time; /* periodic outputs report */
 
@@ -399,6 +398,41 @@ command(__ram char *buf)
 }
 
 static void
+print_interframe(void)
+{
+	char c;
+	if ((time - I_timestamp) > 300) { /* 3s */
+		uout.bits.rs232 = 1;
+		for (c = 0; c < 6; c++) {
+			printf("II%d 0x%lx", c,
+		    (u_long)(time - I_timestamp));
+			printf(" 0x%lx/0x%x\n", (u_long)I_average[c],
+			    I_count[c]);
+			I_average[c] = 0;
+			I_count[c] = 0;
+			/* intensity:
+			 * Iadc = I_average / I_count / 100 
+			 * Iadc = I(A) 3000 * 100 / 2.048 * 4096
+			 * I(A) = I_average / I_count / 6666.6667
+			 * Irms = I(A) * 1.11
+			 */
+		}
+		uout.bits.rs232 = 0;
+		I_timestamp = time;
+	} else if (output_status_time == 0) {
+		uout.bits.rs232 = 1;
+		printf("EE ");
+		for (c = 0; c < 6; c++) {
+			printf("%d", outputs_status[c]);
+		}
+		printf("\n");
+		uout.bits.rs232 = 0;
+		output_status_time = 100; /* 10s */
+	}
+}
+
+
+static void
 debug(void)
 {
 #if 0
@@ -498,7 +532,7 @@ main(void)
 	uout.bits.debug = 1;
 	linky_state.byte = 0;
 	linky_frame_timeout = 0;
-	debug_out.byte = 0xff;
+	debug_out.byte = 0x01; /* linky */
 
 	ANSELC = 0;
 	ANSELB = 0;
@@ -669,9 +703,8 @@ main(void)
 	for (c = 0; c < 6; c++) {
 		I_average[c] = 0;
 		I_count[c] = 0;
-		I_timestamp[c] = time;
 	}
-	I_idx = 0;
+	I_timestamp = time;
 
 	DMASELECT = 2;
 	DMAnCON0 = 0x00; /* !SIRQEN */
@@ -762,36 +795,10 @@ again:
 		if (time_events.bits.ev_10hz) {
 			if (output_status_time != 0)
 				output_status_time--;
-			if (linky_frame_timeout != 0) {
+			if (linky_frame_timeout == 0) {
+				print_interframe();
+			} else {
 				linky_frame_timeout--;
-			} else if ((time - I_timestamp[I_idx]) > 300) { /* 3s */
-				uout.bits.rs232 = 1;
-				printf("II%d %ld", I_idx,
-				    (u_long)(time - I_timestamp[I_idx]));
-				printf(" %ld/%d\n", (u_long)I_average[I_idx],
-				    I_count[I_idx]);
-				I_average[I_idx] = 0;
-				I_count[I_idx] = 0;
-				I_timestamp[I_idx] = time;
-				/* intensity:
-				 * Iadc = I_average / I_count / 100 
-				 * Iadc = I(A) 3000 * 100 / 2.048 * 4096
-				 * I(A) = I_average / I_count / 6666.6667
-				 * Irms = I(A) * 1.11
-				 */
-				uout.bits.rs232 = 0;
-				I_idx++;
-				if (I_idx >= 6)
-					I_idx = 0;
-			} else if (output_status_time == 0) {
-				uout.bits.rs232 = 1;
-				printf("EE ");
-				for (c = 0; c < 6; c++) {
-					printf("%d", outputs_status[c]);
-				}
-				printf("\n");
-				uout.bits.rs232 = 0;
-				output_status_time = 100; /* 10s */
 			}
 		}
 		if (time_events.bits.ev_1hz) {
@@ -845,12 +852,10 @@ again:
 			uart_softintrs.bits.uart232_line2 = 0;
 		} 
 		if (linky_softintrs.bits.linky_sof) {
+			if (debug_out.bits.linky)
+				printf("lsf\n");
 			linky_softintrs.bits.linky_sof = 0;
 			linky_frame_timeout = 50; /* 5s */
-		}
-		if (linky_softintrs.bits.linky_eof) {
-			linky_softintrs.bits.linky_eof = 0;
-			linky_frame_timeout = 0;
 		}
 		if (linky_softintrs.bits.linky_line1) {
 			if (linky_softintrs.bits.linky_badcs_l1) {
@@ -869,6 +874,13 @@ again:
 			linky_softintrs.bits.linky_badcs_l2 = 0;
 			linky_softintrs.bits.linky_line2 = 0;
 		} 
+		if (linky_softintrs.bits.linky_eof) {
+			if (debug_out.bits.linky)
+				printf("lef\n");
+			linky_softintrs.bits.linky_eof = 0;
+			linky_frame_timeout = 0;
+			print_interframe();
+		}
 
 		if (default_src != 0) {
 			printf("default handler called for 0x%x\n",
