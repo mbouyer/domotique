@@ -159,17 +159,7 @@ static __uint24 I_timestamp[6]; /* time of first sample */
 static u_char channel; /* active channel */
 static u_char I_idx; /* data being handled */
 
-static void
-do_outputs_status(void)
-{
-	char c;
-	uout.bits.rs232 = 1;
-	for (c = 0; c < 2; c++)
-		printf("O%d %d\n", c, outputs_status[c]);
-	for (c = 0; c < 4; c++)
-		printf("P%d %d\n", c, outputs_status[c + 2]);
-	uout.bits.rs232 = 0;
-}
+static u_char output_status_time; /* periodic outputs report */
 
 static void
 update_outputs(void)
@@ -403,7 +393,7 @@ command(__ram char *buf)
 	if (r != 0) {
 		char c;
 		update_outputs();
-		do_outputs_status();
+		output_status_time = 0; /* send updated status on next slot */
 	}
 	return r;
 }
@@ -628,6 +618,7 @@ main(void)
 	for (c = 0; c < NOUTS; c++)
 		outputs_status[c] = 0;
 	LATC = 0;
+	output_status_time = 0;
 	/*
 	 * set up DMA1 to update LATC on timer4 interrupt.
 	 */
@@ -769,6 +760,8 @@ again:
 		CLRWDT();
 
 		if (time_events.bits.ev_10hz) {
+			if (output_status_time != 0)
+				output_status_time--;
 			if (linky_frame_timeout != 0) {
 				linky_frame_timeout--;
 			} else if ((time - I_timestamp[I_idx]) > 300) { /* 3s */
@@ -790,6 +783,15 @@ again:
 				I_idx++;
 				if (I_idx >= 6)
 					I_idx = 0;
+			} else if (output_status_time == 0) {
+				uout.bits.rs232 = 1;
+				printf("EE ");
+				for (c = 0l c < 6; c++) {
+					printf("%d", outputs_status[c]);
+				}
+				printf("\n");
+				uout.bits.rs232 = 0;
+				output_status_time = 100; /* 10s */
 			}
 		}
 		if (time_events.bits.ev_1hz) {
