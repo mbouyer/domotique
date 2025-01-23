@@ -28,13 +28,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <ctype.h>
 #include <fcntl.h>
 #include <poll.h>
 #include <string.h>
 #include <err.h>
+#include <errno.h>
 #include <sys/socket.h>
 #include <sys/un.h>
+#include <sys/stat.h>
+#include <grp.h>
+#include <pwd.h>
 #include <termios.h>
+#include <syslog.h>
+#include <util.h>
 
 #define SOCKET_PATH "/tmp/.e_hub"
 
@@ -48,6 +55,24 @@ usage(void)
 static int opt_f = 0;
 #define MAX_CLIENTS 128
 #define LINESZ 80
+
+static void mylog(int, const char *, ...) __sysloglike(2, 3);
+
+static void
+mylog(int l, const char *fmt, ...)
+{
+        va_list ap; 
+	char buf[LINESZ];
+
+	va_start(ap, fmt);
+	(void)vsnprintf(buf, sizeof(buf), fmt, ap);
+	va_end(ap);
+
+	if (opt_f) {
+		fprintf(stderr, "%s\n", buf);
+	}
+	syslog(l | LOG_LOCAL2, "%s", buf);
+}
 
 static struct clients_fds {
 	int fd;
@@ -81,12 +106,16 @@ linky_write(char *buf)
 		}
 		sum += buf[i];
 	}
-	if (fprintf(linky_f, buf) < 0)
-		err(1, "linky write");
+	if (fprintf(linky_f, buf) < 0) {
+		mylog(LOG_ERR, "linky write: %s", strerror(errno));
+		exit (1);
+	}
 
 	sum = (sum & 0x3f) + 0x20;
-	if (fprintf(linky_f, " %c\r\n", sum) < 0 || fflush(linky_f) < 0)
-		err(1, "linky write");
+	if (fprintf(linky_f, " %c\r\n", sum) < 0 || fflush(linky_f) < 0) {
+		mylog(LOG_ERR, "linky write: %s", strerror(errno));
+		exit (1);
+	}
 }
 
 static void
@@ -103,7 +132,8 @@ clients_write(char *buf)
 	}
 	sum = (sum & 0x3f) + 0x20;
 	if (s < 2 || buf[s - 2] != ' ' || buf[s - 1] != sum) {
-		warnx("linky sum mismatch: %s %d %d != %d", buf, s, sum, buf[s - 1]);
+		mylog(LOG_NOTICE, "linky sum mismatch: %s %d %d != %d",
+		    buf, s, sum, buf[s - 1]);
 		return;
 	}
 	/* strip checksum */
@@ -127,22 +157,42 @@ int
 main(int argc, char * const argv[])
 {
 	int ch;
-	extern int optind;
 	int main_socket;
 	struct sockaddr_un saddr;
 	struct termios cntrl;
 	int i;
+	long l;
 	static char linebuf[LINESZ];
 	static char linkybuf[LINESZ];
 	int linkybufi = 0;
 	struct pollfd fds[MAX_CLIENTS + 2];
 	int nfds;
 
-	while ((ch = getopt(argc, argv, "f")) != -1) {
+	uid_t uid = 0;
+	gid_t gid = 0; 
+	char *user = NULL;
+	char *group = NULL;
+
+	char *endp;
+	struct group   *gr;
+	struct passwd  *pw;
+
+	while ((ch = getopt(argc, argv, "fu:g:")) != -1) {
 		switch(ch) {
 		case 'f':
 			opt_f++;
 			break;
+		case 'g':
+			group = optarg;
+			if (*group == '\0')
+				usage();
+			break;
+		case 'u':
+			user = optarg;
+			if (*user == '\0')
+				usage();
+			break;
+
 		case '?':
 		default:
 			usage();
@@ -152,6 +202,43 @@ main(int argc, char * const argv[])
 	argv += optind;
 	if (argc != 1)
 		usage();
+
+	if (user != NULL) {
+		if (isdigit((unsigned char)*user)) {
+			errno = 0;
+			endp = NULL;
+			l = strtoul(user, &endp, 0);
+			if (errno || *endp != '\0')
+				goto getuser;
+			uid = (uid_t)l;
+		} else {
+getuser:
+			if ((pw = getpwnam(user)) != NULL) {
+				uid = pw->pw_uid;
+			} else {
+				errno = 0;
+				errx(1, "Cannot find user `%s'", user);
+			}
+		}
+	}
+	if (group != NULL) {
+		if (isdigit((unsigned char)*group)) {
+			errno = 0;
+			endp = NULL;
+			l = strtoul(group, &endp, 0);
+			if (errno || *endp != '\0')
+				goto getgroup;
+			gid = (gid_t)l;
+		} else {
+getgroup:
+			if ((gr = getgrnam(group)) != NULL) {
+				gid = gr->gr_gid;
+			} else {
+				errno = 0;
+				errx(1, "Cannot find group `%s'", group);
+			}
+		}
+	}
 
 	unlink(SOCKET_PATH);
 	/* need to open with O_NONBLOCK, util we set CLOCAL */
@@ -198,12 +285,28 @@ main(int argc, char * const argv[])
 	if (listen(main_socket, 10) != 0)
 		err(1, "listen %s",  SOCKET_PATH);
 
-#if 0
+	if (lchown(SOCKET_PATH, uid, gid) < 0)
+		err(1, "chown %s to %d:%d", SOCKET_PATH, uid, gid);
+
+	if (lchmod(SOCKET_PATH, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP) < 0)
+		err(1, "chmod %s to 0660", SOCKET_PATH);
+
 	if (opt_f == 0) {
 		if (daemon(0, 0) != 0)
 			err(1, "daemon()");
+		pidfile(NULL);
 	}
-#endif
+
+	if (setgid(gid) || setegid(gid)) {
+		mylog(LOG_ERR, "Failed to set gid to %d: %s", gid,
+		    strerror(errno));
+		exit(1);
+	}
+	if (setuid(uid) || seteuid(uid)) { 
+		mylog(LOG_ERR, "Failed to set uid to %d: %s", uid,
+		    strerror(errno));
+		exit(1);
+	}
 
 	printf("ready\n");
 	while (1) {
@@ -219,7 +322,8 @@ main(int argc, char * const argv[])
 		nfds = i + 1;
 
 		if (poll(fds, nfds, -1) < 0) {
-			err(1, "poll");
+			mylog(LOG_ERR, "poll: %s", strerror(errno));
+			exit(1);
 		}
 		for (i = 0; i < nclients; i++) {
 			if (fds[i].revents & POLLRDNORM) {
@@ -241,7 +345,9 @@ main(int argc, char * const argv[])
 				/* ignore short read */
 				break;
 			case -1:
-				errx(1, "can't read linky");
+				mylog(LOG_ERR, "can't read linky: %s",
+				    strerror(errno));
+				exit(1);
 			default:
 				if (linkybuf[linkybufi] == '\r') {
 					/* complete line */
@@ -267,7 +373,8 @@ main(int argc, char * const argv[])
 				clients_fds[nclients].f =
 				    fdopen(new_s, "w+");
 				if (clients_fds[nclients].f == NULL) {
-					warn("fdopen new client");
+					mylog(LOG_ERR, "fdopen new client: %s",
+				    	    strerror(errno));
 					close(new_s);
 				} else {
 					printf("added client %d\n", nclients);
@@ -277,7 +384,7 @@ main(int argc, char * const argv[])
 				close(new_s);
 			}
 		}
-		/* cleanup closed clients, compat array */
+		/* cleanup closed clients, compact array */
 		for (i = 0 ; i < nclients; i++) {
 			if (clients_fds[i].f != NULL)
 				continue;
