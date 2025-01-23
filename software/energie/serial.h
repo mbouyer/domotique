@@ -67,8 +67,8 @@ union uart_softintrs {
 };
 extern volatile union uart_softintrs uart_softintrs;
 
-#define UART232_TXBUFSIZE 32
-#define UART232_TXBUFSIZE_MASK 0x1f
+#define UART232_TXBUFSIZE 128
+#define UART232_TXBUFSIZE_MASK 0x7f
 
 void uart232_putchar (char c);
 void uart232_init(void);
