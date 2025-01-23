@@ -79,6 +79,18 @@ extern char uart232_rxbuf2[UART232_RXBUFSIZE];
 extern unsigned char uart232_rxbuf_idx;
 extern unsigned char uart232_rxbuf_a;
 
+union linky_softintrs {
+        struct linky_softintrs_bits {
+		char linky_line1 : 1;    /* a line is ready in linky_rxbuf1 */
+		char linky_line2 : 1;    /* a line is ready in linky_rxbuf2 */
+		char linky_badcs_l1 : 1; /* bad checksum in linky_rxbuf1 */
+		char linky_badcs_l2 : 1; /* bad checksum in linky_rxbuf2 */
+		char linky_sof : 1; /* start of frame detected */
+		char linky_eof : 1; /* end of frame detected */
+	} bits;
+	char byte;
+};
+extern volatile union linky_softintrs linky_softintrs;
 #define LINKY_RXBUFSIZE 32
 extern char linky_rxbuf1[LINKY_RXBUFSIZE];
 extern char linky_rxbuf2[LINKY_RXBUFSIZE];

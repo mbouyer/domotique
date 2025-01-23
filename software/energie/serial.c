@@ -343,6 +343,8 @@ unsigned char linky_rxbuf_idx;
 unsigned char linky_rxbuf_a;
 static char linky_rxsum;
 
+volatile union linky_softintrs linky_softintrs;
+
 void __interrupt(__irq(U3RX), __low_priority, base(IVECT_BASE))
 irql_linky1rx(void)
 {
@@ -367,9 +369,9 @@ irql_linky1rx(void)
 				rx_linky_ov++;
 				linky_rxbuf_idx = 0;
 				linky_rxsum = 0;
-				if (uart_softintrs.bits.linky_line1 == 0)
+				if (linky_softintrs.bits.linky_line1 == 0)
 					linky_rxbuf_a = 1;
-				else if (uart_softintrs.bits.linky_line2 == 0)
+				else if (linky_softintrs.bits.linky_line2 == 0)
 					linky_rxbuf_a = 2;
 			}
 			return;
@@ -408,9 +410,9 @@ irql_linky1rx(void)
 				return;
 #else
 				if (linky_rxbuf_a == 2)
-					uart_softintrs.bits.linky_badcs_l2 = 1;
+					linky_softintrs.bits.linky_badcs_l2 = 1;
 				else
-					uart_softintrs.bits.linky_badcs_l1 = 1;
+					linky_softintrs.bits.linky_badcs_l1 = 1;
 				buf[linky_rxbuf_idx] = 0;
 			} else
 #endif
@@ -418,22 +420,26 @@ irql_linky1rx(void)
 			linky_rxbuf_idx = 0;
 			linky_rxsum = 0;
 			if (linky_rxbuf_a == 2) {
-				uart_softintrs.bits.linky_line2 = 1;
-				if (uart_softintrs.bits.linky_line1) {
+				linky_softintrs.bits.linky_line2 = 1;
+				if (linky_softintrs.bits.linky_line1) {
 					/* overflow */
 					linky_rxbuf_a = 0;
 				} else {
 					linky_rxbuf_a = 1;
 				}
 			} else {
-				uart_softintrs.bits.linky_line1 = 1;
-				if (uart_softintrs.bits.linky_line2) {
+				linky_softintrs.bits.linky_line1 = 1;
+				if (linky_softintrs.bits.linky_line2) {
 					/* overflow */
 					linky_rxbuf_a = 0;
 				} else {
 					linky_rxbuf_a = 2;
 				}
 			}
+		} else if (c == 0x02) {
+			linky_softintrs.bits.linky_sof = 1;
+		} else if (c == 0x03 || c == 0x04) {
+			linky_softintrs.bits.linky_eof = 1;
 		} else if (c >= 32) {
 			buf[linky_rxbuf_idx] = c;
 			linky_rxsum += c;
@@ -447,6 +453,7 @@ irql_linky1rx(void)
 
 void
 linky_init() {
+	linky_softintrs.byte = 0;
 	IPR9bits.U3TXIP=0;
 	IPR9bits.U3RXIP=0;
 	linky_rxsum = 0;

@@ -85,6 +85,8 @@ static union linky_state {
 	char byte;
 } linky_state;
 
+u_char linky_frame_timeout;
+
 static union debug_out {
 	struct _dout {
 		char linky : 1;
@@ -153,8 +155,9 @@ static uint16_t adc_results[25];
 
 static __uint24 I_average[6];
 static u_char I_count[6]; /* count of samples */
-static __uint24 I_timestamp; /* time of first sample */
+static __uint24 I_timestamp[6]; /* time of first sample */
 static u_char channel; /* active channel */
+static u_char I_idx; /* data being handled */
 
 static void
 do_outputs_status(void)
@@ -455,6 +458,10 @@ do_linky(__ram char *buf)
 	if (debug_out.bits.linky == 0)
 		uout.bits.debug = 0;
 	printf("linky ");
+	if (linky_frame_timeout == 0) {
+		printf("!frame %s\n", buf);
+		return;
+	}
 	uout.bits.rs232 = 1;
 	printf("%s\n", buf);
 	uout.bits.rs232 = 0;
@@ -500,6 +507,7 @@ main(void)
 	}
 	uout.bits.debug = 1;
 	linky_state.byte = 0;
+	linky_frame_timeout = 0;
 	debug_out.byte = 0xff;
 
 	ANSELC = 0;
@@ -670,8 +678,9 @@ main(void)
 	for (c = 0; c < 6; c++) {
 		I_average[c] = 0;
 		I_count[c] = 0;
+		I_timestamp[c] = time;
 	}
-	I_timestamp = time;
+	I_idx = 0;
 
 	DMASELECT = 2;
 	DMAnCON0 = 0x00; /* !SIRQEN */
@@ -759,29 +768,34 @@ again:
 
 		CLRWDT();
 
-		if (time_events.bits.ev_1hz) {
-			seconds++;
-			for (c = 0; c < LATC_DATA_SIZE; c++)
-				latc_data[c] ^= O_LED;
-			if ((time - I_timestamp) > 300) { /* 3s */
+		if (time_events.bits.ev_10hz) {
+			if (linky_frame_timeout != 0) {
+				linky_frame_timeout--;
+			} else if ((time - I_timestamp[I_idx]) > 300) { /* 3s */
 				uout.bits.rs232 = 1;
-				printf("II %ld", (u_long)(time - I_timestamp));
-				for (c = 0; c < 6; c++) {
-					printf(" %ld/%d",
-					    (u_long)I_average[c], I_count[c]);
-					I_average[c] = 0;
-					I_count[c] = 0;
+				printf("II%d %ld", I_idx,
+				    (u_long)(time - I_timestamp[I_idx]));
+				printf(" %ld/%d\n", (u_long)I_average[I_idx],
+				    I_count[I_idx]);
+				I_average[I_idx] = 0;
+				I_count[I_idx] = 0;
+				I_timestamp[I_idx] = time;
 				/* intensity:
 				 * Iadc = I_average / I_count / 100 
 				 * Iadc = I(A) 3000 * 100 / 2.048 * 4096
 				 * I(A) = I_average / I_count / 6666.6667
 				 * Irms = I(A) * 1.11
 				 */
-				}
-				printf("\n");
 				uout.bits.rs232 = 0;
-				I_timestamp = time;
+				I_idx++;
+				if (I_idx >= 6)
+					I_idx = 0;
 			}
+		}
+		if (time_events.bits.ev_1hz) {
+			seconds++;
+			for (c = 0; c < LATC_DATA_SIZE; c++)
+				latc_data[c] ^= O_LED;
 			/*
 			printf("st %d %d\n", uart_rxbuf_idx, uart_rxbuf_a);
 			printf("0x%x 0x%x 0x%x 0x%x\n", U1CON0, U1CON1, U1CON2, U1ERRIR);
@@ -828,22 +842,30 @@ again:
 			command(uart232_rxbuf2);
 			uart_softintrs.bits.uart232_line2 = 0;
 		} 
-		if (uart_softintrs.bits.linky_line1) {
-			if (uart_softintrs.bits.linky_badcs_l1) {
+		if (linky_softintrs.bits.linky_sof) {
+			linky_softintrs.bits.linky_sof = 0;
+			linky_frame_timeout = 50; /* 5s */
+		}
+		if (linky_softintrs.bits.linky_eof) {
+			linky_softintrs.bits.linky_eof = 0;
+			linky_frame_timeout = 0;
+		}
+		if (linky_softintrs.bits.linky_line1) {
+			if (linky_softintrs.bits.linky_badcs_l1) {
 				printf("linky1badcs: %s\n", linky_rxbuf1);
 			} else {
 				do_linky(linky_rxbuf1);
 			}
-			uart_softintrs.bits.linky_badcs_l1 = 0;
-			uart_softintrs.bits.linky_line1 = 0;
-		} else if (uart_softintrs.bits.linky_line2) {
-			if (uart_softintrs.bits.linky_badcs_l2) {
+			linky_softintrs.bits.linky_badcs_l1 = 0;
+			linky_softintrs.bits.linky_line1 = 0;
+		} else if (linky_softintrs.bits.linky_line2) {
+			if (linky_softintrs.bits.linky_badcs_l2) {
 				printf("linky2badcs: %s\n", linky_rxbuf2);
 			} else {
 				do_linky(linky_rxbuf2);
 			}
-			uart_softintrs.bits.linky_badcs_l2 = 0;
-			uart_softintrs.bits.linky_line2 = 0;
+			linky_softintrs.bits.linky_badcs_l2 = 0;
+			linky_softintrs.bits.linky_line2 = 0;
 		} 
 
 		if (default_src != 0) {
@@ -851,7 +873,9 @@ again:
 			    default_src);
 			default_src = 0;
 		}
-		if (softintrs.byte == 0 &&  uart_softintrs.byte == 0)
+		if (softintrs.byte == 0 &&
+		    uart_softintrs.byte == 0 &&
+		    linky_softintrs.byte == 0)
 			SLEEP();
 	}
 	WDTCON0bits.SEN = 0;
