@@ -51,6 +51,10 @@ static char counter_10hz;
 static uint16_t seconds;
 static __uint24 time; /* in 10ms units */
 
+static unsigned char led_pattern_s;
+static unsigned char led_pattern;
+static unsigned char led_pattern_count;
+
 static volatile union softintrs {
 	struct softintrs_bits {
 		char int_100hz : 1;	/* 0.01s timer */
@@ -732,8 +736,9 @@ main(void)
 	T4CONbits.TMR4ON = 1;
 
 	printf("enter loop\n");
-	for (c = 0; c < LATC_DATA_SIZE; c++)
-		latc_data[c] |= O_LED;
+	latc_data[0] |= O_LED;
+	led_pattern = led_pattern_s = 0xff;
+	led_pattern_count = 8;
 
 again:
 	while (1) {
@@ -788,6 +793,19 @@ again:
 				counter_100hz = 10;
 				time_events.bits.ev_10hz = 1;
 				counter_10hz--;
+				if (counter_10hz & 0x01) {
+					led_pattern_count--;
+					led_pattern >>= 1;
+					if (led_pattern_count == 0) {
+						led_pattern = led_pattern_s;
+						led_pattern_count = 8;
+					}
+					if (led_pattern & 0x01) {
+						latc_data[0] |= O_LED;
+					} else {
+						latc_data[0] &= ~O_LED;
+					}
+				}
 				if (counter_10hz == 0) {
 					counter_10hz = 10;
 					time_events.bits.ev_1hz = 1;
@@ -806,14 +824,13 @@ again:
 				if (linky_frame_num == 'z')
 					linky_frame_num = '0';
 				linky_frame_timeout = 50;
+				led_pattern_s = 0x33;
 			} else {
 				linky_frame_timeout--;
 			}
 		}
 		if (time_events.bits.ev_1hz) {
 			seconds++;
-			for (c = 0; c < LATC_DATA_SIZE; c++)
-				latc_data[c] ^= O_LED;
 			/*
 			printf("st %d %d\n", uart_rxbuf_idx, uart_rxbuf_a);
 			printf("0x%x 0x%x 0x%x 0x%x\n", U1CON0, U1CON1, U1CON2, U1ERRIR);
@@ -865,6 +882,7 @@ again:
 				printf("lsf\n");
 			linky_softintrs.bits.linky_sof = 0;
 			linky_frame_timeout = 50; /* 5s */
+			led_pattern_s = 0x1;
 		}
 		if (linky_softintrs.bits.linky_line1) {
 			if (linky_softintrs.bits.linky_badcs_l1) {
