@@ -84,6 +84,7 @@ static int nclients = 0;
 static int linky;
 static FILE *linky_f;
 
+static char linky_frnum = 0;
 static struct timeval msg_ts; /* timespamp of messages */
 
 static void
@@ -128,6 +129,14 @@ clients_write(char *buf)
 	unsigned int sum = 0;
 	int i;
 
+	if (linky_frnum != buf[0]) {
+		if (gettimeofday(&msg_ts, NULL) != 0) {
+			mylog(LOG_ERR, "gettimeofday: %s",
+			    strerror(errno));
+			exit(1);
+		}
+		linky_frnum = buf[0];
+	}
 	/* verify checksum */
 	for (i = 0; i < s - 2; i++) {
 		buf[i] = buf[i] & 0x7f;
@@ -139,8 +148,9 @@ clients_write(char *buf)
 		    buf, s, sum, buf[s - 1]);
 		return;
 	}
-	/* strip checksum */
-	buf[s - 2] = '\0';
+	
+	buf[s - 2] = '\0'; /* strip checksum */
+	buf++; /* skip frame number */
 	/* send to clients */
 	for (i = 0; i < nclients; i++) {
 		if (clients_fds[i].f == NULL)
@@ -347,13 +357,6 @@ getgroup:
 			}
 		}
 		if (fds[i].revents & POLLRDNORM) {
-			if (linkybufi == 0) {
-				if (gettimeofday(&msg_ts, NULL) != 0) {
-					mylog(LOG_ERR, "gettimeofday: %s",
-					    strerror(errno));
-					exit(1);
-				}
-			}
 			switch(read(linky, &linkybuf[linkybufi], 1)) {
 			case 0:
 				/* ignore short read */

@@ -86,6 +86,7 @@ static union linky_state {
 } linky_state;
 
 u_char linky_frame_timeout;
+u_char linky_frame_num;
 
 static union debug_out {
 	struct _dout {
@@ -404,6 +405,7 @@ print_interframe(void)
 	if ((time - I_timestamp) > 300) { /* 3s */
 		uout.bits.rs232 = 1;
 		for (c = 0; c < 6; c++) {
+			putchar(linky_frame_num);
 			printf("II%d 0x%lx", c,
 		    (u_long)(time - I_timestamp));
 			printf(" 0x%lx/0x%x\n", (u_long)I_average[c],
@@ -421,6 +423,7 @@ print_interframe(void)
 		I_timestamp = time;
 	} else if (output_status_time == 0) {
 		uout.bits.rs232 = 1;
+		putchar(linky_frame_num);
 		printf("EE ");
 		for (c = 0; c < 6; c++) {
 			printf("%d", outputs_status[c]);
@@ -487,6 +490,7 @@ do_linky(__ram char *buf)
 		return;
 	}
 	uout.bits.rs232 = 1;
+	putchar(linky_frame_num);
 	printf("%s\n", buf);
 	uout.bits.rs232 = 0;
 	uout.bits.debug = 1;
@@ -532,6 +536,7 @@ main(void)
 	uout.bits.debug = 1;
 	linky_state.byte = 0;
 	linky_frame_timeout = 0;
+	linky_frame_num = '0';
 	debug_out.byte = 0x01; /* linky */
 
 	ANSELC = 0;
@@ -797,6 +802,10 @@ again:
 				output_status_time--;
 			if (linky_frame_timeout == 0) {
 				print_interframe();
+				linky_frame_num++;
+				if (linky_frame_num == 'z')
+					linky_frame_num = '0';
+				linky_frame_timeout = 50;
 			} else {
 				linky_frame_timeout--;
 			}
@@ -880,6 +889,9 @@ again:
 			linky_softintrs.bits.linky_eof = 0;
 			linky_frame_timeout = 0;
 			print_interframe();
+			linky_frame_num++;
+			if (linky_frame_num == 'z')
+				linky_frame_num = '0';
 		}
 
 		if (default_src != 0) {
