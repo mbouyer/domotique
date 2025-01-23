@@ -786,7 +786,7 @@ again:
 			} else if (output_status_time == 0) {
 				uout.bits.rs232 = 1;
 				printf("EE ");
-				for (c = 0l c < 6; c++) {
+				for (c = 0; c < 6; c++) {
 					printf("%d", outputs_status[c]);
 				}
 				printf("\n");
