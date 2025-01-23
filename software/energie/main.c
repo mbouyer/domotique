@@ -411,8 +411,8 @@ print_II(void)
 {
 	uout.bits.rs232 = 1;
 	putchar(linky_frame_num);
-	printf("II%d 0x%x", ii_output, ii_duration);
-	printf(" 0x%lx/0x%x\n",
+	printf("II%d %d", ii_output, ii_duration);
+	printf(" %ld/%d\n",
 	    (u_long)I_average[ii_output], I_count[ii_output]);
 	I_average[ii_output] = 0;
 	I_count[ii_output] = 0;
