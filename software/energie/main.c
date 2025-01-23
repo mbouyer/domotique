@@ -58,6 +58,7 @@ static unsigned char led_pattern_count;
 static volatile union softintrs {
 	struct softintrs_bits {
 		char int_100hz : 1;	/* 0.01s timer */
+		char int_10hz : 1;	/* 0.01s timer */
 		char int_adcc : 1;	/* A/D convertion complete */
 	} bits;
 	char byte;
@@ -787,35 +788,31 @@ again:
 		if (softintrs.bits.int_100hz) {
 			softintrs.bits.int_100hz = 0;
 			time_events.bits.ev_100hz = 1;
-			time++;
-			counter_100hz--;
-			if (counter_100hz == 0) {
-				counter_100hz = 10;
-				time_events.bits.ev_10hz = 1;
-				counter_10hz--;
-				if (counter_10hz & 0x01) {
-					led_pattern_count--;
-					led_pattern >>= 1;
-					if (led_pattern_count == 0) {
-						led_pattern = led_pattern_s;
-						led_pattern_count = 8;
-					}
-					if (led_pattern & 0x01) {
-						latc_data[0] |= O_LED;
-					} else {
-						latc_data[0] &= ~O_LED;
-					}
-				}
-				if (counter_10hz == 0) {
-					counter_10hz = 10;
-					time_events.bits.ev_1hz = 1;
-				}
-			}
 		}
 
 		CLRWDT();
 
-		if (time_events.bits.ev_10hz) {
+		if (softintrs.bits.int_10hz) {
+			softintrs.bits.int_10hz = 0;
+			time_events.bits.ev_10hz = 1;
+			counter_10hz--;
+			if (counter_10hz == 0) {
+				counter_10hz = 10;
+				time_events.bits.ev_1hz = 1;
+			}
+			if (counter_10hz & 0x01) {
+				led_pattern_count--;
+				led_pattern >>= 1;
+				if (led_pattern_count == 0) {
+					led_pattern = led_pattern_s;
+					led_pattern_count = 8;
+				}
+				if (led_pattern & 0x01) {
+					latc_data[0] |= O_LED;
+				} else {
+					latc_data[0] &= ~O_LED;
+				}
+			}
 			if (output_status_time != 0)
 				output_status_time--;
 			if (linky_frame_timeout == 0) {
@@ -949,6 +946,12 @@ irqh_timer2(void)
 {
 	PIR3bits.TMR2IF = 0;
 	softintrs.bits.int_100hz = 1;
+	time++;
+	counter_100hz--;
+	if (counter_100hz == 0) {
+		counter_100hz = 10;
+		softintrs.bits.int_10hz = 1;
+	}
 }
 
 void __interrupt(__irq(DMA1DCNT), __high_priority, base(IVECT_BASE))
