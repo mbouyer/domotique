@@ -246,6 +246,9 @@ getgroup:
 	if (linky < 0)
 		err(1, "open %s", argv[0]);
 
+	if (flock(linky, (LOCK_EX|LOCK_NB)) != 0)
+		err(1, "flock %s", argv[0]);
+
 	tcgetattr(linky, &cntrl);
 	cfsetospeed(&cntrl, 57600);
 	cfsetispeed(&cntrl, 57600);
