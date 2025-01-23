@@ -403,35 +403,49 @@ command(__ram char *buf)
 	return r;
 }
 
+static u_char ii_output;
+static u_int ii_duration;
+
+static void
+print_II(void)
+{
+	uout.bits.rs232 = 1;
+	putchar(linky_frame_num);
+	printf("II%d 0x%x", ii_output, ii_duration);
+	printf(" 0x%lx/0x%x\n",
+	    (u_long)I_average[ii_output], I_count[ii_output]);
+	I_average[ii_output] = 0;
+	I_count[ii_output] = 0;
+	/* intensity:
+	 * Iadc = I_average / I_count / 100 
+	 * Iadc = I(A) 3000 * 100 / 2.048 * 4096
+	 * I(A) = I_average / I_count / 6666.6667
+	 * Irms = I(A) * 1.11
+	 */
+	uout.bits.rs232 = 0;
+	ii_output++;
+	if (ii_output == 6) {
+		ii_output = 0;
+		I_timestamp = time;
+		linky_softintrs.bits.linky_interframe_active = 0;
+	}
+}
+
 static void
 print_interframe(void)
 {
 	char c;
+
 	if ((time - I_timestamp) > 300) { /* 3s */
-		uout.bits.rs232 = 1;
-		for (c = 0; c < 6; c++) {
-			putchar(linky_frame_num);
-			printf("II%d 0x%lx", c,
-		    (u_long)(time - I_timestamp));
-			printf(" 0x%lx/0x%x\n", (u_long)I_average[c],
-			    I_count[c]);
-			I_average[c] = 0;
-			I_count[c] = 0;
-			/* intensity:
-			 * Iadc = I_average / I_count / 100 
-			 * Iadc = I(A) 3000 * 100 / 2.048 * 4096
-			 * I(A) = I_average / I_count / 6666.6667
-			 * Irms = I(A) * 1.11
-			 */
-		}
-		uout.bits.rs232 = 0;
-		I_timestamp = time;
+		ii_duration = (u_int)(time - I_timestamp);
+		print_II();
+		linky_softintrs.bits.linky_interframe_active = 1;
 	} else if (output_status_time == 0) {
 		uout.bits.rs232 = 1;
 		putchar(linky_frame_num);
 		printf("EE ");
 		for (c = 0; c < 6; c++) {
-			printf("%d", outputs_status[c]);
+			printf("%x", outputs_status[c]);
 		}
 		printf("\n");
 		uout.bits.rs232 = 0;
@@ -490,10 +504,6 @@ do_linky(__ram char *buf)
 	if (debug_out.bits.linky == 0)
 		uout.bits.debug = 0;
 	printf("linky ");
-	if (linky_frame_timeout == 0) {
-		printf("!frame %s\n", buf);
-		return;
-	}
 	uout.bits.rs232 = 1;
 	putchar(linky_frame_num);
 	printf("%s\n", buf);
@@ -815,15 +825,16 @@ again:
 			}
 			if (output_status_time != 0)
 				output_status_time--;
-			if (linky_frame_timeout == 0) {
-				print_interframe();
-				linky_frame_num++;
-				if (linky_frame_num == 'z')
-					linky_frame_num = '0';
-				linky_frame_timeout = 50;
-				led_pattern_s = 0x33;
-			} else {
+			if (linky_frame_timeout != 0) {
 				linky_frame_timeout--;
+				if (linky_frame_timeout == 0) {
+					linky_frame_num++;
+					if (linky_frame_num == 'z')
+						linky_frame_num = '0';
+					linky_frame_timeout = 50;
+					led_pattern_s = 0x33;
+					print_interframe();
+				}
 			}
 		}
 		if (time_events.bits.ev_1hz) {
@@ -846,6 +857,8 @@ again:
 			printf("0x%x 0x%x\n", PIR2, PIR6);
 #endif
 		}
+		if (linky_softintrs.bits.linky_interframe_active)
+			print_II();
 
 		if (uart_softintrs.bits.uart1_line1) {
 			printf("line1: %s\n", uart_rxbuf1);
@@ -874,14 +887,19 @@ again:
 			command(uart232_rxbuf2);
 			uart_softintrs.bits.uart232_line2 = 0;
 		} 
-		if (linky_softintrs.bits.linky_sof) {
+		if (linky_softintrs.bits.linky_sof &&
+		    linky_softintrs.bits.linky_interframe_active == 0) {
 			if (debug_out.bits.linky)
 				printf("lsf\n");
 			linky_softintrs.bits.linky_sof = 0;
 			linky_frame_timeout = 50; /* 5s */
 			led_pattern_s = 0x1;
+			linky_frame_num++;
+			if (linky_frame_num == 'z')
+				linky_frame_num = '0';
 		}
-		if (linky_softintrs.bits.linky_line1) {
+		if (linky_softintrs.bits.linky_line1 &&
+		    linky_frame_timeout != 0) {
 			if (linky_softintrs.bits.linky_badcs_l1) {
 				printf("linky1badcs: %s\n", linky_rxbuf1);
 			} else {
@@ -889,7 +907,8 @@ again:
 			}
 			linky_softintrs.bits.linky_badcs_l1 = 0;
 			linky_softintrs.bits.linky_line1 = 0;
-		} else if (linky_softintrs.bits.linky_line2) {
+		} else if (linky_softintrs.bits.linky_line2 &&
+		    linky_softintrs.bits.linky_interframe_active == 0) {
 			if (linky_softintrs.bits.linky_badcs_l2) {
 				printf("linky2badcs: %s\n", linky_rxbuf2);
 			} else {
@@ -898,15 +917,13 @@ again:
 			linky_softintrs.bits.linky_badcs_l2 = 0;
 			linky_softintrs.bits.linky_line2 = 0;
 		} 
-		if (linky_softintrs.bits.linky_eof) {
+		if (linky_softintrs.bits.linky_eof && 
+		    linky_softintrs.bits.linky_interframe_active == 0) {
 			if (debug_out.bits.linky)
 				printf("lef\n");
 			linky_softintrs.bits.linky_eof = 0;
 			linky_frame_timeout = 0;
 			print_interframe();
-			linky_frame_num++;
-			if (linky_frame_num == 'z')
-				linky_frame_num = '0';
 		}
 
 		if (default_src != 0) {

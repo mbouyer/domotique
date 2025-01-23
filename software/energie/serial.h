@@ -87,6 +87,7 @@ union linky_softintrs {
 		char linky_badcs_l2 : 1; /* bad checksum in linky_rxbuf2 */
 		char linky_sof : 1; /* start of frame detected */
 		char linky_eof : 1; /* end of frame detected */
+		char linky_interframe_active; /* doing interframe outputs */
 	} bits;
 	char byte;
 };
