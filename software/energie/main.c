@@ -872,6 +872,17 @@ again:
 			if (debug_out.bits.adc) 
 				printf("adcc: %lu", (uint32_t)adr);
 			adr = ((uint24_t)4095 * 200) - adr;
+			/*
+			 * because of the way we do the measure the noise
+			 * doesn't cancel. Try to strip it there.
+			 * 400 comes from experiments.
+			 * not perfect but the error should be minimal
+			 */
+			 if (adr > 400)
+				adr -= 400;
+			else
+				adr = 0;
+
 			if (debug_out.bits.adc) 
 				printf(" %lu\n", (uint32_t)adr);
 			I_average[channel] += adr;
