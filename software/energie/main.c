@@ -90,6 +90,16 @@ static union linky_state {
 	char byte;
 } linky_state;
 
+static enum linky_tarif {
+	L_HPJB = 0,
+	L_HCJB,
+	L_HPJW,
+	L_HCJW,
+	L_HPJR,
+	L_HCJR,
+	L_UNKOWN,
+} linky_tarif;
+
 u_char linky_frame_timeout;
 u_char linky_frame_num;
 
@@ -150,7 +160,7 @@ static char outputs_status[NOUTS];
  */
 /*
  * Accumulates 200 (25 * 8) measures over 20ms (one 50Hz cycle)
- * The sum will be intensity RMS * 100 (in ADC units), max about 213300
+ * The sum will be intensity average * 100 (in ADC units), max about 213300
  */
 static uint16_t adc_results[25];
 /*
@@ -163,6 +173,17 @@ static __uint24 I_average[6];
 static u_char I_count[6]; /* count of samples */
 static __uint24 I_timestamp; /* time of first sample */
 static u_char channel; /* active channel */
+
+/*
+ * accumulate intensity per time unit so we can compute energy.
+ * The final indexes will be on 32 bits with a resolution of about
+ * 23.45As, which translates to about 1.5Wh.
+ * We use an intermediate accumulator with higher resolution
+ * to keep a good enough precision without using more than 32bits data
+ * we need one per input per tarif.
+ */
+static uint32_t I_index[6][6];
+static uint32_t I_index_i[6][6];
 
 static u_char output_status_time; /* periodic outputs report */
 
@@ -409,19 +430,44 @@ static u_int ii_duration;
 static void
 print_II(void)
 {
+	uint32_t average;
 	uout.bits.rs232 = 1;
 	putchar(linky_frame_num);
-	printf("II%d %d", ii_output, ii_duration);
-	printf(" %ld/%d\n",
-	    (u_long)I_average[ii_output], I_count[ii_output]);
-	I_average[ii_output] = 0;
-	I_count[ii_output] = 0;
 	/* intensity:
 	 * Iadc = I_average / I_count / 100 
-	 * Iadc = I(A) 3000 * 100 / 2.048 * 4096
+	 * Iadc = I(A) / 3000 * 100 / 2.048 * 4096
 	 * I(A) = I_average / I_count / 6666.6667
-	 * Irms = I(A) * 1.11
+	 * Irms = I(A) * 1.1107207
+	 * Irms = I_average / I_count / 6002.11
 	 */
+	printf("II%d %d", ii_output, ii_duration);
+	average = I_average[ii_output] / I_count[ii_output];
+	/* here we print Irms * 6002.11 */
+	printf(" %ld\n", average);
+
+	if (linky_tarif != L_UNKOWN) {
+		/*
+		 * compute i * t; the result here is in (1/ 6002.11) Ams as
+		 * ii_duration is in ms.
+		 */
+		average = average * ii_duration;
+		/*
+		 * divide by 256 and accumulate in the short time index.
+		 * The unit here will be (1 / 6002.11 * 256) = (1/23.45)Ams
+		 */
+		I_index_i[ii_output][linky_tarif] += (average >> 8);
+		/*
+		 * get the high part for the final index. The unit of this
+		 * will be (1 / 6002.11 * 65536 * 256)Ams, or
+		 * 2795.22 Ams, or 7.76mAh (which translates to 1.83Wh)
+		 */
+		average = I_index_i[ii_output][linky_tarif] >> 16;
+		/* keep remainer in short-term index */
+		I_index_i[ii_output][linky_tarif] &= (uint32_t)0xffff;
+		I_index[ii_output][linky_tarif] += average;
+	}
+	I_average[ii_output] = 0;
+	I_count[ii_output] = 0;
 	uout.bits.rs232 = 0;
 	ii_output++;
 	if (ii_output == 6) {
@@ -509,36 +555,63 @@ do_linky(__ram char *buf)
 	printf("%s\n", buf);
 	uout.bits.rs232 = 0;
 	uout.bits.debug = 1;
-	if (strncmp(buf, "PTEC HC", 7) == 0 && linky_state.bits.hc == 0) {
-		linky_state.bits.hc = 1;
-		outputs_status[0] = 1;
-		update_outputs();
-	} else if (strncmp(buf, "PTEC HP", 7) == 0 && linky_state.bits.hc == 1) {
-		linky_state.bits.hc = 0;
-		outputs_status[0] = 0;
-		update_outputs();
-	}
-	if (strncmp(buf, "PTEC HPJR", 9) == 0) {
-		if (linky_state.bits.hpjr == 0) {
-			linky_state.bits.hpjr = 1;
+	if (strncmp(buf, "PTEC H", 6) == 0) {
+		if (buf[6] == 'C' && /* PTEC HC */
+		    linky_state.bits.hc == 0) {
+			linky_state.bits.hc = 1;
+			outputs_status[0] = 1;
+			update_outputs();
+		} else if (buf[6] == 'P' && /* PTEC HP */
+		    linky_state.bits.hc == 1) {
+			linky_state.bits.hc = 0;
+			outputs_status[0] = 0;
+			update_outputs();
+		}
+		if (buf[6] == 'P' && buf[8] == 'R') { /* PTEC HPJR */
+			if (linky_state.bits.hpjr == 0) {
+				linky_state.bits.hpjr = 1;
+				for (c = 2; c < 6; c++) {
+					outputs_status[c] = PIL_NEG;
+				}
+				update_outputs();
+			}
+		} else if (linky_state.bits.hpjr == 1) {
+			linky_state.bits.hpjr = 0;
 			for (c = 2; c < 6; c++) {
-				outputs_status[c] = PIL_NEG;
+				outputs_status[c] = 0;
 			}
 			update_outputs();
 		}
-	} else if (linky_state.bits.hpjr == 1 && strncmp(buf, "PTEC H", 6) == 0) {
-		linky_state.bits.hpjr = 0;
-		for (c = 2; c < 6; c++) {
-			outputs_status[c] = 0;
+		if (buf[6] == 'C') { /* PTEC HC */
+			if (buf[8] == 'B') {
+				linky_tarif = L_HCJB;
+			} else if (buf[8] == 'W') {
+				linky_tarif = L_HCJW;
+			} else if (buf[8] == 'R') {
+				linky_tarif = L_HCJR;
+			} else {
+				linky_tarif = L_UNKOWN;
+			}
+		} else if (buf[6] == 'P') { /* PTEC HP */
+			if (buf[8] == 'B') {
+				linky_tarif = L_HPJB;
+			} else if (buf[8] == 'W') {
+				linky_tarif = L_HPJW;
+			} else if (buf[8] == 'R') {
+				linky_tarif = L_HPJR;
+			} else {
+				linky_tarif = L_UNKOWN;
+			}
+		} else  {
+			linky_tarif = L_UNKOWN;
 		}
-		update_outputs();
 	}
 }
 
 int
 main(void)
 {
-	char c;
+	char c, d;
 
 	default_src = 0;
 	uout.byte = 0;
@@ -723,8 +796,14 @@ main(void)
 	for (c = 0; c < 6; c++) {
 		I_average[c] = 0;
 		I_count[c] = 0;
+		for (d = 0; d < 6; d++) {
+			I_index[c][d] = 0;
+			I_index_i[c][d] = 0;
+		}
 	}
 	I_timestamp = time;
+
+	linky_tarif = L_UNKOWN;
 
 	DMASELECT = 2;
 	DMAnCON0 = 0x00; /* !SIRQEN */
