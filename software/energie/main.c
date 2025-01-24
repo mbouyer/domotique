@@ -100,6 +100,15 @@ static enum linky_tarif {
 	L_UNKOWN,
 } linky_tarif;
 
+static const char * const linky_tarif_s[] = {
+	"HPJB",
+	"HCJB",
+	"HPJW",
+	"HCJW",
+	"HPJR",
+	"HCJR"
+};
+
 u_char linky_frame_timeout;
 u_char linky_frame_num;
 
@@ -480,7 +489,7 @@ print_II(void)
 static void
 print_interframe(void)
 {
-	char c;
+	char c, d;
 
 	if ((time - I_timestamp) > 300) { /* 3s */
 		ii_duration = (u_int)(time - I_timestamp);
@@ -494,6 +503,13 @@ print_interframe(void)
 			printf("%x", outputs_status[c]);
 		}
 		printf("\n");
+		for (c = 0; c < 6; c++) {
+			for (d = 0; d < 6; d++) {
+				putchar(linky_frame_num);
+				printf("IAH%d%s %ld\n", c, linky_tarif_s[d],
+				    I_index[c][d]);
+			}
+		}
 		uout.bits.rs232 = 0;
 		output_status_time = 100; /* 10s */
 	}
