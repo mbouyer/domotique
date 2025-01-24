@@ -186,7 +186,7 @@ static u_char channel; /* active channel */
 /*
  * accumulate intensity per time unit so we can compute energy.
  * The final indexes will be on 32 bits with a resolution of about
- * 7.76Ah which translates to about 1.83Wh.
+ * 7.76mAh which translates to about 1.83Wh.
  * We use an intermediate accumulator with higher resolution
  * to keep a good enough precision without using more than 32bits data
  * we need one per input per tarif.
