@@ -150,9 +150,9 @@ putch(char c)
 #define O1_OB	(u_char)(O2_OA + 3)
 #define O2_OB	(u_char)(O1_OB + 3)
 #define O1_OC	(u_char)(O2_OB + 3)
-#define O2_OC	(u_char)(O1_OC + 2)
+#define O2_OC	(u_char)(O1_OC + 3)
 
-#define LATC_DATA_SIZE (O2_OC + 2)
+#define LATC_DATA_SIZE (O2_OC + 3)
 static char latc_data[LATC_DATA_SIZE];
 
 #define NOUTS 6
@@ -208,6 +208,7 @@ update_outputs(void)
 		latc_data[O2_OC] &= ~O2;
 		break;
 	}
+	latc_data[O2_OC + 1] = latc_data[O2_OC];
 	switch(outputs_status[1]) {
 	case 0:
 		latc_data[O1_OC] &= ~(O1|OC);
@@ -217,6 +218,7 @@ update_outputs(void)
 		latc_data[O1_OC] &= ~O1;
 		break;
 	}
+	latc_data[O1_OC + 1] = latc_data[O1_OC];
 	switch(outputs_status[2]) {
 	case PIL_OFF:
 		latc_data[O2_OB] &= ~(O2|OB);
