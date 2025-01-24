@@ -186,7 +186,7 @@ static u_char channel; /* active channel */
 /*
  * accumulate intensity per time unit so we can compute energy.
  * The final indexes will be on 32 bits with a resolution of about
- * 23.45As, which translates to about 1.5Wh.
+ * 7.76Ah which translates to about 1.83Wh.
  * We use an intermediate accumulator with higher resolution
  * to keep a good enough precision without using more than 32bits data
  * we need one per input per tarif.
@@ -456,19 +456,19 @@ print_II(void)
 
 	if (linky_tarif != L_UNKOWN) {
 		/*
-		 * compute i * t; the result here is in (1/ 6002.11) Ams as
-		 * ii_duration is in ms.
+		 * compute i * t; the result here is in (1/ 6002.11) As*100 as
+		 * ii_duration is in 10ms units.
 		 */
 		average = average * ii_duration;
 		/*
 		 * divide by 256 and accumulate in the short time index.
-		 * The unit here will be (1 / 6002.11 * 256) = (1/23.45)Ams
+		 * The unit here will be (1 / 6002.11 * 256) = (1/23.45)As*100
 		 */
 		I_index_i[ii_output][linky_tarif] += (average >> 8);
 		/*
 		 * get the high part for the final index. The unit of this
-		 * will be (1 / 6002.11 * 65536 * 256)Ams, or
-		 * 2795.22 Ams, or 7.76mAh (which translates to 1.83Wh)
+		 * will be (1 / 6002.11 * 65536 * 256)Ams*100, or
+		 * 2795.22 Ams*100, or 7.76mAh (which translates to 1.83Wh)
 		 */
 		average = I_index_i[ii_output][linky_tarif] >> 16;
 		/* keep remainer in short-term index */
