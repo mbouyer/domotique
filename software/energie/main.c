@@ -90,6 +90,9 @@ static union linky_state {
 	char byte;
 } linky_state;
 
+static u_int standalone_timeout;
+#define STANDALONE_TIMEOUT 600 /* 10mn without commands: go standalone */
+
 static enum linky_tarif {
 	L_HPJB = 0,
 	L_HCJB,
@@ -420,17 +423,21 @@ command(__ram char *buf)
 {
 	char r = 0;
 	switch (buf[0]) {
-	case 'O':
+	case 'O': /* power outputs */
 		r = do_output(&buf[1]);
 		break;
-	case 'P':
+	case 'P': /* pilote outputs */
 		r = do_pilote(&buf[1]);
+		break;
+	case 'N': /* NOP */
+		/* alive message, don't force status report */
+		standalone_timeout = STANDALONE_TIMEOUT;
 		break;
 	}
 	if (r != 0) {
-		char c;
 		update_outputs();
 		output_status_time = 0; /* send updated status on next slot */
+		standalone_timeout = STANDALONE_TIMEOUT;
 	}
 	return r;
 }
@@ -562,6 +569,27 @@ do_debug(__ram char *buf)
 }
 
 static void
+linky_state_to_outputs()
+{
+	char c;
+	if (standalone_timeout == 0) {
+		if (linky_state.bits.hc) {
+			outputs_status[0] = 1;
+		} else {
+			outputs_status[0] = 0;
+		}
+		for (c = 2; c < 6; c++) {
+			if (linky_state.bits.hpjr) {
+				outputs_status[c] = PIL_NEG;
+			} else {
+				outputs_status[c] = 0;
+			}
+		}
+		update_outputs();
+	}
+}
+
+static void
 do_linky(__ram char *buf)
 {
 	char c;
@@ -577,28 +605,20 @@ do_linky(__ram char *buf)
 		if (buf[6] == 'C' && /* PTEC HC */
 		    linky_state.bits.hc == 0) {
 			linky_state.bits.hc = 1;
-			outputs_status[0] = 1;
-			update_outputs();
+			linky_state_to_outputs();
 		} else if (buf[6] == 'P' && /* PTEC HP */
 		    linky_state.bits.hc == 1) {
 			linky_state.bits.hc = 0;
-			outputs_status[0] = 0;
-			update_outputs();
+			linky_state_to_outputs();
 		}
 		if (buf[6] == 'P' && buf[8] == 'R') { /* PTEC HPJR */
 			if (linky_state.bits.hpjr == 0) {
 				linky_state.bits.hpjr = 1;
-				for (c = 2; c < 6; c++) {
-					outputs_status[c] = PIL_NEG;
-				}
-				update_outputs();
+				linky_state_to_outputs();
 			}
 		} else if (linky_state.bits.hpjr == 1) {
 			linky_state.bits.hpjr = 0;
-			for (c = 2; c < 6; c++) {
-				outputs_status[c] = 0;
-			}
-			update_outputs();
+			linky_state_to_outputs();
 		}
 		if (buf[6] == 'C') { /* PTEC HC */
 			if (buf[8] == 'B') {
@@ -848,6 +868,8 @@ main(void)
 	led_pattern = led_pattern_s = 0xff;
 	led_pattern_count = 8;
 
+	standalone_timeout = STANDALONE_TIMEOUT;
+
 again:
 	while (1) {
 		if (PORTBbits.RB7) {
@@ -947,24 +969,14 @@ again:
 		}
 		if (time_events.bits.ev_1hz) {
 			seconds++;
-			/*
-			printf("st %d %d\n", uart_rxbuf_idx, uart_rxbuf_a);
-			printf("0x%x 0x%x 0x%x 0x%x\n", U1CON0, U1CON1, U1CON2, U1ERRIR);
-			printf("st232 %d %d\n", uart232_rxbuf_idx, uart232_rxbuf_a);
-			uart232_putchar('a');
-			uart232_putchar('b');
-			uart232_putchar('\r');
-			uart232_putchar('\n');
-			*/
-#if 0
-			printf("portC 0x%x 0x%x\n", LATC, TRISC);
-			DMASELECT = 0;
-			printf(" DMA0 0x%x 0x%lx 0x%x 0x%x 0x%x\n", DMAnCON0, (uint32_t)DMAnSSA, DMAnSSZ, DMAnSCNT, DMAnDCNT);
-			DMASELECT = 1;
-			printf(" DMA1 0x%x 0x%lx 0x%x 0x%x 0x%x\n", DMAnCON0, (uint32_t)DMAnSSA, DMAnSSZ, DMAnSCNT, DMAnDCNT);
-			printf("0x%x 0x%x\n", PIR2, PIR6);
-#endif
+			if (standalone_timeout != 0) {
+				standalone_timeout--;
+				if (standalone_timeout == 0) {
+					linky_state_to_outputs();
+				}
+			}
 		}
+
 		if (linky_softintrs.bits.linky_interframe_active)
 			print_II();
 
