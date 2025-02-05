@@ -771,9 +771,12 @@ main(void)
 	 * 3 writes we want to update TRISC. Unfortunably there's
 	 * no way to do this in HW so we'll have to use an interrupts for this.
 	 */
-	/* set up timer4 for 10kHz output */
+	/*
+	 * set up timer4 for 13.157895Khz output. We use a prime number as
+	 * divider to avoid interferences with 50Hz as much as possible
+	 */
 	T4CON = 0x60; /* b01100000: postscaller 1/1, prescaler 1/64 */
-	T4PR = 25; /* 10kHz output */
+	T4PR = 19; /* 10kHz output */
 	T4CLKCON = 0x01; /* Fosc / 4 */
 
 	/* at startup every data is low */
@@ -807,12 +810,17 @@ main(void)
 
 	/*
 	 * set up ADC
-	 * triggered at 10kHz (timer4 postscaled by 2), values transfered
+	 * triggered at 10kHz (timer4), values transfered
 	 * by DMA3. We want 200 measures to cover a full 50Hz cycle
 	 * this means we have 200us per measures, which should be plenty
 	 * with a 1Mhz (1us) ADC clock. We'll use the computation module
 	 * to sum up 8 values, so we'll have only 25 values to transfers.
 	 */
+	/* set up timer6 for 10kHz output */
+	T6CON = 0x60; /* b01100000: postscaller 1/1, prescaler 1/64 */
+	T6PR = 25; /* 10kHz output */
+	T6CLKCON = 0x01; /* Fosc / 4 */
+
 	ADCON0 = 0x4; /* right-justified */
 	ADCON1 = 0;
 	ADCON2 = 0x3a; /* divide by 8, clear, average mode */
@@ -858,7 +866,8 @@ main(void)
 	ADCON0bits.ON = 1;
 
 	DMAnCON0bits.SIRQEN = 1;
-	ADACT = 0x06; /* timer4_postscaled , start conversion */
+	ADACT = 0x08; /* timer6_postscaled , start conversion */
+	T6CONbits.TMR6ON = 1; /* start ADC updates */
 
 	/* enable the whole C outputs updates */
 	T4CONbits.TMR4ON = 1;
