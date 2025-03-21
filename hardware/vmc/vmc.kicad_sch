@@ -997,7 +997,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "1500W unidirectional TRANSZORB® Transient Voltage Suppressor, DO-201AE"
+			(property "Description" "1500W unidirectional TVS diode, DO-201AE"
 				(at 0 0 0)
 				(effects
 					(font
@@ -1006,7 +1006,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_keywords" "diode TVS voltage suppressor"
+			(property "ki_keywords" "transient voltage suppressor TRANSZORB®"
 				(at 0 0 0)
 				(effects
 					(font
@@ -3146,6 +3146,12 @@
 		(uuid "11ea68f6-fceb-47a4-92d3-558850dbd06c")
 	)
 	(junction
+		(at 201.93 38.1)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "129b0ff6-ac34-42b6-b13c-f3729157a503")
+	)
+	(junction
 		(at 73.66 161.29)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3230,6 +3236,12 @@
 		(uuid "6a092e72-6037-4e23-8676-5b686e9c0d36")
 	)
 	(junction
+		(at 198.12 46.99)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "7ef82218-c7d8-48ef-986e-11e54025ec08")
+	)
+	(junction
 		(at 170.18 27.94)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3240,12 +3252,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "8cd34c6b-2316-4f35-bceb-4443f43e84f4")
-	)
-	(junction
-		(at 198.12 40.64)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "9089326a-4820-4da7-8420-a0d1cf94c7f5")
 	)
 	(junction
 		(at 153.67 49.53)
@@ -3264,12 +3270,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "9a74efe8-bc41-4141-96ce-2c1985c7f07b")
-	)
-	(junction
-		(at 207.01 43.18)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "aa4355bb-d9b0-40f9-bd88-2e0f4eee9862")
 	)
 	(junction
 		(at 86.36 161.29)
@@ -3314,6 +3314,12 @@
 		(uuid "cfb96ce5-acb7-4bfc-a604-88e11daceb86")
 	)
 	(junction
+		(at 207.01 35.56)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d6cdaf95-b9c5-4e23-8ccd-e6b76e687c11")
+	)
+	(junction
 		(at 80.01 74.93)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3324,12 +3330,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "e5f16ef3-34f0-41ea-9269-79c7cedc94d1")
-	)
-	(junction
-		(at 201.93 35.56)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "e5ff925b-59a7-41f0-8d4d-a46949ebc8b8")
 	)
 	(junction
 		(at 92.71 161.29)
@@ -3567,16 +3567,6 @@
 	)
 	(wire
 		(pts
-			(xy 193.04 38.1) (xy 210.82 38.1)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1dc8267e-56de-4b39-bcbc-c519b7cb93f8")
-	)
-	(wire
-		(pts
 			(xy 86.36 161.29) (xy 86.36 163.83)
 		)
 		(stroke
@@ -3607,13 +3597,13 @@
 	)
 	(wire
 		(pts
-			(xy 193.04 57.15) (xy 193.04 38.1)
+			(xy 198.12 46.99) (xy 198.12 43.18)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "20a9255d-d177-4234-ad7f-e8a654a8e26d")
+		(uuid "1f814234-24e2-441a-8805-fbed76301a95")
 	)
 	(wire
 		(pts
@@ -3634,16 +3624,6 @@
 			(type default)
 		)
 		(uuid "23ce75fe-2820-49d0-be95-d6c7a9177374")
-	)
-	(wire
-		(pts
-			(xy 210.82 43.18) (xy 207.01 43.18)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2451cdef-7da1-4af3-af2a-41ad68a479d6")
 	)
 	(wire
 		(pts
@@ -3674,6 +3654,16 @@
 			(type default)
 		)
 		(uuid "2a859935-1165-4df6-8f3f-c6c99329e69e")
+	)
+	(wire
+		(pts
+			(xy 207.01 35.56) (xy 210.82 35.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2c1a9619-efce-47db-bf31-27b301be2af8")
 	)
 	(wire
 		(pts
@@ -3817,7 +3807,7 @@
 	)
 	(wire
 		(pts
-			(xy 198.12 54.61) (xy 198.12 40.64)
+			(xy 198.12 54.61) (xy 198.12 46.99)
 		)
 		(stroke
 			(width 0)
@@ -3854,6 +3844,16 @@
 			(type default)
 		)
 		(uuid "44606a0e-16d2-40c0-b001-9fb44d047ed1")
+	)
+	(wire
+		(pts
+			(xy 204.47 40.64) (xy 204.47 46.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4659bd40-cfbd-42e5-b5b7-255e6f162cfc")
 	)
 	(wire
 		(pts
@@ -3924,6 +3924,16 @@
 			(type default)
 		)
 		(uuid "509e7257-a717-455b-8876-fbbed37d0f29")
+	)
+	(wire
+		(pts
+			(xy 204.47 46.99) (xy 198.12 46.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "51e7121a-61f5-4210-a0e3-e26647a2484e")
 	)
 	(wire
 		(pts
@@ -4057,7 +4067,7 @@
 	)
 	(wire
 		(pts
-			(xy 228.6 57.15) (xy 193.04 57.15)
+			(xy 228.6 57.15) (xy 210.82 57.15)
 		)
 		(stroke
 			(width 0)
@@ -4147,6 +4157,16 @@
 	)
 	(wire
 		(pts
+			(xy 201.93 38.1) (xy 210.82 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "73b488d7-04b3-433f-8584-069eb3dd0c03")
+	)
+	(wire
+		(pts
 			(xy 198.12 123.19) (xy 180.34 123.19)
 		)
 		(stroke
@@ -4177,7 +4197,7 @@
 	)
 	(wire
 		(pts
-			(xy 198.12 35.56) (xy 201.93 35.56)
+			(xy 198.12 38.1) (xy 201.93 38.1)
 		)
 		(stroke
 			(width 0)
@@ -4327,7 +4347,7 @@
 	)
 	(wire
 		(pts
-			(xy 201.93 33.02) (xy 201.93 35.56)
+			(xy 201.93 33.02) (xy 201.93 38.1)
 		)
 		(stroke
 			(width 0)
@@ -4444,6 +4464,16 @@
 			(type default)
 		)
 		(uuid "90b49641-5c8e-4c49-b7de-db890cf95222")
+	)
+	(wire
+		(pts
+			(xy 210.82 40.64) (xy 204.47 40.64)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "963d65c3-c9c8-4586-aeed-07edbcdf1444")
 	)
 	(wire
 		(pts
@@ -4617,7 +4647,7 @@
 	)
 	(wire
 		(pts
-			(xy 207.01 30.48) (xy 207.01 43.18)
+			(xy 207.01 30.48) (xy 207.01 35.56)
 		)
 		(stroke
 			(width 0)
@@ -4747,6 +4777,16 @@
 	)
 	(wire
 		(pts
+			(xy 200.66 35.56) (xy 207.01 35.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ba95facc-0ef3-4e66-97b3-56003f9465be")
+	)
+	(wire
+		(pts
 			(xy 228.6 80.01) (xy 172.72 80.01)
 		)
 		(stroke
@@ -4764,16 +4804,6 @@
 			(type default)
 		)
 		(uuid "beca6771-efba-4a02-989a-0722b78ac560")
-	)
-	(wire
-		(pts
-			(xy 198.12 40.64) (xy 210.82 40.64)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c54b28c0-b33c-4e00-8c24-ccce98931c0f")
 	)
 	(wire
 		(pts
@@ -4997,16 +5027,6 @@
 	)
 	(wire
 		(pts
-			(xy 201.93 35.56) (xy 210.82 35.56)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "dd959e1a-4f70-4070-93cf-f40653904839")
-	)
-	(wire
-		(pts
 			(xy 163.83 36.83) (xy 170.18 36.83)
 		)
 		(stroke
@@ -5127,16 +5147,6 @@
 	)
 	(wire
 		(pts
-			(xy 207.01 43.18) (xy 207.01 45.72)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f0c3d59e-3d42-4e8b-b1f5-567512f2ffc1")
-	)
-	(wire
-		(pts
 			(xy 238.76 39.37) (xy 236.22 39.37)
 		)
 		(stroke
@@ -5154,6 +5164,16 @@
 			(type default)
 		)
 		(uuid "f181c97d-70b1-48b7-bfa9-b8bbe7f64518")
+	)
+	(wire
+		(pts
+			(xy 210.82 43.18) (xy 210.82 57.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f41799f0-4eb0-419b-bbab-504b9d295153")
 	)
 	(wire
 		(pts
@@ -6928,7 +6948,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small")
-		(at 198.12 38.1 180)
+		(at 198.12 40.64 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -6936,7 +6956,7 @@
 		(dnp no)
 		(uuid "65b3011e-3f9b-4abf-9ff6-1c6c95bd2eec")
 		(property "Reference" "R6"
-			(at 196.088 38.1 90)
+			(at 196.088 40.64 90)
 			(effects
 				(font
 					(size 1.016 1.016)
@@ -6944,7 +6964,7 @@
 			)
 		)
 		(property "Value" "10K"
-			(at 197.9422 38.1254 90)
+			(at 197.9422 40.6654 90)
 			(effects
 				(font
 					(size 1.016 1.016)
@@ -6952,7 +6972,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
-			(at 199.898 38.1 90)
+			(at 199.898 40.64 90)
 			(effects
 				(font
 					(size 0.762 0.762)
@@ -6961,7 +6981,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 198.12 38.1 0)
+			(at 198.12 40.64 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6970,7 +6990,7 @@
 			)
 		)
 		(property "Description" "Resistor, small symbol"
-			(at 198.12 38.1 0)
+			(at 198.12 40.64 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6979,7 +6999,7 @@
 			)
 		)
 		(property "P/N" "stock"
-			(at 198.12 38.1 0)
+			(at 198.12 40.64 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9245,16 +9265,15 @@
 	)
 	(symbol
 		(lib_id "power:+5V")
-		(at 207.01 45.72 180)
+		(at 200.66 35.56 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "cb34f311-8ea1-4339-b32d-6c2b4577a094")
 		(property "Reference" "#PWR07"
-			(at 207.01 41.91 0)
+			(at 204.47 35.56 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9263,16 +9282,15 @@
 			)
 		)
 		(property "Value" "+5V"
-			(at 208.407 46.99 0)
+			(at 194.31 35.814 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
 			)
 		)
 		(property "Footprint" ""
-			(at 207.01 45.72 0)
+			(at 200.66 35.56 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9281,7 +9299,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 207.01 45.72 0)
+			(at 200.66 35.56 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9290,7 +9308,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+5V\""
-			(at 207.01 45.72 0)
+			(at 200.66 35.56 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9299,7 +9317,7 @@
 			)
 		)
 		(property "P/N" ""
-			(at 207.01 45.72 0)
+			(at 200.66 35.56 0)
 			(effects
 				(font
 					(size 1.27 1.27)
