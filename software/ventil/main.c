@@ -137,11 +137,20 @@ static uint8_t motor_o[] = {
 
 static uint8_t motor_o_idx;
 static uint16_t motor_count;
+
+#define M_COUNT 318 /* for 28 deg */
 static enum motor_dir {
 	M_IDLE = 0,
 	M_OPEN,
 	M_CLOSE
 } motor_dir;
+
+static inline void
+update_motor(enum motor_dir d, uint16_t c)
+{
+	motor_dir = d;
+	motor_count = c;
+}
 	
 
 #define SHTADDR (0x44 << 1)
@@ -160,11 +169,9 @@ command(__ram char *buf)
 	char r = 1;
 
 	if (strcmp(buf, "o") == 0) {
-		motor_dir = M_OPEN;
-		motor_count = 318;
+		update_motor(M_OPEN, M_COUNT);
 	} else if (strcmp(buf, "c") == 0) {
-		motor_dir = M_CLOSE;
-		motor_count = 318;
+		update_motor(M_CLOSE, M_COUNT);
 	} else
 		r = 0;
 	return r;
@@ -491,6 +498,11 @@ again:
 			uint8_t o = (LATC & O_I2C);
 			led_pattern = 0xff;
 			if (motor_count == 0) {
+				if (motor_dir == M_OPEN)
+					status |= STATUS_VENTIL;
+				else 
+					status &= ~STATUS_VENTIL;
+				status_update = 1;
 				motor_dir = M_IDLE;
 				led_pattern = 0;
 			} else {
@@ -581,6 +593,24 @@ again:
 			lin_put();
 			status_update = 0;
 		}
+
+		if (uart_softintrs.bits.int_linpid) {
+			printf("lin pid 0x%x\n", lin_pid);
+			uart_softintrs.bits.int_linpid = 0;
+		}
+
+		if (uart_softintrs.bits.int_linrx) {
+			printf("lin rx 0x%x 0x%x\n", lin_rxbuf[0], lin_rxbuf[1]);               
+			if (lin_rxbuf[0] & STATUS_VENTIL) {
+				if ((status & STATUS_VENTIL) == 0)
+					update_motor(M_OPEN, M_COUNT);
+			} else {
+				if ((status & STATUS_VENTIL) != 0)
+					update_motor(M_CLOSE, M_COUNT);
+													}
+			uart_softintrs.bits.int_linrx = 0;
+		}
+
 
 		if (uart_softintrs.bits.uart2_line1) {
 			printf("line1: %s\n", uart_rxbuf1);
