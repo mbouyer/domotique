@@ -136,6 +136,12 @@ static uint8_t motor_o[] = {
 };
 
 static uint8_t motor_o_idx;
+static uint16_t motor_count;
+static enum motor_dir {
+	M_IDLE = 0,
+	M_OPEN,
+	M_CLOSE
+} motor_dir;
 	
 
 #define SHTADDR (0x44 << 1)
@@ -151,7 +157,16 @@ static uint8_t motor_o_idx;
 static char
 command(__ram char *buf)
 {
-	char r = 0;
+	char r = 1;
+
+	if (strcmp(buf, "o") == 0) {
+		motor_dir = M_OPEN;
+		motor_count = 318;
+	} else if (strcmp(buf, "c") == 0) {
+		motor_dir = M_CLOSE;
+		motor_count = 318;
+	} else
+		r = 0;
 	return r;
 }
 
@@ -401,10 +416,12 @@ main(void)
 	printf("enter loop\n");
 	LED = 1;
 
-	led_pattern = led_pattern_s = 0x0f;
+	led_pattern = led_pattern_s = 0x01;
 	led_pattern_count = 8;
 
 	motor_o_idx = 0;
+	motor_count = 0;
+	motor_dir = M_IDLE;
 
 again:
 	while (1) {
@@ -470,13 +487,21 @@ again:
 
 		CLRWDT();
 
-		if (time_events.bits.ev_100hz) {
+		if (time_events.bits.ev_100hz && motor_dir != M_IDLE) {
 			uint8_t o = (LATC & O_I2C);
-			o |= motor_o[motor_o_idx];
+			led_pattern = 0xff;
+			if (motor_count == 0) {
+				motor_dir = M_IDLE;
+				led_pattern = 0;
+			} else {
+				o |= motor_o[motor_o_idx & 0x07];
+				motor_count--;
+				if (motor_dir == M_OPEN)
+					motor_o_idx++;
+				else
+					motor_o_idx--;
+			}
 			LATC = o;
-			motor_o_idx++;
-			if (motor_o_idx == sizeof(motor_o))
-				motor_o_idx = 0;
 		}
 
 		if (softintrs.bits.int_10hz) {
