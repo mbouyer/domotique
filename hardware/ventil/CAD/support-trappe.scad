@@ -3,11 +3,13 @@ $fs = 0.2;
 $fn = 100;
 ep_plexi=5.1;
 ep_support=3;
-dia_axe = 4.9;
+dia_axe = 5;
 longueur=60;
 largeur=15;
 base=20;
 x_axe=8.5;
+dia_centrage=5;
+h_centrage=3;
 
 longueur_ht=longueur+base;
 largeur_ht=largeur+base;
@@ -22,9 +24,11 @@ module support() {
 	    translate([-base-1, -base-1, ep_support]) cube([base-ep_support+1, largeur_ht+2, hauteur_ht]);
         };
     };
-    cylinder(d=dia_axe, h=hauteur_ht);
+    translate([0,0,-h_centrage]) cylinder(d=dia_axe, h=hauteur_ht+h_centrage);
+    translate([45,-25,-h_centrage]) cylinder(d=dia_axe, h=h_centrage);
 };
 
 support();
 //projection(cut = true) translate([0,0,-1]) support();
+//projection(cut = true) translate([0,0,1]) support();
 
