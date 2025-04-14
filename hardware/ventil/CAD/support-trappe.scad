@@ -22,6 +22,7 @@ module support() {
 	    cube([longueur+1, largeur+1, ep_plexi]);
 	    translate([-base-1, -base-1, ep_support]) cube([longueur_ht+2, base-ep_support+1, hauteur_ht]);
 	    translate([-base-1, -base-1, ep_support]) cube([base-ep_support+1, largeur_ht+2, hauteur_ht]);
+	    translate([-base + longueur_ht/2, -base, -1]) cylinder(r=15, h=hauteur_ht+2);
         };
     };
     translate([0,0,-h_centrage]) cylinder(d=dia_axe, h=hauteur_ht+h_centrage);
