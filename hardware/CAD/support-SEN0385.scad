@@ -1,6 +1,6 @@
-$fa = 6;
-$fs = 0.2;
-$fn = 100;
+ $fa = 6;
+ $fs = 0.2;
+ $fn = 100;
 
 module support_SEN0385()
 {
@@ -44,15 +44,29 @@ module passage_collier(l=8,h=3) {
     };
 };
 
-module bras() {
-    rotate([90, 0, 0]) linear_extrude(height=e_bras, center=true) polygon(points=[
-	[0, h2_bras/2],
-	[l_bras, h2_bras/2],
-	[l_bras, -h2_bras/2],
-	[l_bras-3, -h2_bras/2],
-	[0, h2_bras/2 - h1_bras]
-	]);
+d_chanfrin=8-minko/2; // taille_ecrous/cos(30) = 15/2/cos(30) - minko/2
 
+module _bras1() {
+	hull() {
+	    translate([d_chanfrin/2, 0, 0]) cylinder(d=d_chanfrin, h=h1_bras+2, center=true);
+	    translate([l_bras-d_chanfrin/2, 0, 0]) cylinder(d=d_chanfrin, h=h1_bras+2, center=true);
+	}
+};
+	
+
+module bras() {
+    difference() {
+        rotate([90, 0, 0]) linear_extrude(height=e_bras+d_chanfrin, center=true)
+	    polygon(points=[
+		[0, h2_bras/2],
+		[l_bras, h2_bras/2],
+		[l_bras, -h2_bras/2],
+		[l_bras-3, -h2_bras/2],
+		[0, h2_bras/2 - h1_bras]
+	    ]);
+	translate([0, d_chanfrin/2+e_bras/2, h2_bras/2-h1_bras/2]) _bras1();
+	translate([0, -(d_chanfrin/2+e_bras/2), h2_bras/2-h1_bras/2]) _bras1();
+    };
 };
 
 module base() {
@@ -71,7 +85,7 @@ module support() {
         base();
 	translate([l_bras/2, 0, 0]) passage_collier();
     }
-    translate([l_bras,0,0]) support_SEN0385();
+    translate([l_bras-1.3,0,0]) support_SEN0385();
 };
 
 support();
