@@ -30,7 +30,7 @@ minko=2;
 h1_bras=30-minko;
 h2_bras=10-minko;
 l_bras=40-minko;
-e_bras=2.5-minko;
+e_bras=3-minko;
 h_plaque=70-minko;
 l_plaque=50-minko;
 e_plaque=e_bras;
@@ -85,7 +85,7 @@ module support() {
         base();
 	translate([l_bras/2, 0, 0]) passage_collier();
     }
-    translate([l_bras-1.3,0,0]) support_SEN0385();
+    translate([l_bras-1.5,0,0]) support_SEN0385();
 };
 
 support();
