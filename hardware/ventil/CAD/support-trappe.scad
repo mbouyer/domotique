@@ -1,7 +1,7 @@
 $fa = 6;
 $fs = 0.2;
 $fn = 100;
-ep_plexi=5.1;
+ep_plexi=6.2;
 ep_support=3;
 dia_axe = 5;
 longueur=60;
