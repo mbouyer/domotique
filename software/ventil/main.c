@@ -138,7 +138,8 @@ static uint8_t motor_o[] = {
 static uint8_t motor_o_idx;
 static uint16_t motor_count;
 
-#define M_COUNT 318 /* for 28 deg */
+#define M_COUNT 420 /* for full course */
+#define M_COUNT_INIT 450 /* reset to close state */
 static enum motor_dir {
 	M_IDLE = 0,
 	M_OPEN,
@@ -429,6 +430,7 @@ main(void)
 	motor_o_idx = 0;
 	motor_count = 0;
 	motor_dir = M_IDLE;
+	update_motor(M_CLOSE, M_COUNT_INIT);
 
 again:
 	while (1) {
