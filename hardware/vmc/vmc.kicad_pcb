@@ -849,6 +849,7 @@
 			(net 13 "Net-(U1-SDA)")
 			(pinfunction "SDA")
 			(pintype "bidirectional")
+			(solder_paste_margin 0.025)
 			(uuid "71e98168-4595-4769-90e1-d623baac1fe4")
 		)
 		(pad "2" smd rect
@@ -858,6 +859,7 @@
 			(net 1 "GND")
 			(pinfunction "ADDR")
 			(pintype "input")
+			(solder_paste_margin 0.025)
 			(uuid "9c646be3-2d80-461c-8703-2af222374cc3")
 		)
 		(pad "3" smd rect
@@ -867,6 +869,7 @@
 			(net 21 "unconnected-(U1-ALERT-Pad3)")
 			(pinfunction "ALERT")
 			(pintype "output+no_connect")
+			(solder_paste_margin 0.025)
 			(uuid "05082461-350d-4aee-be87-cb95c77e5323")
 		)
 		(pad "4" smd rect
@@ -876,6 +879,7 @@
 			(net 14 "Net-(U1-SCL)")
 			(pinfunction "SCL")
 			(pintype "input")
+			(solder_paste_margin 0.025)
 			(uuid "21fe0272-f9bf-49b3-833c-d6cf7664b0b4")
 		)
 		(pad "5" smd rect
@@ -885,6 +889,7 @@
 			(net 2 "+5V")
 			(pinfunction "VDD")
 			(pintype "power_in")
+			(solder_paste_margin 0.025)
 			(uuid "87b876de-1a3b-4c4f-9434-2672da61ff33")
 		)
 		(pad "6" smd rect
@@ -894,6 +899,7 @@
 			(net 22 "unconnected-(U1-~{RESET}-Pad6)")
 			(pinfunction "~{RESET}")
 			(pintype "input+no_connect")
+			(solder_paste_margin 0.025)
 			(uuid "54f64723-8d13-4bb7-9498-54cdef7816a6")
 		)
 		(pad "7" smd rect
@@ -903,6 +909,7 @@
 			(net 1 "GND")
 			(pinfunction "R")
 			(pintype "passive")
+			(solder_paste_margin 0.025)
 			(uuid "18ea61ee-33e5-4e6b-8b38-2e5e3bb485df")
 		)
 		(pad "8" smd rect
@@ -912,6 +919,7 @@
 			(net 1 "GND")
 			(pinfunction "VSS")
 			(pintype "power_in")
+			(solder_paste_margin 0.025)
 			(uuid "14822b2e-1c8e-4c85-afab-669980defd97")
 		)
 		(pad "9" smd custom
