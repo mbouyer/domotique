@@ -188,12 +188,17 @@ irql_uartlinrx(void)
 		}
 		c = U1RXB;
 		if (U1ERRIRbits.U1RXBKIF) {
+			uint8_t lin_rxid;
 			U1ERRIRbits.U1RXBKIF = 0;
 			U1ERRIRbits.CERIF = 0;
 			lin_errir = U1ERRIR;
 			lin_pid = (c & 0x3f);
 			uart_softintrs.bits.int_linpid = 1;
-			if ((lin_pid & 0x0f) == lin_userid) {
+			if (lin_pid == 0x3c) {
+				lin_state = RXDATA;
+				lin_rxidx = 0;
+				U1P3 = 1;
+			} else if ((lin_pid & 0x0f) == lin_userid) {
 				switch(lin_pid & 0x30) {
 				case 0x00:
 					lin_state = RXDATA;

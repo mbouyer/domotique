@@ -1,4 +1,3 @@
-/* $Id: main.c,v 1.36 2019/03/12 19:24:19 bouyer Exp $ */
 /*
  * Copyright (c) 2025 Manuel Bouyer
  *
@@ -91,6 +90,10 @@ static uint8_t status;
 #define STATUS_VALID 0x1
 #define STATUS_VMC 0x02 /* 0 = close, 1 = open */
 #define STATUS_BUTTON 0x04
+
+#define ACTION_OPEN	0x01
+#define ACTION_CLOSE	0x02
+#define ACTION_RESET	0x80
 
 static char status_update;
 
@@ -427,7 +430,7 @@ main(void)
 	printf("enter loop\n");
 	LATC |= O_LED;
 
-	led_pattern = led_pattern_s = 0x01;
+	led_pattern = 0xff;
 	led_pattern_count = 8;
 
 	to_motor_state(M_PRE_CLOSE);
@@ -469,18 +472,16 @@ again:
 				counter_10hz = 10;
 				time_events.bits.ev_1hz = 1;
 			}
-			if (counter_10hz & 0x01) {
-				led_pattern_count--;
-				led_pattern >>= 1;
-				if (led_pattern_count == 0) {
-					led_pattern = led_pattern_s;
-					led_pattern_count = 8;
-				}
+			if (led_pattern_count != 0) {
 				if (led_pattern & 0x01) {
 					LATC |= O_LED;
 				} else {
 					LATC &= ~O_LED;
 				}
+				led_pattern_count--;
+				led_pattern >>= 1;
+			} else {
+				LATC &= ~O_LED;
 			}
 		}
 		if (time_events.bits.ev_1hz) {
@@ -504,7 +505,11 @@ again:
 						printf("i2c status 0x%02x%02x 0x%x\n",
 						    i2c_data[0], i2c_data[1], i2c_data[2]);
 					}
+					led_pattern_count = 8;
+					led_pattern = 0xff;
 				} else {
+					led_pattern_count = 2;
+					led_pattern = 1;
 					printf("i2c data 0x%02x%02x 0x%x "
 					    "0x%02x%02x 0x%x\n",
 					    i2c_data[0], i2c_data[1],
@@ -552,6 +557,8 @@ again:
 		case M_CLOSE:
 			if ((timer0_read() - motor_timer) >= T_MOTOR_ACT)
 				to_motor_state(M_BREAK);
+			led_pattern_count = 2;
+			led_pattern = 1;
 			break;
 		case M_BREAK:
 			if ((timer0_read() - motor_timer) >= T_MOTOR_POST)
@@ -564,11 +571,15 @@ again:
 			uart_softintrs.bits.int_linpid = 0;
 		}
 		if (uart_softintrs.bits.int_linrx) {
-			printf("lin rx 0x%x 0x%x\n", lin_rxbuf[0], lin_rxbuf[1]);       
-			if (lin_rxbuf[0] & STATUS_VMC) {
+			printf("lin rx from 0x%x: 0x%x 0x%x\n", lin_pid, lin_rxbuf[0], lin_rxbuf[1]);       
+
+			if (lin_rxbuf[0] & ACTION_OPEN) {
 				to_motor_state(M_PRE_OPEN);
-			} else {
+			} else if (lin_rxbuf[0] & ACTION_CLOSE) {
 				to_motor_state(M_PRE_CLOSE);
+			}
+			if (lin_rxbuf[0] & ACTION_RESET) {
+				goto do_reset;
 			}
 			uart_softintrs.bits.int_linrx = 0;
 		}
@@ -602,6 +613,7 @@ again:
 			SLEEP();
 	}
 	WDTCON0bits.SEN = 0;
+do_reset:
 	printf("returning\n");
 	while (!PIR8bits.U2TXIF || PIE8bits.U2TXIE) {
 		; /* wait */ 
