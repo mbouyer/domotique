@@ -5197,6 +5197,17 @@
 		)
 		(uuid "fc6c59f5-e5b0-4867-b1c5-114760ecebc0")
 	)
+	(label "SCL"
+		(at 186.69 80.01 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "0325ee80-504c-40ac-8d1a-ea444760d699")
+	)
 	(label "~{MCLR}"
 		(at 208.28 64.77 0)
 		(fields_autoplaced yes)
@@ -5251,6 +5262,17 @@
 			(justify left bottom)
 		)
 		(uuid "938d1c5b-f90b-4c49-a87d-2577c9090dee")
+	)
+	(label "SDA"
+		(at 194.31 77.47 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d74fa78a-9f3d-4367-bc09-47671c81bdb6")
 	)
 	(global_label "Lrx"
 		(shape input)
