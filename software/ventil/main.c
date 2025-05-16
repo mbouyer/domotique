@@ -91,6 +91,10 @@ static uint8_t status;
 #define STATUS_VENTIL 0x02 /* 0 = close, 1 = open */
 #define STATUS_BUTTON 0x04
 
+#define ACTION_OPEN	0x01
+#define ACTION_CLOSE	0x02
+#define ACTION_RESET	0x80
+
 static char status_update;
 
 
@@ -603,13 +607,16 @@ again:
 
 		if (uart_softintrs.bits.int_linrx) {
 			printf("lin rx 0x%x 0x%x\n", lin_rxbuf[0], lin_rxbuf[1]);               
-			if (lin_rxbuf[0] & STATUS_VENTIL) {
+			if (lin_rxbuf[0] & ACTION_OPEN) {
 				if ((status & STATUS_VENTIL) == 0)
 					update_motor(M_OPEN, M_COUNT);
-			} else {
+			} else if (lin_rxbuf[0] & ACTION_CLOSE) {
 				if ((status & STATUS_VENTIL) != 0)
 					update_motor(M_CLOSE, M_COUNT);
-													}
+			}
+			if (lin_rxbuf[0] & ACTION_RESET) {
+				goto do_reset;
+			}
 			uart_softintrs.bits.int_linrx = 0;
 		}
 
@@ -643,6 +650,7 @@ again:
 			SLEEP();
 	}
 	WDTCON0bits.SEN = 0;
+do_reset:
 	printf("returning\n");
 	while (!PIR8bits.U2TXIF || PIE8bits.U2TXIE) {
 		; /* wait */ 
