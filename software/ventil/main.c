@@ -497,7 +497,7 @@ again:
 		CLRWDT();
 
 		if (time_events.bits.ev_100hz && motor_dir != M_IDLE) {
-			uint8_t o = (LATC & O_I2C);
+			uint8_t o = O_I2C;
 			led_pattern = 0xff;
 			if (motor_count == 0) {
 				if (motor_dir == M_OPEN)
