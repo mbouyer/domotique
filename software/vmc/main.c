@@ -61,7 +61,6 @@ static char counter_10hz;
 static uint16_t seconds;
 static __uint24 time; /* in 10ms units */
 
-static unsigned char led_pattern_s;
 static unsigned char led_pattern;
 static unsigned char led_pattern_count;
 
