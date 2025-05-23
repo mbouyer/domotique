@@ -61,7 +61,6 @@ static char counter_10hz;
 static uint16_t seconds;
 static __uint24 time; /* in 10ms units */
 
-static unsigned char led_pattern_s;
 static unsigned char led_pattern;
 static unsigned char led_pattern_count;
 
@@ -428,7 +427,7 @@ main(void)
 	printf("enter loop\n");
 	LED = 1;
 
-	led_pattern = led_pattern_s = 0x01;
+	led_pattern = 0xff;
 	led_pattern_count = 8;
 
 	motor_o_idx = 0;
@@ -502,7 +501,6 @@ again:
 
 		if (time_events.bits.ev_100hz && motor_dir != M_IDLE) {
 			uint8_t o = O_I2C;
-			led_pattern = 0xff;
 			if (motor_count == 0) {
 				if (motor_dir == M_OPEN)
 					status |= STATUS_VENTIL;
@@ -510,7 +508,8 @@ again:
 					status &= ~STATUS_VENTIL;
 				status_update = 1;
 				motor_dir = M_IDLE;
-				led_pattern = 0;
+				led_pattern = 1;
+				led_pattern_count = 2;
 			} else {
 				o |= motor_o[motor_o_idx & 0x07];
 				motor_count--;
@@ -518,6 +517,8 @@ again:
 					motor_o_idx++;
 				else
 					motor_o_idx--;
+				led_pattern = 0xff;
+				led_pattern_count = 8;
 			}
 			LATC = o;
 		}
@@ -530,18 +531,16 @@ again:
 				counter_10hz = 10;
 				time_events.bits.ev_1hz = 1;
 			}
-			if (counter_10hz & 0x01) {
-				led_pattern_count--;
-				led_pattern >>= 1;
-				if (led_pattern_count == 0) {
-					led_pattern = led_pattern_s;
-					led_pattern_count = 8;
-				}
+			if (led_pattern_count != 0) {
 				if (led_pattern & 0x01) {
 					LED = 1;
 				} else {
 					LED = 0;
 				}
+				led_pattern_count--;
+				led_pattern >>= 1;
+			} else {
+				LED = 0;
 			}
 		}
 		if (time_events.bits.ev_1hz) {
@@ -565,7 +564,11 @@ again:
 						printf("i2c status 0x%02x%02x 0x%x\n",
 						    i2c_data[0], i2c_data[1], i2c_data[2]);
 					}
+					led_pattern_count = 8;
+					led_pattern = 0x55;
 				} else {
+					led_pattern_count = 2;
+					led_pattern = 1;
 					printf("i2c data 0x%02x%02x 0x%x "
 					    "0x%02x%02x 0x%x\n",
 					    i2c_data[0], i2c_data[1],
