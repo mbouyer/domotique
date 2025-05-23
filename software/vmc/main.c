@@ -88,7 +88,7 @@ static uint8_t status;
 
 #define STATUS_VALID 0x1
 #define STATUS_VMC 0x02 /* 0 = close, 1 = open */
-#define STATUS_BUTTON 0x04
+#define STATUS_BUTTON 0x04 /* the current state comes from button */
 
 #define ACTION_OPEN	0x01
 #define ACTION_CLOSE	0x02
@@ -123,6 +123,8 @@ putch(char c)
 #define O2	(u_char)0x20 /* RC5 */
 #define O_I2C	(u_char)0x03 /* RC0, RC1 */
 
+#define BUTTON PORTAbits.RA2
+
 #define SHTADDR (0x44 << 1)
 #define SHT_READ_STATUS		0xF32D
 #define SHT_CLEAR_STATUS	0x3041
@@ -131,6 +133,15 @@ putch(char c)
 #define SHT_START_PERIODIC	0x2126
 #define SHT_READ_PERIODIC	0xE000
 #define SHT_MEASURE_READ	0x2C0D
+
+enum _button_state {
+	B_RELEASE = 0,
+	B_PRESS
+} button_state;
+
+u_int button_time; /* key press time */ 
+#define BTN_SHORT_PRESS TIMER0_20MS
+#define BTN_LONG_PRESS (TIMER0_100MS * 5)
 
 enum _motor_state {
 	M_SLEEP = 0,
@@ -189,6 +200,26 @@ to_motor_state(enum _motor_state s)
 		break;
 	}
 }
+
+static void
+button_long_press()
+{
+	/* noithing for now */
+}
+
+static void
+button_short_press()
+{
+	if (status & STATUS_VMC) {
+		to_motor_state(M_PRE_CLOSE);
+		status |= STATUS_BUTTON;
+	} else {
+		to_motor_state(M_PRE_OPEN);
+		status |= STATUS_BUTTON;
+	}
+}
+
+
 
 static char
 command(__ram char *buf)
@@ -464,6 +495,17 @@ again:
 		CLRWDT();
 
 		if (softintrs.bits.int_10hz) {
+			if (BUTTON == 0 && button_state == B_RELEASE) {
+				button_state = B_PRESS;
+				button_time = timer0_read();
+			} else if (BUTTON == 1 && button_state == B_PRESS) {
+				button_state = B_RELEASE;
+				if ((timer0_read() - button_time) >= BTN_LONG_PRESS) {
+					button_long_press();
+				} else if ((timer0_read() - button_time) >= BTN_SHORT_PRESS) {
+					button_short_press();
+				} /* else it's a bounce */
+			}
 			softintrs.bits.int_10hz = 0;
 			time_events.bits.ev_10hz = 1;
 			counter_10hz--;
@@ -508,8 +550,13 @@ again:
 					led_pattern = 0xaa;
 					status &= ~STATUS_VALID;
 				} else {
-					led_pattern_count = 2;
-					led_pattern = 1;
+					if (status & STATUS_BUTTON) {
+						led_pattern_count = 8;
+						led_pattern = 0x33;
+					} else {
+						led_pattern_count = 2;
+						led_pattern = 1;
+					}
 					printf("i2c data 0x%02x%02x 0x%x "
 					    "0x%02x%02x 0x%x\n",
 					    i2c_data[0], i2c_data[1],
@@ -575,8 +622,10 @@ again:
 
 			if (lin_rxbuf[0] & ACTION_OPEN) {
 				to_motor_state(M_PRE_OPEN);
+				status &= ~STATUS_BUTTON;
 			} else if (lin_rxbuf[0] & ACTION_CLOSE) {
 				to_motor_state(M_PRE_CLOSE);
+				status &= ~STATUS_BUTTON;
 			}
 			if (lin_rxbuf[0] & ACTION_RESET) {
 				goto do_reset;
