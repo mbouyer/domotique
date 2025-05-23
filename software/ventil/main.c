@@ -566,6 +566,7 @@ again:
 					}
 					led_pattern_count = 8;
 					led_pattern = 0x55;
+					status &= ~STATUS_VALID;
 				} else {
 					led_pattern_count = 2;
 					led_pattern = 1;
