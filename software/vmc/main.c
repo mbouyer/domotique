@@ -505,7 +505,7 @@ again:
 						    i2c_data[0], i2c_data[1], i2c_data[2]);
 					}
 					led_pattern_count = 8;
-					led_pattern = 0xff;
+					led_pattern = 0xaa;
 				} else {
 					led_pattern_count = 2;
 					led_pattern = 1;
