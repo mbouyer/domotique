@@ -57,7 +57,7 @@ uint8_t dev_addr = BME280_I2C_ADDR_PRIM;
 static void
 usage(void)
 {
-	fprintf(stderr, "usage: %s <LIN tty> <i2c>\n", getprogname());
+	fprintf(stderr, "usage: %s [-f] [-u user] [-g group] <LIN tty> <i2c>\n", getprogname());
 	exit(1);
 }
 
@@ -66,6 +66,7 @@ static int opt_f = 0;
 #define LINESZ 80
 
 static void mylog(int, const char *, ...) __sysloglike(2, 3);
+static void myprintf(const char *, ...) __printflike(1, 2);
 
 static void
 mylog(int l, const char *fmt, ...)
@@ -83,14 +84,33 @@ mylog(int l, const char *fmt, ...)
 	syslog(l | LOG_LOCAL2, "%s", buf);
 }
 
+static void
+myprintf(const char *fmt, ...)
+{
+	va_list ap;
+
+	if (opt_f) {
+		va_start(ap, fmt);
+		vprintf(fmt, ap);
+		va_end(ap);
+	}
+}
+
 static struct clients_fds {
 	int fd;
 	FILE *f;
 } clients_fds[MAX_CLIENTS] = {0};
 static int nclients = 0;
 
-static int lin, iic_fd;
+static int lin_fd, iic_fd;
 static FILE *lin_f;
+
+enum lin_state { 
+	IDLE,
+	TXPID,
+	TXDATA,
+	RXDATA
+} lin_state;
 
 static struct timeval msg_ts; /* timespamp of messages */
 #define SENSORS_PERIOD 30 /* seconds */
@@ -208,15 +228,243 @@ do_bme280()
 	clients_write(buf);
 }
 
+#define STATUS_VALID 0x1
+#define STATUS_VMC 0x02 /* 0 = close, 1 = open */
+#define STATUS_BUTTON 0x04 /* the current state comes from button */
+
+#define ACTION_OPEN     0x01
+#define ACTION_CLOSE    0x02
+#define ACTION_RESET    0x80
+
+#define CH_ID 0x09
+#define SA_ID 0x08
+#define CU_ID 0x01
+#define SB_ID 0x03
+#define ALL_ID 0x3c
+
+static int
+lin_write_and_check(uint8_t c)
+{
+	struct pollfd fd[1];
+	uint8_t b;
+
+	if (write(lin_fd, &c, 1) != 1) {
+		mylog(LOG_ERR, "LIN send 0x%x: %s", c, strerror(errno));
+		return -1;
+	}
+	/* read back, wait 10ms */
+	fd[0].fd = lin_fd;
+	fd[0].events = POLLRDNORM;
+	if (poll(fd, 1, 10) < 0) {
+		mylog(LOG_ERR, "lin 0x%x back poll: %s", c, strerror(errno));
+		return -1;
+	}
+	if ((fd[0].revents & POLLRDNORM) == 0) {
+		mylog(LOG_ERR, "lin 0x%x back poll: timeout", c);
+		errno = ETIMEDOUT;
+		return -1;
+	}
+	if (read(lin_fd, &b, 1) != 1) {
+		mylog(LOG_ERR, "lin 0x%x back read: %s", c, strerror(errno));
+		return -1;
+	}
+	if (c != b) {
+		mylog(LOG_ERR, "lin back read: 0x%x != 0x%x", c, b);
+		return -1;
+	}
+	return 0;
+}
+
+static int
+lin_send_pid(uint8_t pid)
+{
+	uint8_t c;
+
+#define GETBIT(i, x) (((i) >> (x)) & 0x01)
+
+	/* compute checksum */
+	c = GETBIT(pid, 0) ^ GETBIT(pid, 1) ^ GETBIT(pid, 2) ^ GETBIT(pid, 4);
+	pid |= (c << 6);
+	c = GETBIT(pid, 1) ^ GETBIT(pid, 3) ^ GETBIT(pid, 4) ^ GETBIT(pid, 5) ^ 0x01;
+	pid |= (c << 7);
+	/* send break */
+	if (tcsendbreak(lin_fd, 1) < 0) {
+		mylog(LOG_ERR, "LIN send break: %s", strerror(errno));
+		return -1;
+	}
+	/* send sync */
+	if (lin_write_and_check(0x55) != 0)
+		return -1;
+	
+	/* send PID */
+	if (lin_write_and_check(pid) != 0)
+		return -1;
+	return 0;
+}
+
+static int
+lin_send_data(uint8_t pid, const char *buf, int len)
+{
+	uint16_t csum = 0;
+	if (lin_send_pid(pid) != 0) {
+		return -1;
+	}
+	for (int i = 0; i < len; i++) {
+		if (lin_write_and_check(buf[i]) != 0) {
+			return -1;
+		}
+		csum += (uint8_t)buf[i];
+		if (csum >= 256)
+			csum = csum - 255;
+	}
+	csum = ~csum;
+	if (lin_write_and_check(csum) != 0) {
+		return -1;
+	}
+}
+
+static int
+lin_receive_data(uint8_t pid, char *buf, int len)
+{
+	uint16_t csum = 0;
+	uint8_t rcsum;
+	uint8_t *p;
+	struct pollfd fd[1];
+
+	if (lin_send_pid(pid) != 0) {
+		return -1;
+	}
+	for (int i = 0; i <= len; i++) {
+		/* read data, wait 100ms */
+		fd[0].fd = lin_fd;
+		fd[0].events = POLLRDNORM;
+		if (poll(fd, 1, 100) < 0) {
+			mylog(LOG_ERR, "lin 0x%x read poll: %s", pid,
+			    strerror(errno));
+			errno = ETIMEDOUT;
+			return -1;
+		}
+		if ((fd[0].revents & POLLRDNORM) == 0) {
+			mylog(LOG_ERR, "lin 0x%x rd poll: timeout", pid);
+			errno = ETIMEDOUT;
+			return -1;
+		}
+		if (i == len)
+			p = &rcsum;
+		else
+			p = &buf[i];
+		if (read(lin_fd, p, 1) != 1) {
+			mylog(LOG_ERR, "lin 0x%x read: %s", pid, strerror(errno));
+			return -1;
+		}
+		csum += *p;
+		if (csum >= 256)
+			csum = csum - 255;
+	}
+	if (csum != 0xff) {
+			mylog(LOG_ERR, "lin 0x%x read: csum 0x%x != 0x%x", pid, csum, rcsum);
+			errno = EIO;
+			return -1;
+	}
+	return 0;
+}
+
+void lin_read_sensor(int lin_id)
+{
+	static char buf[LINESZ];
+	char *sensor;
+	char *act;
+	int i;
+	if (lin_receive_data(0x10|lin_id, buf, 5) == 0) {
+		int16_t temp, hum;
+		uint8_t flags = buf[0];
+		myprintf("lin 0x%x:", lin_id);
+		for (i = 0; i < 5; i++) {
+			myprintf(" %x", buf[i]);
+		}
+		temp = buf[2] << 8 | buf[1];
+		myprintf(" %f", (float)temp / 100.0);
+		hum = buf[4] << 8 | buf[3];
+		myprintf(" %f", (float)hum / 100.0);
+		myprintf("\n");
+		switch(lin_id) {
+		case CU_ID:
+			sensor = act = "Cu";
+			break;
+		case SB_ID:
+			sensor = act = "Sb";
+			break;
+		case SA_ID:
+			sensor = "E";
+			act = "Sa";
+			break;
+		case CH_ID:
+			sensor = act = "Ch";
+			break;
+		default:
+			return;
+		}
+		if (flags & STATUS_VALID) {
+			snprintf(buf, LINESZ, "%sTEMP %.2f",
+			    sensor, (float)temp / 100.0);
+			clients_write(buf);
+			snprintf(buf, LINESZ, "%sHUM %.2f",
+			    sensor, (float)hum / 100.0);
+			clients_write(buf);
+		}
+		snprintf(buf, LINESZ, "%sSTAT %s%s",
+		    act, (flags & STATUS_VMC) ? "O" : "F",
+		    (flags & STATUS_BUTTON) ? " B" : "");
+		clients_write(buf);
+	}
+}
+
+
 static void
 do_sensors()
 {
 	do_bme280();
+	lin_read_sensor(CU_ID);
+	lin_read_sensor(SB_ID);
+	lin_read_sensor(SA_ID);
+	lin_read_sensor(CH_ID);
 }
 
 static void
-lin_write(char *buf)
+do_client(char *buf)
 {
+	uint8_t b, id;
+
+	myprintf("client %s\n", buf);
+	if (buf[2] != ' ' || buf[4] != '\n')
+		return;
+
+	switch(buf[3]) {
+	case 'O':
+		b = ACTION_OPEN;
+		break;
+	case 'F': 
+		b = ACTION_CLOSE;
+		break;
+	case 'R': 
+		b = ACTION_RESET;
+		break;
+	default:
+		return;
+	}
+	if (strncmp(buf, "Cu", 2) == 0) {
+		id = CU_ID;
+	} else if (strncmp(buf, "Sb", 2) == 0) {
+		id = SB_ID;
+	} else if (strncmp(buf, "Sa", 2) == 0) {
+		id = SA_ID;
+	} else if (strncmp(buf, "Ch", 2) == 0) {
+		id = CH_ID;
+	} else if (strncmp(buf, "AA", 2) == 0) {
+		id = ALL_ID;
+	}
+	myprintf("lin id 0x%x action 0x%x\n", id, b);
+	lin_send_data(id, &b, 1);
 }
 
 static void
@@ -251,8 +499,6 @@ main(int argc, char * const argv[])
 	int i;
 	long l;
 	static char linebuf[LINESZ];
-	static char linbuf[LINESZ];
-	int linbufi = 0;
 	struct pollfd fds[MAX_CLIENTS + 2];
 	int nfds;
 
@@ -329,42 +575,41 @@ getgroup:
 	}
 
 	unlink(SOCKET_PATH);
-	lin = -1;
+	lin_fd = -1;
 	lin_f = NULL;
-#ifdef notyet
+
 	/* need to open with O_NONBLOCK, util we set CLOCAL */
-	lin = open(argv[0], O_RDWR | O_NOCTTY | O_NONBLOCK);
-	if (lin < 0)
+	lin_fd = open(argv[0], O_RDWR | O_NOCTTY | O_NONBLOCK);
+	if (lin_fd < 0)
 		err(1, "open %s", argv[0]);
 
-	if (flock(lin, (LOCK_EX|LOCK_NB)) != 0)
+	if (flock(lin_fd, (LOCK_EX|LOCK_NB)) != 0)
 		err(1, "flock %s", argv[0]);
 
-	tcgetattr(lin, &cntrl);
-	cfsetospeed(&cntrl, 57600);
-	cfsetispeed(&cntrl, 57600);
+	tcgetattr(lin_fd, &cntrl);
+	cfsetospeed(&cntrl, 19200);
+	cfsetispeed(&cntrl, 19200);
 	cntrl.c_cflag &= ~(CSIZE|PARENB);
 	cntrl.c_cflag |= CS8;
 	cntrl.c_cflag |= CLOCAL;
-	cntrl.c_iflag &= ~(ISTRIP|ICRNL);
-	cntrl.c_oflag &= ~OPOST;
+	cntrl.c_iflag &= ~(ISTRIP|ICRNL|IXON|IXOFF|IEXTEN);
+	cntrl.c_oflag &= ~(OPOST);
 	cntrl.c_lflag &= ~(ICANON|ISIG|IEXTEN|ECHO);
 	cntrl.c_cc[VMIN] = 1;
 	cntrl.c_cc[VTIME] = 0;
-	if (tcsetattr(lin, TCSAFLUSH, &cntrl) != 0) {
+	if (tcsetattr(lin_fd, TCSAFLUSH, &cntrl) != 0) {
 		err(1, "tcsetattr %s", argv[0]);
 	}
-	if ((i = fcntl(lin, F_GETFL, 0)) < 0)  {
+	if ((i = fcntl(lin_fd, F_GETFL, 0)) < 0)  {
 		err(1, "F_GETFL %s", argv[0]);
 	}
-	if (fcntl(lin, F_SETFL, i & ~O_NONBLOCK) < 0) {
+	if (fcntl(lin_fd, F_SETFL, i & ~O_NONBLOCK) < 0) {
 		err(1, "F_SETFL %s", argv[0]);
 	}
 
-	lin_f = fdopen(lin, "w+");
+	lin_f = fdopen(lin_fd, "w+");
 	if (lin_f == NULL)
 		err(1, "fopen %s", argv[1]);
-#endif /* notyet */
 
 	iic_fd = open(argv[1], O_RDWR);
 
@@ -425,11 +670,6 @@ getgroup:
 			fds[i].fd = clients_fds[i].fd;
 			fds[i].events = POLLRDNORM;
 		}
-#ifdef notyet
-		fds[i].fd = lin;
-		fds[i].events = POLLRDNORM;
-		i++;
-#endif
 		fds[i].fd = main_socket;
 		fds[i].events = POLLRDNORM;
 		nfds = i + 1;
@@ -457,35 +697,10 @@ getgroup:
 					clients_fds[i].f = NULL;
 					close(clients_fds[i].fd);
 				} else {
-					lin_write(linebuf);
+					do_client(linebuf);
 				}
 			}
 		}
-#ifdef notyet
-		if (fds[i].revents & POLLRDNORM) {
-			switch(read(lin, &linbuf[linbufi], 1)) {
-			case 0:
-				/* ignore short read */
-				break;
-			case -1:
-				mylog(LOG_ERR, "can't read lin: %s",
-				    strerror(errno));
-				exit(1);
-			default:
-				if (linbuf[linbufi] == '\r') {
-					/* complete line */
-					linbuf[linbufi] = '\0';
-					clients_write(linbuf);
-					linbufi = 0;
-				} else if (linbuf[linbufi] < 0x20) {
-					/* ignore */
-				} else if (linbufi < LINESZ - 2) {
-					linbufi++;
-				}
-			}
-		}
-		i++;
-#endif /* notyet */
 		if (fds[i].revents & POLLRDNORM) {
 			int new_s;
 			socklen_t socksize = sizeof(saddr);
