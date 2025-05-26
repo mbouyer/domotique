@@ -414,7 +414,7 @@ void lin_read_sensor(int lin_id)
 		}
 		snprintf(buf, LINESZ, "%sSTAT %s%s",
 		    act, (flags & STATUS_VMC) ? "O" : "F",
-		    (flags & STATUS_BUTTON) ? " B" : "");
+		    (flags & STATUS_BUTTON) ? ",B" : "");
 		clients_write(buf);
 	}
 }
@@ -435,7 +435,9 @@ do_client(char *buf)
 {
 	uint8_t b, id;
 
-	myprintf("client %s\n", buf);
+	myprintf("client %s %d\n", buf, strlen(buf));
+	if (strlen(buf) < 5)
+		return;
 	if (buf[2] != ' ' || buf[4] != '\n')
 		return;
 
