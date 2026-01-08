@@ -4535,7 +4535,7 @@
 	)
 	(wire
 		(pts
-			(xy 68.58 45.72) (xy 88.9 45.72)
+			(xy 68.58 48.26) (xy 88.9 48.26)
 		)
 		(stroke
 			(width 0)
@@ -4625,7 +4625,7 @@
 	)
 	(wire
 		(pts
-			(xy 67.31 80.01) (xy 73.66 80.01)
+			(xy 67.31 80.01) (xy 82.55 80.01)
 		)
 		(stroke
 			(width 0)
@@ -4635,7 +4635,7 @@
 	)
 	(wire
 		(pts
-			(xy 68.58 40.64) (xy 90.17 40.64)
+			(xy 68.58 43.18) (xy 90.17 43.18)
 		)
 		(stroke
 			(width 0)
@@ -4795,6 +4795,16 @@
 	)
 	(wire
 		(pts
+			(xy 92.71 119.38) (xy 127 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "227cdb04-e77d-4913-a4fc-fb9b2529bb97")
+	)
+	(wire
+		(pts
 			(xy 123.19 74.93) (xy 102.87 74.93)
 		)
 		(stroke
@@ -4905,6 +4915,16 @@
 	)
 	(wire
 		(pts
+			(xy 91.44 121.92) (xy 127 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2bf97bd4-2cc0-4f67-bb5f-4ffbdcb334ca")
+	)
+	(wire
+		(pts
 			(xy 204.47 149.86) (xy 187.96 149.86)
 		)
 		(stroke
@@ -4945,7 +4965,7 @@
 	)
 	(wire
 		(pts
-			(xy 68.58 43.18) (xy 87.63 43.18)
+			(xy 68.58 45.72) (xy 87.63 45.72)
 		)
 		(stroke
 			(width 0)
@@ -4962,16 +4982,6 @@
 			(type default)
 		)
 		(uuid "30cdac3d-3b87-4912-88b4-f113c1e2fedd")
-	)
-	(wire
-		(pts
-			(xy 113.03 121.92) (xy 127 121.92)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "33bf1787-f407-4473-9596-b0dfb0be36fb")
 	)
 	(wire
 		(pts
@@ -5242,6 +5252,16 @@
 			(type default)
 		)
 		(uuid "4c4e13e7-485a-49d2-a968-2be5eb355da7")
+	)
+	(wire
+		(pts
+			(xy 68.58 40.64) (xy 91.44 40.64)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4c4f13ba-45a1-4eee-9167-571667ee550d")
 	)
 	(wire
 		(pts
@@ -5615,7 +5635,7 @@
 	)
 	(wire
 		(pts
-			(xy 73.66 50.8) (xy 73.66 80.01)
+			(xy 82.55 53.34) (xy 82.55 80.01)
 		)
 		(stroke
 			(width 0)
@@ -5752,16 +5772,6 @@
 			(type default)
 		)
 		(uuid "8b86b4e0-4bef-49e5-a1c5-7bc03162133a")
-	)
-	(wire
-		(pts
-			(xy 113.03 119.38) (xy 127 119.38)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8d6c290e-88ce-4844-9f48-3cf49a29c64b")
 	)
 	(wire
 		(pts
@@ -6035,7 +6045,17 @@
 	)
 	(wire
 		(pts
-			(xy 87.63 43.18) (xy 87.63 129.54)
+			(xy 91.44 40.64) (xy 91.44 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b72f50b5-db98-48fa-9b8b-85bed3c2998f")
+	)
+	(wire
+		(pts
+			(xy 87.63 45.72) (xy 87.63 129.54)
 		)
 		(stroke
 			(width 0)
@@ -6105,7 +6125,7 @@
 	)
 	(wire
 		(pts
-			(xy 90.17 40.64) (xy 90.17 124.46)
+			(xy 90.17 43.18) (xy 90.17 124.46)
 		)
 		(stroke
 			(width 0)
@@ -6162,6 +6182,16 @@
 			(type default)
 		)
 		(uuid "c8d3a201-a7ef-4307-b368-68e58a320916")
+	)
+	(wire
+		(pts
+			(xy 68.58 38.1) (xy 92.71 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ca1bf5ae-a137-4863-b997-6be07518ba18")
 	)
 	(wire
 		(pts
@@ -6425,7 +6455,7 @@
 	)
 	(wire
 		(pts
-			(xy 88.9 45.72) (xy 88.9 127)
+			(xy 88.9 48.26) (xy 88.9 127)
 		)
 		(stroke
 			(width 0)
@@ -6575,7 +6605,7 @@
 	)
 	(wire
 		(pts
-			(xy 68.58 50.8) (xy 73.66 50.8)
+			(xy 68.58 53.34) (xy 82.55 53.34)
 		)
 		(stroke
 			(width 0)
@@ -6612,6 +6642,16 @@
 			(type default)
 		)
 		(uuid "f695619f-9dee-44a7-94c5-a3fcb57ebb6f")
+	)
+	(wire
+		(pts
+			(xy 92.71 38.1) (xy 92.71 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f7317723-aa9d-4df6-833c-23a3db94c3c0")
 	)
 	(wire
 		(pts
@@ -11441,7 +11481,7 @@
 			)
 		)
 		(pin "linRx" output
-			(at 68.58 43.18 0)
+			(at 68.58 45.72 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11451,7 +11491,7 @@
 			(uuid "e405dd3d-b6b5-4005-a25b-bcbe3b771e83")
 		)
 		(pin "linTx" input
-			(at 68.58 45.72 0)
+			(at 68.58 48.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11461,7 +11501,7 @@
 			(uuid "1ee2bb94-bd80-4173-8c23-cdd471e1d201")
 		)
 		(pin "+12V" input
-			(at 68.58 50.8 0)
+			(at 68.58 53.34 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11471,7 +11511,7 @@
 			(uuid "fec906d0-e225-4e06-b095-528844322665")
 		)
 		(pin "lin_cs" input
-			(at 68.58 40.64 0)
+			(at 68.58 43.18 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11499,6 +11539,26 @@
 				(justify right)
 			)
 			(uuid "5c465b1a-78bc-43dd-933b-e583446d129a")
+		)
+		(pin "LIN_ON2" input
+			(at 68.58 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "afe65e0b-7006-4ede-ae51-a671f7e2058e")
+		)
+		(pin "LIN_ON1" input
+			(at 68.58 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "44b8d582-9dcd-4d43-8a4e-709e38de635b")
 		)
 		(instances
 			(project "controle"
