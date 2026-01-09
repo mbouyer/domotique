@@ -224,6 +224,145 @@
 				)
 			)
 		)
+		(symbol "Connector_Generic:Conn_01x02"
+			(pin_names
+				(offset 1.016) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 0 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x02"
+				(at 0 -5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_1x??_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Conn_01x02_1_1"
+				(rectangle
+					(start -1.27 -2.413)
+					(end 0 -2.667)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 0.127)
+					(end 0 -0.127)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 1.27)
+					(end 1.27 -3.81)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -2.54 0)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
 		(symbol "Device:C_Small"
 			(pin_numbers hide)
 			(pin_names
@@ -342,6 +481,165 @@
 				(pin passive line
 					(at 0 -2.54 90)
 					(length 2.032)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "Device:L_Small"
+			(pin_numbers hide)
+			(pin_names
+				(offset 0.254) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "L"
+				(at 0.762 1.016 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "L_Small"
+				(at 0.762 -1.016 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Inductor, small symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "inductor choke coil reactor magnetic"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Choke_* *Coil* Inductor_* L_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "L_Small_0_1"
+				(arc
+					(start 0 -2.032)
+					(mid 0.5058 -1.524)
+					(end 0 -1.016)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -1.016)
+					(mid 0.5058 -0.508)
+					(end 0 0)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 0)
+					(mid 0.5058 0.508)
+					(end 0 1.016)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 1.016)
+					(mid 0.5058 1.524)
+					(end 0 2.032)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "L_Small_1_1"
+				(pin passive line
+					(at 0 2.54 270)
+					(length 0.508)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -2.54 90)
+					(length 0.508)
 					(name "~"
 						(effects
 							(font
@@ -481,11 +779,11 @@
 				)
 			)
 		)
-		(symbol "centrale-rescue:+12V-power"
+		(symbol "power:+12V"
 			(power)
+			(pin_numbers hide)
 			(pin_names
-				(offset 0)
-			)
+				(offset 0) hide)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -498,7 +796,7 @@
 					(hide yes)
 				)
 			)
-			(property "Value" "power_+12V"
+			(property "Value" "+12V"
 				(at 0 3.556 0)
 				(effects
 					(font
@@ -524,7 +822,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" ""
+			(property "Description" "Power symbol creates a global label with name \"+12V\""
 				(at 0 0 0)
 				(effects
 					(font
@@ -533,14 +831,23 @@
 					(hide yes)
 				)
 			)
-			(symbol "+12V-power_0_1"
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "+12V_0_1"
 				(polyline
 					(pts
 						(xy -0.762 1.27) (xy 0 2.54)
 					)
 					(stroke
 						(width 0)
-						(type solid)
+						(type default)
 					)
 					(fill
 						(type none)
@@ -552,7 +859,7 @@
 					)
 					(stroke
 						(width 0)
-						(type solid)
+						(type default)
 					)
 					(fill
 						(type none)
@@ -564,18 +871,18 @@
 					)
 					(stroke
 						(width 0)
-						(type solid)
+						(type default)
 					)
 					(fill
 						(type none)
 					)
 				)
 			)
-			(symbol "+12V-power_1_1"
+			(symbol "+12V_1_1"
 				(pin power_in line
 					(at 0 0 90)
-					(length 0) hide
-					(name "+12V"
+					(length 0)
+					(name "~"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -592,154 +899,11 @@
 				)
 			)
 		)
-		(symbol "centrale-rescue:Conn_01x02_Male-Connector"
-			(pin_names
-				(offset 1.016) hide)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "J"
-				(at 0 2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "Connector_Conn_01x02_Male"
-				(at 0 -5.08 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "Connector*:*_1x??_*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "Conn_01x02_Male-Connector_1_1"
-				(polyline
-					(pts
-						(xy 1.27 -2.54) (xy 0.8636 -2.54)
-					)
-					(stroke
-						(width 0.1524)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 1.27 0) (xy 0.8636 0)
-					)
-					(stroke
-						(width 0.1524)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start 0.8636 -2.413)
-					(end 0 -2.667)
-					(stroke
-						(width 0.1524)
-						(type solid)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(rectangle
-					(start 0.8636 0.127)
-					(end 0 -0.127)
-					(stroke
-						(width 0.1524)
-						(type solid)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(pin passive line
-					(at 5.08 0 180)
-					(length 3.81)
-					(name "Pin_1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 5.08 -2.54 180)
-					(length 3.81)
-					(name "Pin_2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
-		(symbol "centrale-rescue:GND2-power"
+		(symbol "power:GND"
 			(power)
+			(pin_numbers hide)
 			(pin_names
-				(offset 0)
-			)
+				(offset 0) hide)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -752,7 +916,7 @@
 					(hide yes)
 				)
 			)
-			(property "Value" "power_GND2"
+			(property "Value" "GND"
 				(at 0 -3.81 0)
 				(effects
 					(font
@@ -778,7 +942,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" ""
+			(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 				(at 0 0 0)
 				(effects
 					(font
@@ -787,25 +951,34 @@
 					(hide yes)
 				)
 			)
-			(symbol "GND2-power_0_1"
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "GND_0_1"
 				(polyline
 					(pts
 						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
 					)
 					(stroke
 						(width 0)
-						(type solid)
+						(type default)
 					)
 					(fill
 						(type none)
 					)
 				)
 			)
-			(symbol "GND2-power_1_1"
+			(symbol "GND_1_1"
 				(pin power_in line
 					(at 0 0 270)
-					(length 0) hide
-					(name "GND2"
+					(length 0)
+					(name "~"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -816,146 +989,6 @@
 						(effects
 							(font
 								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
-		(symbol "centrale-rescue:INDUCTOR-pspice"
-			(pin_numbers hide)
-			(pin_names
-				(offset 0)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "L"
-				(at 0 2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "pspice_INDUCTOR"
-				(at 0 -1.27 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "INDUCTOR-pspice_0_1"
-				(arc
-					(start -2.54 0)
-					(mid -3.81 1.27)
-					(end -5.08 0)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start 0 0)
-					(mid -1.27 1.27)
-					(end -2.54 0)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start 2.54 0)
-					(mid 1.27 1.27)
-					(end 0 0)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start 5.08 0)
-					(mid 3.81 1.27)
-					(end 2.54 0)
-					(stroke
-						(width 0)
-						(type solid)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "INDUCTOR-pspice_1_1"
-				(pin input line
-					(at -6.35 0 0)
-					(length 1.27)
-					(name "1"
-						(effects
-							(font
-								(size 0.762 0.762)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 0.762 0.762)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at 6.35 0 180)
-					(length 1.27)
-					(name "2"
-						(effects
-							(font
-								(size 0.762 0.762)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 0.762 0.762)
 							)
 						)
 					)
@@ -1121,7 +1154,7 @@
 					(end 17.78 10.16)
 					(stroke
 						(width 0)
-						(type solid)
+						(type default)
 					)
 					(fill
 						(type none)
@@ -1367,6 +1400,12 @@
 		(uuid "9664208a-0d55-47f6-93b6-8c824d07a0d1")
 	)
 	(junction
+		(at 58.42 67.31)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a373707f-42c1-48c1-9b28-a79a2cc56a42")
+	)
+	(junction
 		(at 113.03 100.33)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1413,14 +1452,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "edcdb32b-dea0-4779-a6d1-46043a535113")
-	)
-	(no_connect
-		(at 194.31 161.29)
-		(uuid "b522014e-07ed-4e86-b125-a9a0b81c0dff")
-	)
-	(no_connect
-		(at 58.42 64.77)
-		(uuid "cc7d133d-7eb6-49c5-aebb-be99e4d8131b")
 	)
 	(wire
 		(pts
@@ -1604,7 +1635,7 @@
 	)
 	(wire
 		(pts
-			(xy 149.86 82.55) (xy 152.4 82.55)
+			(xy 149.86 82.55) (xy 156.21 82.55)
 		)
 		(stroke
 			(width 0)
@@ -1744,6 +1775,16 @@
 	)
 	(wire
 		(pts
+			(xy 161.29 82.55) (xy 166.37 82.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9b4a9cf2-84ed-4e60-a6d9-1bfaefeee809")
+	)
+	(wire
+		(pts
 			(xy 118.11 100.33) (xy 118.11 102.87)
 		)
 		(stroke
@@ -1761,6 +1802,16 @@
 			(type default)
 		)
 		(uuid "a3c30c28-68e0-47c1-9696-2be7117e962f")
+	)
+	(wire
+		(pts
+			(xy 58.42 64.77) (xy 58.42 67.31)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a5da1b2a-9067-45ee-9d6d-717eea5887b4")
 	)
 	(wire
 		(pts
@@ -1841,16 +1892,6 @@
 			(type default)
 		)
 		(uuid "c38130e6-106c-4510-ab9f-af293c1d35da")
-	)
-	(wire
-		(pts
-			(xy 166.37 82.55) (xy 165.1 82.55)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c62704c5-e7a3-4d40-8ffc-89e0b7706456")
 	)
 	(wire
 		(pts
@@ -2485,7 +2526,7 @@
 				)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Switching Regulator"
 			(at 118.11 82.55 0)
 			(effects
 				(font
@@ -2566,7 +2607,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 			(at 144.78 96.52 0)
 			(effects
 				(font
@@ -2771,8 +2812,8 @@
 		)
 	)
 	(symbol
-		(lib_id "centrale-rescue:INDUCTOR-pspice")
-		(at 158.75 82.55 0)
+		(lib_id "Device:L_Small")
+		(at 158.75 82.55 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2780,7 +2821,7 @@
 		(dnp no)
 		(uuid "933c327c-7650-4275-9a95-29edcf73ebae")
 		(property "Reference" "L1"
-			(at 158.75 78.74 0)
+			(at 158.75 80.264 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2788,7 +2829,7 @@
 			)
 		)
 		(property "Value" "4.7µH"
-			(at 158.75 83.82 0)
+			(at 159.004 84.582 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2804,15 +2845,16 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "~"
 			(at 158.75 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Inductor, small symbol"
 			(at 158.75 82.55 0)
 			(effects
 				(font
@@ -2846,7 +2888,7 @@
 		)
 	)
 	(symbol
-		(lib_id "centrale-rescue:GND2-power")
+		(lib_id "power:GND")
 		(at 118.11 102.87 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2889,7 +2931,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 118.11 102.87 0)
 			(effects
 				(font
@@ -3054,7 +3096,7 @@
 		)
 	)
 	(symbol
-		(lib_id "centrale-rescue:GND2-power")
+		(lib_id "power:GND")
 		(at 130.81 64.77 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3098,7 +3140,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
 			(at 130.81 64.77 0)
 			(effects
 				(font
@@ -3129,8 +3171,9 @@
 		)
 	)
 	(symbol
-		(lib_id "centrale-rescue:Conn_01x02_Male-Connector")
-		(at 189.23 90.17 180)
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 189.23 90.17 0)
+		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3146,7 +3189,7 @@
 			)
 		)
 		(property "Value" "5V_LIME2"
-			(at 190.5 96.52 0)
+			(at 189.23 84.074 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3162,15 +3205,16 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "~"
 			(at 189.23 90.17 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
 			(at 189.23 90.17 0)
 			(effects
 				(font
@@ -3427,7 +3471,7 @@
 		)
 	)
 	(symbol
-		(lib_id "centrale-rescue:+12V-power")
+		(lib_id "power:+12V")
 		(at 118.11 50.8 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3470,7 +3514,16 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
+		(property "Description" "Power symbol creates a global label with name \"+12V\""
+			(at 118.11 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "P/N" ""
 			(at 118.11 50.8 0)
 			(effects
 				(font
