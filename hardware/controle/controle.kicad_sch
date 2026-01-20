@@ -7435,7 +7435,7 @@
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(dnp no)
+		(dnp yes)
 		(uuid "038739d5-b8c2-498e-bb3f-1cd095bd8a56")
 		(property "Reference" "R11"
 			(at 217.17 61.722 90)
@@ -7445,7 +7445,7 @@
 				)
 			)
 		)
-		(property "Value" "2.2K"
+		(property "Value" "330"
 			(at 217.1954 59.8678 90)
 			(effects
 				(font
@@ -7586,7 +7586,7 @@
 				)
 			)
 		)
-		(property "Value" "2.2K"
+		(property "Value" "330"
 			(at 217.1954 75.1078 90)
 			(effects
 				(font
@@ -7652,7 +7652,7 @@
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(dnp no)
+		(dnp yes)
 		(uuid "0c6b1b8b-6102-451d-87b9-4b9177b51311")
 		(property "Reference" "R7"
 			(at 217.17 46.482 90)
@@ -7662,7 +7662,7 @@
 				)
 			)
 		)
-		(property "Value" "2.2K"
+		(property "Value" "330"
 			(at 217.1954 44.6278 90)
 			(effects
 				(font
@@ -7893,7 +7893,7 @@
 				)
 			)
 		)
-		(property "Value" "2.2K"
+		(property "Value" "330"
 			(at 217.1954 82.7278 90)
 			(effects
 				(font
@@ -7959,7 +7959,7 @@
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(dnp no)
+		(dnp yes)
 		(uuid "17e72f6d-f9b0-49dd-a5cc-930afd023d08")
 		(property "Reference" "R9"
 			(at 217.17 54.102 90)
@@ -7969,7 +7969,7 @@
 				)
 			)
 		)
-		(property "Value" "2.2K"
+		(property "Value" "330"
 			(at 217.1954 52.2478 90)
 			(effects
 				(font
@@ -9260,7 +9260,7 @@
 				)
 			)
 		)
-		(property "Value" "2.2K"
+		(property "Value" "330"
 			(at 217.1954 56.0578 90)
 			(effects
 				(font
@@ -9336,7 +9336,7 @@
 				)
 			)
 		)
-		(property "Value" "2.2K"
+		(property "Value" "330"
 			(at 217.1954 90.3478 90)
 			(effects
 				(font
@@ -9521,7 +9521,7 @@
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(dnp no)
+		(dnp yes)
 		(uuid "74578e62-b7a8-4b91-8142-dd066e2d5bc2")
 		(property "Reference" "R13"
 			(at 217.17 73.152 90)
@@ -9531,7 +9531,7 @@
 				)
 			)
 		)
-		(property "Value" "2.2K"
+		(property "Value" "330"
 			(at 217.1954 71.2978 90)
 			(effects
 				(font
@@ -9803,7 +9803,7 @@
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(dnp no)
+		(dnp yes)
 		(uuid "8946bdf6-c42d-4ae3-8502-1035ed6a2281")
 		(property "Reference" "R15"
 			(at 217.17 80.772 90)
@@ -9813,7 +9813,7 @@
 				)
 			)
 		)
-		(property "Value" "2.2K"
+		(property "Value" "330"
 			(at 217.1954 78.9178 90)
 			(effects
 				(font
@@ -10644,7 +10644,7 @@
 				)
 			)
 		)
-		(property "Value" "2.2K"
+		(property "Value" "330"
 			(at 217.1954 63.6778 90)
 			(effects
 				(font
@@ -11238,7 +11238,7 @@
 				)
 			)
 		)
-		(property "Value" "2.2K"
+		(property "Value" "330"
 			(at 217.1954 48.4378 90)
 			(effects
 				(font
@@ -11399,7 +11399,7 @@
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(dnp no)
+		(dnp yes)
 		(uuid "ed021e9a-5e93-43bc-b60b-c5748a846729")
 		(property "Reference" "R17"
 			(at 217.17 88.392 90)
@@ -11409,7 +11409,7 @@
 				)
 			)
 		)
-		(property "Value" "2.2K"
+		(property "Value" "330"
 			(at 217.1954 86.5378 90)
 			(effects
 				(font
