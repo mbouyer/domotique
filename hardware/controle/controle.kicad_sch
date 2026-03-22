@@ -7893,7 +7893,7 @@
 				)
 			)
 		)
-		(property "Value" "330"
+		(property "Value" "1k"
 			(at 217.1954 82.7278 90)
 			(effects
 				(font
@@ -9260,7 +9260,7 @@
 				)
 			)
 		)
-		(property "Value" "330"
+		(property "Value" "1k"
 			(at 217.1954 56.0578 90)
 			(effects
 				(font

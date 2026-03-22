@@ -3947,7 +3947,7 @@
 		(path "/84cd3668-0fe7-4e30-b793-dfb1a48fec40/f8780fe8-8f28-4ee7-a1d8-c78988de0c40")
 		(sheetname "LIN")
 		(sheetfile "lin.kicad_sch")
-		(attr smd)
+		(attr smd dnp)
 		(fp_line
 			(start -3.51 1.65)
 			(end 2 1.65)
@@ -5183,7 +5183,7 @@
 				)
 			)
 		)
-		(property "Value" "330"
+		(property "Value" "1k"
 			(at 0 1.65 0)
 			(layer "F.Fab")
 			(uuid "77ed508c-9baa-4807-88f5-ef6889abc0f5")
@@ -15687,7 +15687,7 @@
 				)
 			)
 		)
-		(property "Value" "330"
+		(property "Value" "1k"
 			(at 0 1.65 0)
 			(layer "F.Fab")
 			(uuid "b664924b-24c1-497c-be65-c5e57923e5e9")
