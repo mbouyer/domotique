@@ -499,7 +499,7 @@
 				)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X4701FTL"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -665,7 +665,7 @@
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf, https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator")
 		(tags "capacitor handsolder")
 		(property "Reference" "C14"
-			(at 0 -1.68 360)
+			(at 0 -1.68 0)
 			(layer "F.SilkS")
 			(uuid "1ddb7c0e-5f7a-4402-88e5-d00a08f2519b")
 			(effects
@@ -676,7 +676,7 @@
 			)
 		)
 		(property "Value" "4.7µ"
-			(at 0 1.68 360)
+			(at 0 1.68 0)
 			(layer "F.Fab")
 			(uuid "84080f24-9e99-466e-be52-888a7e1dc689")
 			(effects
@@ -844,7 +844,7 @@
 			(uuid "98b9eea4-2dea-4aa1-a43c-27e80f1c4470")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(uuid "baeeb6c3-e65c-4e70-b09c-516c3ef434d9")
 			(effects
@@ -1782,7 +1782,7 @@
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "resistor handsolder")
 		(property "Reference" "R24"
-			(at 0 -1.65 360)
+			(at 0 -1.65 0)
 			(layer "F.SilkS")
 			(uuid "e7de3eff-5eff-4d33-b878-12df7a2f37a8")
 			(effects
@@ -1793,7 +1793,7 @@
 			)
 		)
 		(property "Value" "56K"
-			(at 0 1.65 360)
+			(at 0 1.65 0)
 			(layer "F.Fab")
 			(uuid "0bf44140-450d-4d8b-b7d8-00a82b318afd")
 			(effects
@@ -1961,7 +1961,7 @@
 			(uuid "514e22e6-ac1a-40ab-b505-66757a6de728")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(uuid "df28cda0-bb75-409a-912d-42aad8ebdd76")
 			(effects
@@ -4557,7 +4557,7 @@
 				)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X4701FTL"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -5364,7 +5364,7 @@
 				)
 			)
 		)
-		(property "Value" "100nF6.3V"
+		(property "Value" "100nF"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(uuid "ceae8fab-0118-47eb-b1e6-1c065ce0d695")
@@ -5414,7 +5414,7 @@
 				)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "CC0805KKX7RYBB104"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -9314,7 +9314,7 @@
 				)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "CC0805KKX7RYBB104"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -10458,7 +10458,7 @@
 				)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "CC0805KKX7RYBB104"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -10634,7 +10634,7 @@
 				)
 			)
 		)
-		(property "Value" "100nF6.3V"
+		(property "Value" "100nF"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(uuid "db3e2c4e-1567-4822-8e4d-5760f3ab39e2")
@@ -10684,7 +10684,7 @@
 				)
 			)
 		)
-		(property "P/N" "MC0603B104K250CT (stock)"
+		(property "P/N" "CC0805KKX7RYBB104"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -11368,7 +11368,7 @@
 				)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X4701FTL"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -12411,7 +12411,7 @@
 				)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X4701FTL"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -13494,7 +13494,7 @@
 				)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X1001FTL"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -14172,7 +14172,7 @@
 				)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X4701FTL"
 			(at 0 0 -90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -14839,7 +14839,7 @@
 				)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X4701FTL"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -17821,7 +17821,7 @@
 				(justify mirror)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X3300FTL"
 			(at 0 0 -90)
 			(unlocked yes)
 			(layer "B.Fab")
@@ -19844,7 +19844,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Value" "330"
+		(property "Value" "1K"
 			(at 0 -1.65 90)
 			(layer "B.Fab")
 			(uuid "4251b5df-09fb-42e9-985c-d3c3b604dbfc")
@@ -19898,7 +19898,7 @@
 				(justify mirror)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X1001FTL"
 			(at 0 0 -90)
 			(unlocked yes)
 			(layer "B.Fab")
@@ -20126,6 +20126,20 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "P/N" "MP008293"
+			(at 0 0 180)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "da0c8c6e-b3ac-4aef-b4ce-53a7420f7e24")
+			(effects
+				(font
+					(size 1 1)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -20627,7 +20641,7 @@
 				(justify mirror)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X3300FTL"
 			(at 0 0 -90)
 			(unlocked yes)
 			(layer "B.Fab")
@@ -20980,7 +20994,7 @@
 				(justify mirror)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X3300FTL"
 			(at 0 0 -90)
 			(unlocked yes)
 			(layer "B.Fab")
@@ -21213,7 +21227,7 @@
 				(justify mirror)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X1001FTL"
 			(at 0 0 -90)
 			(unlocked yes)
 			(layer "B.Fab")
@@ -21392,7 +21406,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Value" "330"
+		(property "Value" "1K"
 			(at 0 -1.65 90)
 			(layer "B.Fab")
 			(uuid "2ac5284b-abb7-456f-a2d3-89ce2bbf6e4e")
@@ -21446,7 +21460,7 @@
 				(justify mirror)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X1001FTL"
 			(at 0 0 -90)
 			(unlocked yes)
 			(layer "B.Fab")
@@ -21464,7 +21478,7 @@
 		(path "/0c6b1b8b-6102-451d-87b9-4b9177b51311")
 		(sheetname "Root")
 		(sheetfile "controle.kicad_sch")
-		(attr smd dnp)
+		(attr smd)
 		(fp_line
 			(start 0.227064 -0.735)
 			(end -0.227064 -0.735)
@@ -21799,6 +21813,20 @@
 				(justify mirror)
 			)
 		)
+		(property "P/N" "MP008293"
+			(at 0 0 -90)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "a45790e7-1352-40f9-899f-e1c070c81681")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
 		(property ki_fp_filters "LED* LED_SMD:* LED_THT:*")
 		(path "/84cd3668-0fe7-4e30-b793-dfb1a48fec40/40960275-df96-4c67-8e86-5da9f34f3072")
 		(sheetname "LIN")
@@ -21986,7 +22014,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Value" "330"
+		(property "Value" "1K"
 			(at 0 -1.65 90)
 			(layer "B.Fab")
 			(uuid "ecb31f54-db53-4181-99bd-7097d8f4c8bd")
@@ -22040,7 +22068,7 @@
 				(justify mirror)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X1001FTL"
 			(at 0 0 -90)
 			(unlocked yes)
 			(layer "B.Fab")
@@ -22058,7 +22086,7 @@
 		(path "/74578e62-b7a8-4b91-8142-dd066e2d5bc2")
 		(sheetname "Root")
 		(sheetfile "controle.kicad_sch")
-		(attr smd dnp)
+		(attr smd)
 		(fp_line
 			(start 0.227064 -0.735)
 			(end -0.227064 -0.735)
@@ -22273,7 +22301,7 @@
 				(justify mirror)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X3300FTL"
 			(at 0 0 -90)
 			(unlocked yes)
 			(layer "B.Fab")
@@ -24429,7 +24457,7 @@
 				(justify mirror)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X3300FTL"
 			(at 0 0 -90)
 			(unlocked yes)
 			(layer "B.Fab")
@@ -25308,7 +25336,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Value" "330"
+		(property "Value" "1K"
 			(at 0 -1.65 90)
 			(layer "B.Fab")
 			(uuid "d603d48b-008d-4c2c-a57a-b45febb9367e")
@@ -25362,7 +25390,7 @@
 				(justify mirror)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X1001FTL"
 			(at 0 0 -90)
 			(unlocked yes)
 			(layer "B.Fab")
@@ -25590,6 +25618,20 @@
 			(effects
 				(font
 					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "P/N" "MP008293"
+			(at 0 0 -90)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "aa6a4523-c563-4a89-8113-8ae7cc2db765")
+			(effects
+				(font
+					(size 1 1)
 					(thickness 0.15)
 				)
 				(justify mirror)
@@ -25836,7 +25878,7 @@
 				(justify mirror)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X1001FTL"
 			(at 0 0 -90)
 			(unlocked yes)
 			(layer "B.Fab")
@@ -26069,7 +26111,7 @@
 				(justify mirror)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X3300FTL"
 			(at 0 0 -90)
 			(unlocked yes)
 			(layer "B.Fab")

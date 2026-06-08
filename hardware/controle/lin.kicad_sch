@@ -3101,7 +3101,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X1001FTL"
 			(at 199.39 52.07 0)
 			(effects
 				(font
@@ -3171,6 +3171,15 @@
 			)
 		)
 		(property "Description" "Light emitting diode, small symbol"
+			(at 91.44 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "P/N" "MP008293"
 			(at 91.44 77.47 0)
 			(effects
 				(font
@@ -3425,7 +3434,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X4701FTL"
 			(at 167.64 57.15 0)
 			(effects
 				(font
@@ -3815,6 +3824,15 @@
 				(hide yes)
 			)
 		)
+		(property "P/N" "MP008293"
+			(at 106.68 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "b978b242-48cf-4a16-b688-baf13ced1261")
 		)
@@ -3874,6 +3892,15 @@
 			)
 		)
 		(property "Description" "Light emitting diode, small symbol"
+			(at 191.77 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "P/N" "MP008293"
 			(at 191.77 45.72 0)
 			(effects
 				(font
@@ -4032,7 +4059,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X4701FTL"
 			(at 207.01 59.69 0)
 			(effects
 				(font

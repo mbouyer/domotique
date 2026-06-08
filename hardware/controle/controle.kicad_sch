@@ -7619,7 +7619,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X3300FTL"
 			(at 217.17 59.69 0)
 			(effects
 				(font
@@ -7725,7 +7725,7 @@
 				)
 			)
 		)
-		(property "Value" "330"
+		(property "Value" "1K"
 			(at 217.1954 75.1078 90)
 			(effects
 				(font
@@ -7760,7 +7760,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X1001FTL"
 			(at 217.17 74.93 0)
 			(effects
 				(font
@@ -7791,7 +7791,7 @@
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(dnp yes)
+		(dnp no)
 		(uuid "0c6b1b8b-6102-451d-87b9-4b9177b51311")
 		(property "Reference" "R1"
 			(at 217.17 46.482 90)
@@ -7801,7 +7801,7 @@
 				)
 			)
 		)
-		(property "Value" "330"
+		(property "Value" "1K"
 			(at 217.1954 44.6278 90)
 			(effects
 				(font
@@ -7836,7 +7836,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X1001FTL"
 			(at 217.17 44.45 0)
 			(effects
 				(font
@@ -7991,7 +7991,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X4701FTL"
 			(at 123.19 71.12 0)
 			(effects
 				(font
@@ -8067,7 +8067,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X1001FTL"
 			(at 217.17 82.55 0)
 			(effects
 				(font
@@ -8143,7 +8143,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X3300FTL"
 			(at 217.17 52.07 0)
 			(effects
 				(font
@@ -8543,7 +8543,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X4701FTL"
 			(at 119.38 69.85 0)
 			(effects
 				(font
@@ -9195,7 +9195,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X4701FTL"
 			(at 114.3 50.8 0)
 			(effects
 				(font
@@ -9562,7 +9562,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X1001FTL"
 			(at 217.17 55.88 0)
 			(effects
 				(font
@@ -9702,7 +9702,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X3300FTL"
 			(at 217.17 90.17 0)
 			(effects
 				(font
@@ -9852,7 +9852,7 @@
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(dnp yes)
+		(dnp no)
 		(uuid "74578e62-b7a8-4b91-8142-dd066e2d5bc2")
 		(property "Reference" "R11"
 			(at 217.17 73.152 90)
@@ -9862,7 +9862,7 @@
 				)
 			)
 		)
-		(property "Value" "330"
+		(property "Value" "1K"
 			(at 217.1954 71.2978 90)
 			(effects
 				(font
@@ -9897,7 +9897,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X1001FTL"
 			(at 217.17 71.12 0)
 			(effects
 				(font
@@ -10111,7 +10111,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X4701FTL"
 			(at 119.38 52.07 0)
 			(effects
 				(font
@@ -10316,7 +10316,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X3300FTL"
 			(at 217.17 78.74 0)
 			(effects
 				(font
@@ -10358,7 +10358,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100nF6.3V"
+		(property "Value" "100nF"
 			(at 57.15 115.57 90)
 			(effects
 				(font
@@ -10393,7 +10393,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "CC0805KKX7RYBB104"
 			(at 90.17 63.5 0)
 			(effects
 				(font
@@ -11147,7 +11147,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X3300FTL"
 			(at 217.17 63.5 0)
 			(effects
 				(font
@@ -11706,7 +11706,7 @@
 				)
 			)
 		)
-		(property "Value" "330"
+		(property "Value" "1K"
 			(at 217.1954 48.4378 90)
 			(effects
 				(font
@@ -11741,7 +11741,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X1001FTL"
 			(at 217.17 48.26 0)
 			(effects
 				(font
@@ -11976,7 +11976,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X3300FTL"
 			(at 217.17 86.36 0)
 			(effects
 				(font

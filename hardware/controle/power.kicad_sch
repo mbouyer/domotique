@@ -3083,7 +3083,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100nF6.3V"
+		(property "Value" "100nF"
 			(at 146.05 74.93 90)
 			(effects
 				(font
@@ -3118,7 +3118,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "MC0603B104K250CT (stock)"
+		(property "P/N" "CC0805KKX7RYBB104"
 			(at 179.07 27.94 0)
 			(effects
 				(font

@@ -2617,7 +2617,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "CC0805KKX7RYBB104"
 			(at 101.6 88.9 0)
 			(effects
 				(font
@@ -3774,7 +3774,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "CC0805KKX7RYBB104"
 			(at 153.67 88.9 0)
 			(effects
 				(font
