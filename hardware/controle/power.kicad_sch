@@ -4700,7 +4700,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "Red"
+		(property "Value" "RED"
 			(at 114.681 125.9896 90)
 			(effects
 				(font
