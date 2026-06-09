@@ -275,7 +275,7 @@
 				)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X2201FTL"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -727,7 +727,7 @@
 				)
 			)
 		)
-		(property "P/N" "CL21A475KPFNNNE"
+		(property "P/N" "08053C475KAT2A"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -1618,7 +1618,7 @@
 				)
 			)
 		)
-		(property "P/N" "C3225X5R1E106K250AA (stock)"
+		(property "P/N" "GRM21BC8YA106KE11L"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -1844,7 +1844,7 @@
 				)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X5602FTL"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -2778,7 +2778,7 @@
 				)
 			)
 		)
-		(property "P/N" "CGA3E1X7R1V105K080AC (stock)"
+		(property "P/N" "CGA3E1X7R1V105K080AC"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -3004,7 +3004,7 @@
 				)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X2201FTL"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -3554,7 +3554,7 @@
 				)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X5602FTL"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -4333,7 +4333,7 @@
 				)
 			)
 		)
-		(property "P/N" "C0805C105K3RACTU ou 08053C105KAT9A (stock)"
+		(property "P/N" "C0805C105K3RACTU ou 08053C105KAT9A"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -4911,7 +4911,7 @@
 				)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X5602FTL"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -5642,7 +5642,7 @@
 				)
 			)
 		)
-		(property "P/N" "C3225X5R1E106K250AA (stock)"
+		(property "P/N" "GRM21BC8YA106KE11L"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -8231,7 +8231,7 @@
 				)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X5602FTL"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -9090,7 +9090,7 @@
 				)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X1002FTL"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -9542,7 +9542,7 @@
 				)
 			)
 		)
-		(property "P/N" "C3225X5R1A226M230AA/CL31A226KAHNNN (stock)"
+		(property "P/N" "C3225X5R1A226M230AA/CL31A226KAHNNN"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -9768,7 +9768,7 @@
 				)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X1002FTL"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -10120,7 +10120,7 @@
 				)
 			)
 		)
-		(property "P/N" "C3225X5R1A226M230AA/CL31A226KAHNNN (stock)"
+		(property "P/N" "C3225X5R1A226M230AA/CL31A226KAHNNN"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -11144,7 +11144,7 @@
 				)
 			)
 		)
-		(property "P/N" "CL21A475KPFNNNE"
+		(property "P/N" "08053C475KAT2A"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -11596,7 +11596,7 @@
 				)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X1002FTL"
 			(at 0 0 -90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -13270,7 +13270,7 @@
 				)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X1002FTL"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -13722,7 +13722,7 @@
 				)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X5602FTL"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -13948,7 +13948,7 @@
 				)
 			)
 		)
-		(property "P/N" "GRM188R71H682KA01D (stock)"
+		(property "P/N" "C0603C682K5R"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -15678,7 +15678,7 @@
 				(justify mirror)
 			)
 		)
-		(property "P/N" "87437-0543"
+		(property "P/N" ""
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "B.Fab")
@@ -20334,7 +20334,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Value" "Red"
+		(property "Value" "RED"
 			(at 0 -1.65 90)
 			(layer "B.Fab")
 			(uuid "2f12b112-e11e-409d-bd50-9af2198a5f42")

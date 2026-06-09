@@ -2945,7 +2945,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X5602FTL"
 			(at 83.82 93.98 0)
 			(effects
 				(font
@@ -3594,7 +3594,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "C0805C105K3RACTU ou 08053C105KAT9A (stock)"
+		(property "P/N" "C0805C105K3RACTU ou 08053C105KAT9A"
 			(at 154.94 58.42 0)
 			(effects
 				(font
@@ -3670,7 +3670,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X2201FTL"
 			(at 96.52 64.77 0)
 			(effects
 				(font
@@ -3746,7 +3746,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X2201FTL"
 			(at 113.03 69.85 0)
 			(effects
 				(font
@@ -4135,7 +4135,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X5602FTL"
 			(at 99.06 95.25 0)
 			(effects
 				(font

@@ -2530,7 +2530,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "87437-0543"
+		(property "P/N" ""
 			(at 109.22 74.93 0)
 			(effects
 				(font
@@ -2871,7 +2871,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X1002FTL"
 			(at 109.22 95.25 0)
 			(effects
 				(font
@@ -3248,7 +3248,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X1002FTL"
 			(at 101.6 83.82 0)
 			(effects
 				(font
@@ -3399,7 +3399,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X1002FTL"
 			(at 88.9 134.62 0)
 			(effects
 				(font

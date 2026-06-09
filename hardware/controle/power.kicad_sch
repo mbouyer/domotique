@@ -3041,7 +3041,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "CGA3E1X7R1V105K080AC (stock)"
+		(property "P/N" "CGA3E1X7R1V105K080AC"
 			(at 92.71 92.71 0)
 			(effects
 				(font
@@ -3195,7 +3195,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "C3225X5R1E106K250AA (stock)"
+		(property "P/N" "GRM21BC8YA106KE11L"
 			(at 83.82 76.2 0)
 			(effects
 				(font
@@ -3272,7 +3272,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X5602FTL"
 			(at 148.59 87.63 0)
 			(effects
 				(font
@@ -3349,7 +3349,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "C3225X5R1E106K250AA (stock)"
+		(property "P/N" "GRM21BC8YA106KE11L"
 			(at 83.82 86.36 0)
 			(effects
 				(font
@@ -3522,7 +3522,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X1002FTL"
 			(at 144.78 96.52 0)
 			(effects
 				(font
@@ -3599,7 +3599,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "C3225X5R1A226M230AA/CL31A226KAHNNN (stock)"
+		(property "P/N" "C3225X5R1A226M230AA/CL31A226KAHNNN"
 			(at 250.19 109.22 0)
 			(effects
 				(font
@@ -3830,7 +3830,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "CL21A475KPFNNNE"
+		(property "P/N" "08053C475KAT2A"
 			(at 74.93 125.73 0)
 			(effects
 				(font
@@ -3907,7 +3907,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X5602FTL"
 			(at 86.36 72.39 90)
 			(effects
 				(font
@@ -4125,7 +4125,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "stock"
+		(property "P/N" "MCWR08X5602FTL"
 			(at 86.36 91.44 90)
 			(effects
 				(font
@@ -4204,7 +4204,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "CL21A475KPFNNNE"
+		(property "P/N" "08053C475KAT2A"
 			(at 99.06 125.73 0)
 			(effects
 				(font
@@ -4281,7 +4281,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "GRM188R71H682KA01D (stock)"
+		(property "P/N" "C0603C682K5R"
 			(at 100.33 54.61 0)
 			(effects
 				(font
@@ -4813,7 +4813,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "C3225X5R1A226M230AA/CL31A226KAHNNN (stock)"
+		(property "P/N" "C3225X5R1A226M230AA/CL31A226KAHNNN"
 			(at 224.79 109.22 0)
 			(effects
 				(font
