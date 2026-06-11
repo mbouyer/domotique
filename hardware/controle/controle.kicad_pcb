@@ -1794,7 +1794,7 @@
 				)
 			)
 		)
-		(property "Value" "56K"
+		(property "Value" "47K"
 			(at 0 1.65 0)
 			(layer "F.Fab")
 			(uuid "0bf44140-450d-4d8b-b7d8-00a82b318afd")
@@ -1844,7 +1844,7 @@
 				)
 			)
 		)
-		(property "P/N" "MCWR08X5602FTL"
+		(property "P/N" "MCWR08X4702FTL"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -3504,7 +3504,7 @@
 				)
 			)
 		)
-		(property "Value" "56K"
+		(property "Value" "47K"
 			(at 0 1.65 0)
 			(layer "F.Fab")
 			(uuid "8fd478aa-fc95-4fc5-860b-34bb5e432dd7")
@@ -3554,7 +3554,7 @@
 				)
 			)
 		)
-		(property "P/N" "MCWR08X5602FTL"
+		(property "P/N" "MCWR08X4702FTL"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -4861,7 +4861,7 @@
 				)
 			)
 		)
-		(property "Value" "56K"
+		(property "Value" "47K"
 			(at 0 1.65 0)
 			(layer "F.Fab")
 			(uuid "268e2ab3-732c-4b57-a55a-4a5a82b1872d")
@@ -4911,7 +4911,7 @@
 				)
 			)
 		)
-		(property "P/N" "MCWR08X5602FTL"
+		(property "P/N" "MCWR08X4702FTL"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -8181,7 +8181,7 @@
 				)
 			)
 		)
-		(property "Value" "56K"
+		(property "Value" "47K"
 			(at 0 1.65 0)
 			(layer "F.Fab")
 			(uuid "dad99989-f9e1-47c6-b1b3-ba00561d8caf")
@@ -8231,7 +8231,7 @@
 				)
 			)
 		)
-		(property "P/N" "MCWR08X5602FTL"
+		(property "P/N" "MCWR08X4702FTL"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")

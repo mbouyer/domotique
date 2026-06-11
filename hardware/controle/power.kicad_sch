@@ -3872,7 +3872,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "56K"
+		(property "Value" "47K"
 			(at 83.82 71.12 90)
 			(effects
 				(font
@@ -3907,7 +3907,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "MCWR08X5602FTL"
+		(property "P/N" "MCWR08X4702FTL"
 			(at 86.36 72.39 90)
 			(effects
 				(font
@@ -4090,7 +4090,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "56K"
+		(property "Value" "47K"
 			(at 83.82 90.17 90)
 			(effects
 				(font
@@ -4125,7 +4125,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "MCWR08X5602FTL"
+		(property "P/N" "MCWR08X4702FTL"
 			(at 86.36 91.44 90)
 			(effects
 				(font
