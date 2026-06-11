@@ -3118,7 +3118,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "CC0805KKX7RYBB104"
+		(property "P/N" "C0603C104K5RAC7411"
 			(at 179.07 27.94 0)
 			(effects
 				(font
@@ -5030,7 +5030,7 @@
 				(hide yes)
 			)
 		)
-		(property "P/N" "C0603C100J5ACTU"
+		(property "P/N" "C0603C100J5GACTU"
 			(at 148.59 92.71 0)
 			(effects
 				(font

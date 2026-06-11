@@ -5416,7 +5416,7 @@
 				)
 			)
 		)
-		(property "P/N" "CC0805KKX7RYBB104"
+		(property "P/N" "C0603C104K5RAC7411"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -9316,7 +9316,7 @@
 				)
 			)
 		)
-		(property "P/N" "CC0805KKX7RYBB104"
+		(property "P/N" "C0603C104K5RAC7411"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -10460,7 +10460,7 @@
 				)
 			)
 		)
-		(property "P/N" "CC0805KKX7RYBB104"
+		(property "P/N" "C0603C104K5RAC7411"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -10686,7 +10686,7 @@
 				)
 			)
 		)
-		(property "P/N" "CC0805KKX7RYBB104"
+		(property "P/N" "C0603C104K5RAC7411"
 			(at 0 0 180)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -12639,7 +12639,7 @@
 				)
 			)
 		)
-		(property "P/N" "C0603C100J5ACTU"
+		(property "P/N" "C0603C100J5GACTU"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
