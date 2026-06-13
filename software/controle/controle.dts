@@ -1,0 +1,74 @@
+/*
+ * Overlay for the controle board
+ */
+
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "olimex,a20-olinuxino-lime2", "olimex,a20-olinuxino-lime2-emmc";
+
+	fragment@0 {
+		target = <&pio>;
+		__overlay__ {
+			i2c4_pins: i2c4-pins {
+				pins = "PI2", "PI3";
+				function = "i2c4";
+			};
+			uart2_pi_pins: uart2-pi-pins {
+				pins = "PI18", "PI19";
+				function = "uart2";
+			};
+			uart5_pi_pins: uart5-pi-pins {
+				pins = "PI10", "PI11";
+				function = "uart5";
+			};
+		};
+	};
+
+	fragment@1 {
+		target = <&uart2>;
+		__overlay__ {
+			pinctrl-names = "default";
+			pinctrl-0 = <&uart2_pi_pins>;
+			status = "okay";
+		};
+	};
+
+	fragment@2 {
+		target = <&i2c4>;
+		__overlay__ {
+			pinctrl-names = "default";
+			pinctrl-0 = <&i2c4_pins>;
+			status = "okay";
+		};
+	};
+
+	fragment@3 {
+		target = <&uart5>;
+		__overlay__ {
+			pinctrl-names = "default";
+			pinctrl-0 = <&uart5_pi_pins>;
+			status = "okay";
+		};
+	};
+	fragment@4 {
+		target = <&i2c0>;
+		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			dsrtc: dsrtc@6f {
+				compatible = "microchip,mcp7940";
+				reg = <0x6f>;
+			};
+		};
+	};
+
+	fragment@5 {
+		target = <&rtc>;
+		__overlay__ {
+			status = "disabled";
+		};
+	};
+
+};
