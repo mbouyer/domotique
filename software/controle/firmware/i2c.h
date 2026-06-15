@@ -25,27 +25,27 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#define I2C_INIT { \
+#define I2C_INIT(adr) { \
 	RC0I2C = 0x41; /* I2C fast slew-rate, no pull-up, i2c threshold */ \
 	RC1I2C = 0x41; /* I2C fast slew-rate, no pull-up, i2c threshold */ \
-	RC1PPS = 0x21; /* SCL */ \
-	RC0PPS = 0x22; /* SDA */ \
-	I2C1SCLPPS = 0x11; /* RC1 */ \
-	I2C1SDAPPS = 0x10; /* RC0 */ \
+	RC0PPS = 0x21; /* SCL */ \
+	RC1PPS = 0x22; /* SDA */ \
+	I2C1SCLPPS = 0x10; /* RC0 */ \
+	I2C1SDAPPS = 0x11; /* RC1 */ \
 	ODCONCbits.ODCC0 = 1; \
 	ODCONCbits.ODCC1 = 1; \
 	LATCbits.LATC0 = 1; \
 	LATCbits.LATC1 = 1; \
 	TRISCbits.TRISC0 = 0; \
 	TRISCbits.TRISC1 = 0; \
-	I2C1CON0 = 0x04; /* On, 7 bits I2C host mode */ \
-	I2C1CON1 = 0; \
+	I2C1CON0 = 0x00; /* 7 bits I2C client mode */ \
+	I2C1CON1 = 0x80; /* ACKCNT */ \
 	I2C1CON2 = 0; /* address buffer enabled */ \
-	I2C1CLK = 3; /* clock = mfintosc  (500khz) */ \
-	I2C1BAUD = 0; /* prescale = 1 */ \
+	I2C1ADR0 = ((adr) << 1); /* set address */ \
+	I2C1ADR1 = ((adr) << 1); /* set address */ \
+	I2C1ADR2 = ((adr) << 1); /* set address */ \
+	I2C1ADR3 = ((adr) << 1); /* set address */ \
 	I2C1CON0bits.EN = 1; \
     }
 
-char i2c_readreg(const uint8_t address, uint16_t reg, uint8_t *data, uint8_t size);
-char i2c_readreg_be(const uint8_t address, uint16_t reg, uint8_t *data, uint8_t size);
-char i2c_writereg(const uint8_t address, uint16_t reg, uint8_t *data, uint8_t size);
+uint8_t i2c_values[2];

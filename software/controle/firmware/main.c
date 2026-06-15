@@ -174,8 +174,8 @@ main(void)
 	ANSELC = 0;
 	ANSELA = 0x10; /* RA4 analog, others digital */
 
-	TRISA |= (O_VCPU_EN);
 	LATA = O_VCPU_EN;
+	TRISA &= ~O_VCPU_EN;
 
 	LATC = 0;
 	/* I2C and GPIOs as outout */
@@ -247,7 +247,7 @@ main(void)
 	IPR3bits.TMR2IP = 1; /* high priority interrupt */
 	PIE3bits.TMR2IE = 1;
 
-	/* I2C_INIT; */
+	I2C_INIT(0x22);
 
 	INTCON0bits.GIEH=1;  /* enable high-priority interrupts */   
 	INTCON0bits.GIEL=1; /* enable low-priority interrrupts */   
@@ -298,9 +298,9 @@ again:
 			if (/*debug_out.bits.adc*/ 1) 
 				printf("adcc 0x%x 0x%lx, 0x%x 0x%x 0x%x\n",
 				 ADRES, (uint32_t)ADACC, ADCNT, ADSTAT, ADCON0);
+			i2c_values[0] = ADACC & 0xff;
+			i2c_values[1] = (ADACC >> 8) & 0xff;
 			ADCON2bits.ACLR = 1;
-			if (/* debug_out.bits.adc */ 1) 
-				printf(" %lu\n", (uint32_t)adr);
 			softintrs.bits.int_adcc = 0;
 		}
 		if (softintrs.bits.int_100hz) {
