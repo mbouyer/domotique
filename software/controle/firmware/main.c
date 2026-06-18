@@ -281,6 +281,19 @@ main(void)
 
 again:
 	while (1) {
+		if (i2csoftintrs.bits.i2c_i) {
+			printf("i2ci 0x%x\n", i2c_pir);
+		}
+		if (i2csoftintrs.bits.i2c_irx) {
+			printf("i2crx 0x%x\n", i2c_cnt);
+		}
+		if (i2csoftintrs.bits.i2c_itx) {
+			printf("i2ctx 0x%x\n", i2c_cnt);
+		}
+		if (i2csoftintrs.bits.i2c_ie) {
+			printf("i2ce 0x%x\n", i2c_err);
+		}
+		i2csoftintrs.byte = 0;
 		if (PORTAbits.RA0) {
 			uout.bits.debug_present = 1;
 			PIE8bits.U2RXIE = 1;
@@ -300,6 +313,7 @@ again:
 				 ADRES, (uint32_t)ADACC, ADCNT, ADSTAT, ADCON0);
 			i2c_values[0] = ADACC & 0xff;
 			i2c_values[1] = (ADACC >> 8) & 0xff;
+			i2c_values[2]++;
 			ADCON2bits.ACLR = 1;
 			softintrs.bits.int_adcc = 0;
 		}
@@ -322,6 +336,14 @@ again:
 		if (time_events.bits.ev_1hz) {
 			ADCON0bits.GO = 1;
 			seconds++;
+			if ((seconds % 10) == 0) {
+				printf("i2c 0x%x 0x%x 0x%x 0x%x 0x%x\n",
+				    I2C1CNTL,
+				    I2C1ERR,
+				    I2C1CON1,
+				    I2C1STAT0,
+				    I2C1STAT1);
+			}
 		}
 
 		if (uart_softintrs.bits.uart2_line1) {

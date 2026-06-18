@@ -30,11 +30,21 @@
 #include <stdlib.h>
 #include <i2c.h>
 
-#if 1
+#define DEBUG 1
+
+#ifdef DEBUG
 #define DPRINTF(x) printf x
 #else
 #define DPRINTF(x) /**/
 #endif
+
+uint8_t i2c_values[N_I2CREGS];
+uint8_t i2c_reg;
+
+uint8_t i2c_pir;
+uint8_t i2c_cnt;
+uint8_t i2c_err;
+volatile union i2csoftintrs i2csoftintrs;
 
 static void i2c_status(void);
 
@@ -44,4 +54,50 @@ i2c_status(void)
 	printf("CON 0x%x 0x%x 0x%x", I2C1CON0, I2C1CON1, I2C1CON2);
 	printf(" STAT 0x%x 0x%x PIR 0x%x", I2C1STAT0, I2C1STAT1, I2C1PIR);
 	printf(" ERR 0x%x CNT 0x%x 0x%x\n", I2C1ERR, I2C1CNTH, I2C1CNTL);
+}
+
+void __interrupt(__irq(IRQ_I2C1), __low_priority, base(IVECT_BASE))
+irqh_i2c(void)
+{
+	if (I2C1PIRbits.SCIF) {
+		i2c_reg = 0;
+		I2C1CNTL = N_I2CREGS + 1;
+	} else {
+		i2c_pir = I2C1PIR;
+		i2csoftintrs.bits.i2c_i = 1;
+	}
+	I2C1PIR = 0;
+}
+
+void __interrupt(__irq(IRQ_I2C1RX), __low_priority, base(IVECT_BASE))
+irqh_i2crx(void)
+{
+	i2c_cnt = (I2C1CNTL | 0x80);
+	i2csoftintrs.bits.i2c_irx = 1;
+	if (I2C1CNTL == N_I2CREGS) {
+		i2c_reg = I2C1RXB;
+		i2c_reg = i2c_reg % N_I2CREGS;
+		I2C1CNTL = N_I2CREGS - i2c_reg;
+		i2c_cnt = N_I2CREGS - i2c_reg;
+	} else {
+		i2c_values[i2c_reg] = I2C1RXB;
+		i2c_reg = (i2c_reg + 1) % N_I2CREGS;
+	}
+}
+
+void __interrupt(__irq(IRQ_I2C1TX), __low_priority, base(IVECT_BASE))
+irqh_i2ctx(void)
+{
+	i2c_cnt = I2C1CNTL;
+	i2csoftintrs.bits.i2c_itx = 1;
+	I2C1TXB = i2c_values[i2c_reg];
+	i2c_reg = (i2c_reg + 1) % N_I2CREGS;
+}
+
+void __interrupt(__irq(IRQ_I2C1E), __low_priority, base(IVECT_BASE))
+irqh_i2ce(void)
+{
+	i2c_err = I2C1ERR;
+	i2csoftintrs.bits.i2c_ie = 1;
+	I2C1ERR = 0x07;
 }

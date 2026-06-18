@@ -26,6 +26,7 @@
  */
 
 #define I2C_INIT(adr) { \
+	i2csoftintrs.byte = 0; \
 	RC0I2C = 0x41; /* I2C fast slew-rate, no pull-up, i2c threshold */ \
 	RC1I2C = 0x41; /* I2C fast slew-rate, no pull-up, i2c threshold */ \
 	RC0PPS = 0x21; /* SCL */ \
@@ -45,7 +46,30 @@
 	I2C1ADR1 = ((adr) << 1); /* set address */ \
 	I2C1ADR2 = ((adr) << 1); /* set address */ \
 	I2C1ADR3 = ((adr) << 1); /* set address */ \
+	I2C1PIR = 0; \
+	I2C1PIE = 0x01; /* interrupt on start condition */\
+	I2C1ERR = 0x07; /* interrupt on all errors */\
+	PIE7bits.I2C1IE = 1; \
+	PIE7bits.I2C1TXIE = 1; \
+	PIE7bits.I2C1RXIE = 1; \
+	PIE7bits.I2C1EIE = 1; \
 	I2C1CON0bits.EN = 1; \
+	I2C1STAT1bits.CLRBF = 1; \
     }
 
-uint8_t i2c_values[2];
+#define N_I2CREGS 3
+extern uint8_t i2c_values[N_I2CREGS];
+
+extern uint8_t i2c_pir;
+extern uint8_t i2c_cnt;
+extern uint8_t i2c_err;
+
+volatile union i2csoftintrs {
+        struct i2csoftintrs_bits {
+		char i2c_i : 1;   
+		char i2c_irx : 1;
+		char i2c_itx : 1;
+		char i2c_ie : 1;
+	} bits;
+	char byte;
+} i2csoftintrs;
