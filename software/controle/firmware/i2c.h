@@ -66,7 +66,8 @@ extern uint8_t i2c_values_wr[N_I2CREGS];
 extern volatile uint8_t i2c_writes;
 
 extern uint8_t i2c_pir;
-extern uint8_t i2c_cnt;
+extern uint8_t i2c_rxi;
+extern uint8_t i2c_txi;
 extern uint8_t i2c_err;
 
 extern volatile union i2csoftintrs {

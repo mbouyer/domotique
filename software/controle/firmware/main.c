@@ -315,10 +315,10 @@ again:
 			printf("i2ci 0x%x\n", i2c_pir);
 		}
 		if (i2csoftintrs.bits.i2c_irx) {
-			printf("i2crx 0x%x\n", i2c_cnt);
+			printf("i2crx 0x%x\n", i2c_rxi);
 		}
 		if (i2csoftintrs.bits.i2c_itx) {
-			printf("i2ctx 0x%x\n", i2c_cnt);
+			printf("i2ctx 0x%x\n", i2c_txi);
 		}
 		if (i2csoftintrs.bits.i2c_ie) {
 			printf("i2ce 0x%x\n", i2c_err);
@@ -401,6 +401,7 @@ again:
 
 		I2C_LOCK;
 		if (i2c_writes) {
+			printf("i2c_writes 0x%x\n", i2c_writes);
 			if (i2c_writes & (1 << CI2C_R_PWROFF0)) {
 				if (i2c_values_wr[CI2C_R_PWROFF0] ==
 				    CI2C_R_PWROFF0_MAGIC && vcpu_off_req == 0) {
