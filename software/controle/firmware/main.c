@@ -92,7 +92,7 @@ uint8_t timer_cpu_off;
 uint8_t timer_cpu_off_req;
 uint8_t timer_cpu_on;
 
-#define VCPU_OFF_DELAY 10
+#define VCPU_OFF_DELAY 20
 #define VCPU_ON_DELAY 10
 
 
