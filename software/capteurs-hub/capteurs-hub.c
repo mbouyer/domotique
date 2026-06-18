@@ -103,7 +103,6 @@ static struct clients_fds {
 static int nclients = 0;
 
 static int lin_fd, iic_fd;
-static FILE *lin_f;
 
 enum lin_state { 
 	IDLE,
@@ -248,14 +247,31 @@ lin_write_and_check(uint8_t c)
 	struct pollfd fd[1];
 	uint8_t b;
 
+	/* flush RX buffer */
+	while (1) {
+		if (poll(fd, 1, 20) < 0) {
+			mylog(LOG_ERR, "lin 0x%x flush poll: %s",
+			    c, strerror(errno));
+			return -1;
+		}
+		if ((fd[0].revents & POLLRDNORM) == 0) {
+			break;
+		}
+		if (read(lin_fd, &b, 1) != 1) {
+			mylog(LOG_ERR, "lin 0x%x flush read: %s",
+			    c, strerror(errno));
+			return -1;
+		}
+	}
+
 	if (write(lin_fd, &c, 1) != 1) {
 		mylog(LOG_ERR, "LIN send 0x%x: %s", c, strerror(errno));
 		return -1;
 	}
-	/* read back, wait 10ms */
+	/* read back, wait 20ms */
 	fd[0].fd = lin_fd;
 	fd[0].events = POLLRDNORM;
-	if (poll(fd, 1, 10) < 0) {
+	if (poll(fd, 1, 20) < 0) {
 		mylog(LOG_ERR, "lin 0x%x back poll: %s", c, strerror(errno));
 		return -1;
 	}
@@ -578,7 +594,6 @@ getgroup:
 
 	unlink(SOCKET_PATH);
 	lin_fd = -1;
-	lin_f = NULL;
 
 	/* need to open with O_NONBLOCK, util we set CLOCAL */
 	lin_fd = open(argv[0], O_RDWR | O_NOCTTY | O_NONBLOCK);
@@ -608,10 +623,6 @@ getgroup:
 	if (fcntl(lin_fd, F_SETFL, i & ~O_NONBLOCK) < 0) {
 		err(1, "F_SETFL %s", argv[0]);
 	}
-
-	lin_f = fdopen(lin_fd, "w+");
-	if (lin_f == NULL)
-		err(1, "fopen %s", argv[1]);
 
 	iic_fd = open(argv[1], O_RDWR);
 
