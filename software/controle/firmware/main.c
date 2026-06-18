@@ -85,6 +85,12 @@ static int16_t lux;
 #define VCPU_EN	LATAbits.LATA2
 #define O_I2C   (u_char)0x03 /* RC0, RC1 */
 
+uint8_t timer_cpu_off;
+uint8_t timer_cpu_on;
+
+#define VCPU_OFF_DELAY 10
+#define VCPU_ON_DELAY 10
+
 static union uout {
 	struct _uout {
 		char debug_present : 1;
@@ -174,7 +180,17 @@ main(void)
 	ANSELC = 0;
 	ANSELA = 0x10; /* RA4 analog, others digital */
 
-	LATA = O_VCPU_EN;
+	timer_cpu_off = 0;
+	LATA = 0;
+	if (PCON0bits.nBOR == 0 || PCON0bits.nPOR == 0) {
+		/* power on or brown out reset */
+		VCPU_EN = 0;
+		timer_cpu_on = VCPU_ON_DELAY;
+	} else {
+		VCPU_EN = 1;
+		timer_cpu_on = 0 ;
+	}
+	PCON0 = 0x3f;
 	TRISA &= ~O_VCPU_EN;
 
 	LATC = 0;
@@ -343,6 +359,20 @@ again:
 				    I2C1CON1,
 				    I2C1STAT0,
 				    I2C1STAT1);
+			}
+			if (timer_cpu_off != 0) {
+				timer_cpu_off--;
+				if (timer_cpu_off == 0) {
+					printf("CPU power off\n");
+					VCPU_EN = 0;
+				}
+			}
+			if (timer_cpu_on != 0) {
+				timer_cpu_on--;
+				if (timer_cpu_on == 0) {
+					printf("CPU power on\n");
+					VCPU_EN = 1;
+				}
 			}
 		}
 
