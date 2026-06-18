@@ -8,7 +8,7 @@ CC+= -mcodeoffset=${ROM_BASE} -mreserve=rom@0x5000:0xfffff -mreserve=ram@0x0d00:
 CFLAGS= -DIVECT_BASE=${IVECT_BASE} -I${.CURDIR} -I${.CURDIR}/../../../pic18_n2k
 CFLAGS+= -DN2K_PRINTF
 OBJECTS= main.p1 serial.p1 i2c.p1
-HEADERS= serial.h vers.h i2c.h
+HEADERS= serial.h vers.h i2c.h i2c_api.h
 
 all: controle.bin
 

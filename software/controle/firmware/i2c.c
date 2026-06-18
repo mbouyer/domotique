@@ -39,6 +39,8 @@
 #endif
 
 uint8_t i2c_values[N_I2CREGS];
+uint8_t i2c_values_wr[N_I2CREGS];
+volatile uint8_t i2c_writes;
 uint8_t i2c_reg;
 
 uint8_t i2c_pir;
@@ -61,7 +63,7 @@ irqh_i2c(void)
 {
 	if (I2C1PIRbits.SCIF) {
 		i2c_reg = 0;
-		I2C1CNTL = N_I2CREGS + 1;
+		I2C1CNTL = 0xff;
 	} else {
 		i2c_pir = I2C1PIR;
 		i2csoftintrs.bits.i2c_i = 1;
@@ -72,15 +74,16 @@ irqh_i2c(void)
 void __interrupt(__irq(IRQ_I2C1RX), __low_priority, base(IVECT_BASE))
 irqh_i2crx(void)
 {
-	i2c_cnt = (I2C1CNTL | 0x80);
+#if 0
+	i2c_cnt = I2C1CNTL;
 	i2csoftintrs.bits.i2c_irx = 1;
-	if (I2C1CNTL == N_I2CREGS) {
+#endif
+	if (I2C1CNTL == 0xfe) {
 		i2c_reg = I2C1RXB;
 		i2c_reg = i2c_reg % N_I2CREGS;
-		I2C1CNTL = N_I2CREGS - i2c_reg;
-		i2c_cnt = N_I2CREGS - i2c_reg;
 	} else {
-		i2c_values[i2c_reg] = I2C1RXB;
+		i2c_values_wr[i2c_reg] = I2C1RXB;
+		i2c_writes |= (0x01 << i2c_reg);
 		i2c_reg = (i2c_reg + 1) % N_I2CREGS;
 	}
 }
@@ -88,8 +91,10 @@ irqh_i2crx(void)
 void __interrupt(__irq(IRQ_I2C1TX), __low_priority, base(IVECT_BASE))
 irqh_i2ctx(void)
 {
+#if 0
 	i2c_cnt = I2C1CNTL;
 	i2csoftintrs.bits.i2c_itx = 1;
+#endif
 	I2C1TXB = i2c_values[i2c_reg];
 	i2c_reg = (i2c_reg + 1) % N_I2CREGS;
 }

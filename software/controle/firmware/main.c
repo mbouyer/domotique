@@ -31,6 +31,7 @@
 #include <stdlib.h> 
 #include "serial.h"
 #include "i2c.h"
+#include "i2c_api.h"
 #include "vers.h"
 
 typedef unsigned char u_char;
@@ -85,11 +86,15 @@ static int16_t lux;
 #define VCPU_EN	LATAbits.LATA2
 #define O_I2C   (u_char)0x03 /* RC0, RC1 */
 
+uint8_t vcpu_off_req;
+
 uint8_t timer_cpu_off;
+uint8_t timer_cpu_off_req;
 uint8_t timer_cpu_on;
 
 #define VCPU_OFF_DELAY 10
 #define VCPU_ON_DELAY 10
+
 
 static union uout {
 	struct _uout {
@@ -181,6 +186,8 @@ main(void)
 	ANSELA = 0x10; /* RA4 analog, others digital */
 
 	timer_cpu_off = 0;
+	timer_cpu_off_req = 0;
+	vcpu_off_req = 0;
 	LATA = 0;
 	if (PCON0bits.nBOR == 0 || PCON0bits.nPOR == 0) {
 		/* power on or brown out reset */
@@ -263,7 +270,14 @@ main(void)
 	IPR3bits.TMR2IP = 1; /* high priority interrupt */
 	PIE3bits.TMR2IE = 1;
 
-	I2C_INIT(0x22);
+	for (c = 0; c < N_I2CREGS; c++) {
+		i2c_values[c] = 0;
+	}
+	i2c_writes = 0;
+	i2c_values[CI2C_R_VERSION] =
+	    (CI2C_MAJOR << MAJOR_SHIFT) | (CI2C_MINOR << MINOR_SHIFT);
+
+	I2C_INIT(I2C_ADDR);
 
 	INTCON0bits.GIEH=1;  /* enable high-priority interrupts */   
 	INTCON0bits.GIEL=1; /* enable low-priority interrrupts */   
@@ -327,9 +341,10 @@ again:
 			if (/*debug_out.bits.adc*/ 1) 
 				printf("adcc 0x%x 0x%lx, 0x%x 0x%x 0x%x\n",
 				 ADRES, (uint32_t)ADACC, ADCNT, ADSTAT, ADCON0);
-			i2c_values[0] = ADACC & 0xff;
-			i2c_values[1] = (ADACC >> 8) & 0xff;
-			i2c_values[2]++;
+			I2C_LOCK;
+			i2c_values[CI2C_R_LIGHTL] = ADACC & 0xff;
+			i2c_values[CI2C_R_LIGHTH] = (ADACC >> 8) & 0xff;
+			I2C_UNLOCK;
 			ADCON2bits.ACLR = 1;
 			softintrs.bits.int_adcc = 0;
 		}
@@ -360,11 +375,19 @@ again:
 				    I2C1STAT0,
 				    I2C1STAT1);
 			}
+			if (timer_cpu_off_req != 0) {
+				/* CPU off request not complete in time */
+				timer_cpu_off_req--;
+				if (timer_cpu_off_req == 0) {
+					vcpu_off_req = 0;
+				}
+			}
 			if (timer_cpu_off != 0) {
 				timer_cpu_off--;
 				if (timer_cpu_off == 0) {
 					printf("CPU power off\n");
 					VCPU_EN = 0;
+					timer_cpu_on = VCPU_ON_DELAY;
 				}
 			}
 			if (timer_cpu_on != 0) {
@@ -375,6 +398,49 @@ again:
 				}
 			}
 		}
+
+		I2C_LOCK;
+		if (i2c_writes) {
+			if (i2c_writes & (1 << CI2C_R_PWROFF0)) {
+				if (i2c_values_wr[CI2C_R_PWROFF0] ==
+				    CI2C_R_PWROFF0_MAGIC && vcpu_off_req == 0) {
+					timer_cpu_off_req = 2;
+					vcpu_off_req = 1;
+				} else {
+					timer_cpu_off_req = 0;
+					vcpu_off_req = 0;
+				}
+			}
+			if (i2c_writes & (1 << CI2C_R_PWROFF1)) {
+				if (i2c_values_wr[CI2C_R_PWROFF1] ==
+				    CI2C_R_PWROFF1_MAGIC && vcpu_off_req == 1) {
+					vcpu_off_req = 2;
+				} else {
+					timer_cpu_off_req = 0;
+					vcpu_off_req = 0;
+				}
+			}
+			if (i2c_writes & (1 << CI2C_R_PWROFF2)) {
+				if (i2c_values_wr[CI2C_R_PWROFF2] ==
+				    CI2C_R_PWROFF2_MAGIC && vcpu_off_req == 2) {
+					vcpu_off_req = 3;
+				} else {
+					timer_cpu_off_req = 0;
+					vcpu_off_req = 0;
+				}
+			}
+			if (i2c_writes & (1 << CI2C_R_PWROFF3)) {
+				if (i2c_values_wr[CI2C_R_PWROFF3] ==
+				    CI2C_R_PWROFF3_MAGIC && vcpu_off_req == 3) {
+					timer_cpu_off = VCPU_OFF_DELAY;
+					printf("CPU power off armed\n");
+				}
+				timer_cpu_off_req = 0;
+				vcpu_off_req = 0;
+			}
+		}
+		i2c_writes = 0;
+		I2C_UNLOCK;
 
 		if (uart_softintrs.bits.uart2_line1) {
 			printf("line1: %s\n", uart_rxbuf1);

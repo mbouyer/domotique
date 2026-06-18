@@ -57,14 +57,19 @@
 	I2C1STAT1bits.CLRBF = 1; \
     }
 
-#define N_I2CREGS 3
+#define I2C_LOCK { INTCON0bits.GIEL = 0; } /* disable interrupts */
+#define I2C_UNLOCK { INTCON0bits.GIEL = 1; } /* enable interrupts */
+
+#define N_I2CREGS 8
 extern uint8_t i2c_values[N_I2CREGS];
+extern uint8_t i2c_values_wr[N_I2CREGS];
+extern volatile uint8_t i2c_writes;
 
 extern uint8_t i2c_pir;
 extern uint8_t i2c_cnt;
 extern uint8_t i2c_err;
 
-volatile union i2csoftintrs {
+extern volatile union i2csoftintrs {
         struct i2csoftintrs_bits {
 		char i2c_i : 1;   
 		char i2c_irx : 1;
