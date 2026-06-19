@@ -249,7 +249,7 @@ lin_write_and_check(uint8_t c)
 
 	/* flush RX buffer */
 	while (1) {
-		if (poll(fd, 1, 20) < 0) {
+		if (poll(fd, 1, 10) < 0) {
 			mylog(LOG_ERR, "lin 0x%x flush poll: %s",
 			    c, strerror(errno));
 			return -1;
@@ -292,6 +292,32 @@ lin_write_and_check(uint8_t c)
 }
 
 static int
+mysetspeed(int speed)
+{
+	struct termios cntrl;
+	tcgetattr(lin_fd, &cntrl);
+	cfsetospeed(&cntrl, speed);
+	cfsetispeed(&cntrl, speed);
+	if (tcsetattr(lin_fd, TCSAFLUSH, &cntrl) != 0) {
+		mylog(LOG_ERR, "tcsetattr %d: %s", speed, strerror(errno));
+		return 1;
+	}
+	return 0;
+}
+
+static int
+mytcsendbreak(int fd)
+{
+	if (mysetspeed(4800) != 0)
+		return -1;
+	if (lin_write_and_check(0) < 0)
+		return -1;
+	if (mysetspeed(19200) != 0)
+		return -1;
+	return 0;
+}
+
+static int
 lin_send_pid(uint8_t pid)
 {
 	uint8_t c;
@@ -304,7 +330,7 @@ lin_send_pid(uint8_t pid)
 	c = GETBIT(pid, 1) ^ GETBIT(pid, 3) ^ GETBIT(pid, 4) ^ GETBIT(pid, 5) ^ 0x01;
 	pid |= (c << 7);
 	/* send break */
-	if (tcsendbreak(lin_fd, 1) < 0) {
+	if (mytcsendbreak(lin_fd) < 0) {
 		mylog(LOG_ERR, "LIN send break: %s", strerror(errno));
 		return -1;
 	}
@@ -610,6 +636,7 @@ getgroup:
 	cntrl.c_cflag |= CS8;
 	cntrl.c_cflag |= CLOCAL;
 	cntrl.c_iflag &= ~(ISTRIP|ICRNL|IXON|IXOFF|IEXTEN);
+	cntrl.c_iflag |= IGNBRK;
 	cntrl.c_oflag &= ~(OPOST);
 	cntrl.c_lflag &= ~(ICANON|ISIG|IEXTEN|ECHO);
 	cntrl.c_cc[VMIN] = 1;
