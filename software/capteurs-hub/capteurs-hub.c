@@ -135,7 +135,7 @@ user_i2c_read(uint8_t reg_addr, uint8_t *reg_data, uint32_t len, void *intf_ptr)
 	iie.iie_buflen = len;
 
 	if (ioctl(iic_fd, I2C_IOCTL_EXEC, &iie) == -1) {
-		perror("ioctl read");
+		mylog(LOG_ERR, "ioctl read: %s", strerror(errno));
 		return BME280_E_COMM_FAIL;
 	}
 	return BME280_OK;
@@ -156,7 +156,7 @@ user_i2c_write(uint8_t reg_addr, const uint8_t *reg_data, uint32_t len,
 	iie.iie_buflen = len;
 
 	if (ioctl(iic_fd, I2C_IOCTL_EXEC, &iie) == -1) {
-		perror("ioctl write");
+		mylog(LOG_ERR, "ioctl write: %s", strerror(errno));
 		return BME280_E_COMM_FAIL;
 	}
 	return BME280_OK;
@@ -176,7 +176,7 @@ do_bme280_init()
 
 	rslt = bme280_init(&bme280_dev);
 	if (rslt != BME280_OK) {
-		warnx("bme280_init failed: %d\n", rslt);
+		mylog(LOG_ERR, "bme280_init failed: %d\n", rslt);
 		return rslt;
 	}
 
@@ -194,12 +194,12 @@ do_bme280_init()
 
 	rslt = bme280_set_sensor_settings(settings_sel, &bme280_dev);
 	if (rslt != BME280_OK) {
-		warn("bme280_set_sensor_settings failed: %d\n", rslt);
+		mylog(LOG_ERR, "bme280_set_sensor_settings failed: %d\n", rslt);
 		return rslt;
 	}
 	rslt = bme280_set_sensor_mode(BME280_NORMAL_MODE, &bme280_dev);
 	if (rslt != BME280_OK) {
-		warn("bme280_set_sensor_mode failed: %d\n", rslt);
+		mylog(LOG_ERR, "bme280_set_sensor_mode failed: %d\n", rslt);
 		return rslt;
 	}
 	return rslt;
@@ -218,6 +218,7 @@ do_bme280()
 	rslt = bme280_get_sensor_data(BME280_ALL, &comp_data, &bme280_dev);
 	if (rslt != BME280_OK) {
 		mylog(LOG_ERR, "bme280_get_sensor_data failed: %d\n", rslt);
+		return;
 	}
 	snprintf(buf, LINESZ, "ITEMP %.2f", comp_data.temperature);
 	clients_write(buf);
