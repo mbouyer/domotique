@@ -42,7 +42,7 @@
 static void
 usage(void)
 {
-	fprintf(stderr, "usage: %s [command] ...\n", getprogname());
+	fprintf(stderr, "usage: %s [-n] [command] ...\n", getprogname());
 	exit(1);
 }
 
@@ -51,18 +51,24 @@ main(int argc, char * const argv[])
 {
 	int ch;
 	int sockfd;
+	int nflag = 0;
 	FILE *sock_f;
 	struct sockaddr_un saddr;
 	int i;
 
-	while ((ch = getopt(argc, argv, "h")) != -1) {
+	while ((ch = getopt(argc, argv, "hn")) != -1) {
 		switch(ch) {
+		case 'n':
+			nflag++;
+			break;
 		case 'h':
 		case '?':
 		default:
 			usage();
 		}
 	}
+	argc -= optind;
+	argv += optind;
 
 	if ((sockfd = socket(AF_UNIX, SOCK_STREAM, 0)) == -1) {
 		err(EXIT_FAILURE, "socket");
@@ -80,7 +86,7 @@ main(int argc, char * const argv[])
 		err(1, "fopen %s", SOCKET_PATH);
 
 	/* send strings from command line */
-	for (i = 1; i < argc; i++) {
+	for (i = 0; i < argc; i++) {
 		if (fprintf(sock_f, "%s\n", argv[i]) < 0 ||
 		    fflush(sock_f) < 0) {
 			err(1, "send failed");
@@ -91,15 +97,15 @@ main(int argc, char * const argv[])
 		struct pollfd fds[2];
 		static char linebuf[LINESZ];
 
-		fds[0].fd = STDIN_FILENO;
+		fds[0].fd = sockfd;
 		fds[0].events = POLLRDNORM;
-		fds[1].fd = sockfd;
+		fds[1].fd = STDIN_FILENO;
 		fds[1].events = POLLRDNORM;
 
-		if (poll(fds, 2, -1) < 0) {
+		if (poll(fds, (nflag ? 1 : 2), -1) < 0) {
 			err(1, "poll");
 		}
-		if (fds[0].revents & POLLRDNORM) {
+		if (nflag == 0 && fds[1].revents & POLLRDNORM) {
 			if (fgets(linebuf, LINESZ, stdin) == NULL) {
 				fclose(sock_f);
 				exit(0);
@@ -109,7 +115,7 @@ main(int argc, char * const argv[])
 				err(1, "can't write to socket");
 			}
 		}
-		if (fds[1].revents & POLLRDNORM) {
+		if (fds[0].revents & POLLRDNORM) {
 			if (fgets(linebuf, LINESZ, sock_f) == NULL) {
 				errx(1, "can't read from socket");
 			}
