@@ -52,14 +52,18 @@ main(int argc, char * const argv[])
 	int ch;
 	int sockfd;
 	int nflag = 0;
+	int sflag = 0;
 	FILE *sock_f;
 	struct sockaddr_un saddr;
 	int i;
 
-	while ((ch = getopt(argc, argv, "hn")) != -1) {
+	while ((ch = getopt(argc, argv, "hns")) != -1) {
 		switch(ch) {
 		case 'n':
 			nflag++;
+			break;
+		case 's':
+			sflag++;
 			break;
 		case 'h':
 		case '?':
@@ -91,6 +95,11 @@ main(int argc, char * const argv[])
 		    fflush(sock_f) < 0) {
 			err(1, "send failed");
 		}
+	}
+
+	if (nflag && sflag) {
+		fclose(sock_f);
+		exit(0);
 	}
 
 	while (1) {
