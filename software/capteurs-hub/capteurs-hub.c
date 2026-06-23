@@ -46,6 +46,8 @@
 #include <sys/ioctl.h>
 #include <dev/i2c/i2c_io.h>
 
+#include <controle/firmware/i2c_api.h>
+
 #include "bme280.h"
 
 struct bme280_dev bme280_dev;
@@ -225,6 +227,48 @@ do_bme280()
 	snprintf(buf, LINESZ, "IHUM %.2f", comp_data.humidity);
 	clients_write(buf);
 	snprintf(buf, LINESZ, "IPRES %.2f", comp_data.pressure / 100.0);
+	clients_write(buf);
+}
+
+static int8_t
+controle_i2c_read(uint8_t reg_addr, uint8_t *reg_data, uint32_t len)
+{
+	i2c_ioctl_exec_t iie;
+
+	iie.iie_op = I2C_OP_READ_WITH_STOP;
+	iie.iie_addr = I2C_ADDR;
+	iie.iie_cmd = &reg_addr;
+	iie.iie_cmdlen = 1;
+	iie.iie_buf = reg_data;
+	iie.iie_buflen = len;
+
+	if (ioctl(iic_fd, I2C_IOCTL_EXEC, &iie) == -1) {
+		mylog(LOG_ERR, "ioctl read: %s", strerror(errno));
+		return -1;
+	}
+	return 0;
+}
+
+static void
+do_controle()
+{
+	u_int rslt;
+	uint8_t data[3];
+	char buf[LINESZ];
+
+	if (controle_i2c_read(0, data, sizeof(data)) != 0) {
+		mylog(LOG_ERR, "controle_i2c_read failed");
+		return;
+	}
+
+	rslt = (data[CI2C_R_VERSION] & MAJOR_MASK) >> MAJOR_SHIFT;
+	if (rslt != CI2C_MAJOR) {
+		mylog(LOG_ERR, "controle wrong major version %d", rslt);
+		return;
+	}
+
+	rslt = data[CI2C_R_LIGHTH] << 8 | data[CI2C_R_LIGHTL];
+	snprintf(buf, LINESZ, "CLUM %u", rslt);
 	clients_write(buf);
 }
 
@@ -467,6 +511,7 @@ static void
 do_sensors()
 {
 	do_bme280();
+	do_controle();
 	lin_read_sensor(CU_ID);
 	lin_read_sensor(SB_ID);
 	lin_read_sensor(SA_ID);
