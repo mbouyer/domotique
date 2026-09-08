@@ -233,10 +233,11 @@ void __interrupt(__irq(U2RX), __low_priority, base(IVECT_BASE))
 irql_uart2321rx(void)
 {
 	if (PIR8bits.U2RXIF) {
-		char c = U2RXB;
+		char c;
 		__ram char *buf;
 
 		if (U2ERRIRbits.RXFOIF || U2ERRIRbits.FERIF) {
+			c = U2RXB;
 			(void)c;
 			U2ERRIRbits.RXFOIF = 0;
 			/* error; ignore line */
@@ -244,6 +245,7 @@ irql_uart2321rx(void)
 			uart232_rxbuf_idx = UART232_RXBUFSIZE;
 			return;
 		}
+		c = U2RXB;
 		if (U2ERRIRbits.RXBKIF)
 			U2ERRIRbits.RXBKIF = 0;
 		if (c == 0x0a)
