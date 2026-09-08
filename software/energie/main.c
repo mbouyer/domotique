@@ -573,11 +573,15 @@ linky_state_to_outputs()
 {
 	char c;
 	if (standalone_timeout == 0) {
+#if 0
 		if (linky_state.bits.hc) {
 			outputs_status[0] = 1;
 		} else {
 			outputs_status[0] = 0;
 		}
+#else
+		outputs_status[0] = 0;
+#endif
 		for (c = 2; c < 6; c++) {
 			if (linky_state.bits.hpjr) {
 				outputs_status[c] = PIL_NEG;
