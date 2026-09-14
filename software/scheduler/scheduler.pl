@@ -79,7 +79,7 @@ my @c_pending_cmd;
 my @e_pending_cmd;
 
 my @expected = ( 'CuSTAT', 'SaSTAT', 'ChSTAT', 'SbSTAT', 'PTEC', 'DEMAIN',
-    'O0', 'O1', 'P1', 'P2', 'P3', 'P4' );
+    'O0', 'O1', 'P0', 'P1', 'P2', 'P3');
 my @cmd_capteur = ('Cu', 'Sa', 'Ch', 'Sb');
 my @cmd_energie = ('O0', 'O1', 'P0', 'P1', 'P2', 'P3');
 
@@ -355,14 +355,14 @@ sub do_energie {
 			$state{O0}{t} = $1;
 			$state{O1}{v} = $3;
 			$state{O1}{t} = $1;
-			$state{P1}{v} = $4;
+			$state{P0}{v} = $4;
+			$state{P0}{t} = $1;
+			$state{P1}{v} = $5;
 			$state{P1}{t} = $1;
-			$state{P2}{v} = $5;
+			$state{P2}{v} = $6;
 			$state{P2}{t} = $1;
-			$state{P3}{v} = $6;
+			$state{P3}{v} = $7;
 			$state{P3}{t} = $1;
-			$state{P4}{v} = $7;
-			$state{P4}{t} = $1;
 		}
 	} else {
 		mylog(LOG_INFO, "$e_sockpath closed");
