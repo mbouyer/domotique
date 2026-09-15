@@ -26,6 +26,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 use strict;
+use Safe;
 use Schedule::Cron::Events;
 use Time::Local;
 use IO::Socket::UNIX;
@@ -93,7 +94,21 @@ while (my $line = <SCHED>) {
 		my $start = new Schedule::Cron::Events($1) or mydie("can't schedule $1");
 		my $end = new Schedule::Cron::Events($2) or mydie("can't schedule $2");
 		my $cmd = $3;
-		push @events, { 'start' => $start, 'end' => $end, 'cmd' => $cmd};
+		my $comp = new Safe;
+		$comp->permit_only(qw(:base_core :base_mem :base_orig));
+		$comp->share(%state);
+		my $res = $comp->reval($cmd);
+		if (!defined($res)) {
+			if (defined($@)) {
+				mylog(LOG_ERR, "<$cmd> failed: $@");
+			} else {
+				mylog(LOG_ERR, "<$cmd> failed");
+			}
+			$err = 1;
+		} else {
+			push @events,
+			    { 'start' => $start, 'end' => $end, 'cmd' => $cmd};
+		}
 	} else {
 		mylog(LOG_ERR, "invalid entry $line");
 		$err = 1;
@@ -110,7 +125,7 @@ $s_sock = new IO::Socket::UNIX (
 	Listen => 16,
 	Reuse => 1,
 );
-mydie("Could not create $s_sockpath socket: $@\n") unless $s_sock;
+mydie("Could not create $s_sockpath socket: $!") unless $s_sock;
 
 if (defined($uid)) {
 	chown $uid, $gid, $s_sockpath;
@@ -216,25 +231,29 @@ sub run_schedules {
 		my $snext = timelocal($start->nextEvent);
 		my $enext = timelocal($end->nextEvent);
 
-		if ($debug) {
-			my $str = "$cmd: $sprev <> $eprev $snext <> $enext";
-			if ($sprev >= $eprev && $snext >= $enext) {
-				mylog(LOG_DEBUG, $str . " RUN") if $debug;
-				my $result = eval $cmd;
-				if (!defined($result)) {
-					if (defined($@)) {
-						mylog(LOG_ERR,
-						    "<$cmd> failed: $@");
-					} else {
-						mylog(LOG_ERR,
-						    "<$cmd> failed");
-					}
+		my $str = "$cmd: $sprev <> $eprev $snext <> $enext";
+		if ($sprev >= $eprev && $snext >= $enext) {
+			my $comp = new Safe;
+			$comp->permit_only(
+			    qw(:base_core :base_mem :base_orig));
+			$comp->share(%state);
+			my $result = $comp->reval($cmd);
+			if (!defined($result)) {
+				if (defined($@)) {
+					mylog(LOG_ERR, "<$cmd> failed: $@");
 				} else {
-					%out = (%out, %$result);
+					mylog(LOG_ERR, "<$cmd> failed");
 				}
 			} else {
-				mylog(LOG_DEBUG, $str) if $debug;
+				$str = $str . " RUN {";
+				foreach my $key ( keys %$result ) {
+					$str = $str .  " $key => " . %{$result}{$key} . ",";
+				}
+				mylog(LOG_DEBUG, $str . "}") if $debug;
+				%out = (%out, %$result);
 			}
+		} else {
+			mylog(LOG_DEBUG, $str) if $debug;
 		}
 	}
 	if ($debug > 1) {
