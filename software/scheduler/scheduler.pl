@@ -178,9 +178,11 @@ while (1) {
 	if (!defined($c_sock) || !defined($e_sock)) {
 		if (defined($e_sock)) {
 			close($e_sock);
+			undef $e_sock;
 		}
 		if (defined($c_sock)) {
 			close($c_sock);
+			undef $c_sock;
 		}
 		sleep(10);
 		$next = time();
