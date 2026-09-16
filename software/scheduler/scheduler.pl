@@ -159,12 +159,6 @@ if (defined($uid)) {
 
 my $next = time();
 while (1) {
-	if (!defined($c_sock) && defined($e_sock)) {
-		close($e_sock);
-	}
-	if (defined($c_sock) && !defined($e_sock)) {
-		close($c_sock);
-	}
 	if (!defined($c_sock)) {
 		$c_sock = new IO::Socket::UNIX (
 		    Type => SOCK_STREAM,          
@@ -182,6 +176,12 @@ while (1) {
 		    "can't connect do $e_sockpath: $!") unless $e_sock;
 	}
 	if (!defined($c_sock) || !defined($e_sock)) {
+		if (defined($e_sock)) {
+			close($e_sock);
+		}
+		if (defined($c_sock)) {
+			close($c_sock);
+		}
 		sleep(10);
 		$next = time();
 		next;
