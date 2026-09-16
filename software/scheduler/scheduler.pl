@@ -76,6 +76,7 @@ my $err = 0;
 
 my @events;
 my %state;
+my %statet;
 my @c_pending_cmd;
 my @e_pending_cmd;
 
@@ -94,9 +95,9 @@ while (my $line = <SCHED>) {
 		my $start = new Schedule::Cron::Events($1) or mydie("can't schedule $1");
 		my $end = new Schedule::Cron::Events($2) or mydie("can't schedule $2");
 		my $cmd = $3;
-		my $comp = new Safe;
+		my $comp = new Safe("Test");
 		$comp->permit_only(qw(:base_core :base_mem :base_orig));
-		$comp->share(%state);
+		%Test::state = %state;
 		my $res = $comp->reval($cmd);
 		if (!defined($res)) {
 			if (defined($@)) {
@@ -188,18 +189,18 @@ while (1) {
 	do_select($next);
 	my $valid = 1;
 	foreach my $e (@expected) {
-		if (!defined($state{$e})) {
+		if (!defined($state{$e}) || !defined($statet{$e})) {
 			mylog(LOG_DEBUG, "state $e missing") if $debug;
 			$valid = 0;
-		} elsif ($state{$e}{t} < $next - 300) {
+		} elsif ($statet{$e} < $next - 300) {
 			mylog(LOG_DEBUG, "state $e old") if $debug;
 			$valid = 0;
 		}
 	}
-	$next = $next + 60;
+	$next = $next + 60 if $valid == 1;
 	if ($debug > 1) {
 		foreach my $key ( sort keys %state ) {
-			mylog(LOG_DEBUG, "state $key $state{$key}{v} $state{$key}{t}");
+			mylog(LOG_DEBUG, "state $key $state{$key} $statet{$key}");
 		}
 	}
 		
@@ -233,10 +234,10 @@ sub run_schedules {
 
 		my $str = "$cmd: $sprev <> $eprev $snext <> $enext";
 		if ($sprev >= $eprev && $snext >= $enext) {
-			my $comp = new Safe;
+			my $comp = new Safe("Tab");
 			$comp->permit_only(
 			    qw(:base_core :base_mem :base_orig));
-			$comp->share(%state);
+			%Tab::state = %state;
 			my $result = $comp->reval($cmd);
 			if (!defined($result)) {
 				if (defined($@)) {
@@ -265,12 +266,12 @@ sub run_schedules {
 	foreach my $key (keys %out ) {
 		if (grep $_ eq $key, @cmd_capteur) {
 			my $statekey = $key . "STAT";
-			if ($state{$statekey}{v} =~ /^([OF]),B/) {
+			if ($state{$statekey} =~ /^([OF]),B/) {
 				if ($out{$key} eq $1) {
 					# reset state
 					push @c_pending_cmd, $key . " " . $1;
 				}
-			} elsif ($state{$statekey}{v} ne $out{$key}) {
+			} elsif ($state{$statekey} ne $out{$key}) {
 				push @c_pending_cmd, $key . " " . $out{$key};
 			}
 		} elsif (grep $_ eq $key, @cmd_energie) {
@@ -304,6 +305,10 @@ sub do_select {
 		$read_set->add($c);
 	}
 	my $delay = $endtime - time();
+	if ($delay < 10) {
+		$endtime = time() + 10;
+		$delay = 10;
+	}
 	my $write_set = new IO::Select();
 
 	while ($delay > 0) {
@@ -350,8 +355,8 @@ sub do_capteur {
 	if ($buf) {
 		chomp $buf;
 		if ($buf =~ /^(\d+) (\S+STAT) (\S+)$/) {
-			$state{$2}{v} = $3;
-			$state{$2}{t} = $1;
+			$state{$2} = $3;
+			$statet{$2} = $1;
 		}
 	} else {
 		mylog(LOG_INFO, "$c_sockpath closed");
@@ -367,21 +372,21 @@ sub do_energie {
 	if ($buf) {
 		chomp $buf;
 		if ($buf =~ /^(\d+) (PTEC|DEMAIN) (\S+)$/) {
-			$state{$2}{v} = $3;
-			$state{$2}{t} = $1;
+			$state{$2} = $3;
+			$statet{$2} = $1;
 		} elsif ($buf =~ /^(\d+) EE (\d)(\d)(\d)(\d)(\d)(\d)$/) {
-			$state{O0}{v} = $2;
-			$state{O0}{t} = $1;
-			$state{O1}{v} = $3;
-			$state{O1}{t} = $1;
-			$state{P0}{v} = $4;
-			$state{P0}{t} = $1;
-			$state{P1}{v} = $5;
-			$state{P1}{t} = $1;
-			$state{P2}{v} = $6;
-			$state{P2}{t} = $1;
-			$state{P3}{v} = $7;
-			$state{P3}{t} = $1;
+			$state{O0} = $2;
+			$statet{O0} = $1;
+			$state{O1} = $3;
+			$statet{O1} = $1;
+			$state{P0} = $4;
+			$statet{P0} = $1;
+			$state{P1} = $5;
+			$statet{P1} = $1;
+			$state{P2} = $6;
+			$statet{P2} = $1;
+			$state{P3} = $7;
+			$statet{P3} = $1;
 		}
 	} else {
 		mylog(LOG_INFO, "$e_sockpath closed");
