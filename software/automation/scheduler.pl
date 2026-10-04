@@ -1,6 +1,6 @@
 #!/usr/pkg/bin/perl
 
-# Copyright (c) 2025 Manuel Bouyer
+# Copyright (c) 2026 Manuel Bouyer
 #
 # All rights reserved.
 #
