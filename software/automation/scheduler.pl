@@ -79,6 +79,7 @@ my %state;
 my %statet;
 my @c_pending_cmd;
 my @e_pending_cmd;
+my @overrides;
 
 my @expected = ( 'CuSTAT', 'SaSTAT', 'ChSTAT', 'SbSTAT', 'PTEC', 'DEMAIN',
     'O0', 'O1', 'P0', 'P1', 'P2', 'P3');
@@ -202,7 +203,7 @@ while (1) {
 	$next = $next + 60 if $valid == 1;
 	if ($debug > 1) {
 		foreach my $key ( sort keys %state ) {
-			mylog(LOG_DEBUG, "state $key $state{$key} $statet{$key}");
+			mylog(LOG_DEBUG, "state $key $state{$key} $statet{$key}") if $debug;
 		}
 	}
 		
@@ -258,6 +259,44 @@ sub run_schedules {
 		} else {
 			mylog(LOG_DEBUG, $str) if $debug;
 		}
+	}
+	mylog(LOG_DEBUG, "overrides: " . @overrides . " entries") if $debug;
+	foreach my $i (0 .. $#overrides) {
+		my $event = $overrides[$i];
+		my $start = $event->{start};
+		my $end = $event->{end};
+		my $cmd = $event->{cmd};
+
+		my $str = "override $cmd: $start -> $end now $now";
+		$event->{a} = "";
+		if ($start <= $now && $end > $now) {
+			my $comp = new Safe("Tab");
+			$comp->permit_only(
+			    qw(:base_core :base_mem :base_orig));
+			%Tab::state = %state;
+			my $result = $comp->reval($cmd);
+			if (!defined($result)) {
+				if (defined($@)) {
+					mylog(LOG_ERR, "<$cmd> failed: $@");
+				} else {
+					mylog(LOG_ERR, "<$cmd> failed");
+				}
+			} else {
+				$str = $str . " RUN {";
+				foreach my $key ( keys %$result ) {
+					$str = $str .  " $key => " . %{$result}{$key} . ",";
+				}
+				mylog(LOG_DEBUG, $str . "}") if $debug;
+				%out = (%out, %$result);
+				$event->{a} = "active";
+			}
+		}
+		if ($end <= $now) {
+			splice @overrides, $i, 1;
+			$str = $str . " remove";
+			mylog(LOG_DEBUG, $str) if $debug;
+		}
+
 	}
 	if ($debug > 1) {
 		mylog(LOG_DEBUG, "out:");
@@ -329,7 +368,9 @@ sub do_select {
 			} elsif ($rh == $e_sock) {
 				do_energie($rh);
 			} else {
-				do_client($rh, $read_set);
+				if (do_client($rh, $read_set) == 1) {
+					$endtime = time(); # eval now
+				}
 			}
 		}
 		foreach my $wh (@$wh_set) {
@@ -403,13 +444,33 @@ sub do_client {
 	my $buf = <$f>;
 	if ($buf) {
 		chomp $buf;
-		print "got client $buf\n";
+		mylog(LOG_DEBUG, "got client $buf") if $debug;
+		if ($buf =~ /^dump$/) {
+			foreach my $e (@overrides) {
+				print $f $e->{start} . "->" . $e->{end} . ": " . $e->{cmd} . " " . $e->{a} . "\n";
+			}
+			print $f "OK\n";
+			$f->flush;
+		} elsif ($buf =~ /^(\d+) (\d+) (.+)$/) {
+			my $start = $1;
+			my $end = $2;
+			my $cmd = $3;
+			mylog(LOG_DEBUG, "new override $start -> $end : $cmd") if $debug;
+			push @overrides, { start => $start, end => $end, cmd => $cmd, a => "" };
+			print $f "OK\n";
+			$f->flush;
+			return 1;
+		} else {
+			print $f "ERROR\n";
+			$f->flush;
+		}
 	} else {
-		print "client close\n";
+		mylog(LOG_DEBUG, "client close") if $debug;
 		$read_set->remove($f);
 		@clients = grep { $_ != $f } @clients;
 		close($f);
 	}
+	return 0;
 }
 
 sub usage {
